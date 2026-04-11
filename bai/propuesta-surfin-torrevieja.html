@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SURFIN' Torrevieja · Sistema de Crecimiento</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#09090a;--white:#ffffff;--dim:rgba(255,255,255,0.62);
+  --faint:rgba(255,255,255,0.28);--border:rgba(255,255,255,0.1);
+  --gold:#F9BC11;--green:#34d399;--amber:#fbbf24;--red:#ef4444;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--white);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:17px;}
+#deck{position:fixed;inset:0;}
+.slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  padding:52px 72px;flex-direction:column;}
+.slide.active{display:flex;}
+.r{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease;}
+.r.shown{opacity:1;transform:none;}
+.slide::before{content:'';position:absolute;inset:0;pointer-events:none;}
+#s0::before{background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(249,188,17,0.1),transparent);}
+#s1::before{background:radial-gradient(ellipse 70% 55% at 30% 40%,rgba(239,68,68,0.08),transparent);}
+#s2::before{background:radial-gradient(ellipse 65% 55% at 25% 40%,rgba(249,188,17,0.06),transparent);}
+#s3::before{background:radial-gradient(ellipse 60% 55% at 70% 30%,rgba(239,68,68,0.07),transparent);}
+#s4::before{background:radial-gradient(ellipse 70% 55% at 30% 50%,rgba(249,188,17,0.07),transparent);}
+#s5::before{background:radial-gradient(ellipse 75% 55% at 50% 50%,rgba(52,211,153,0.07),transparent);}
+#s6::before{background:radial-gradient(ellipse 80% 55% at 50% 50%,rgba(249,188,17,0.06),transparent);}
+#s7::before{background:radial-gradient(ellipse 60% 55% at 60% 50%,rgba(249,188,17,0.07),transparent);}
+#s8::before{background:radial-gradient(ellipse 70% 60% at 40% 50%,rgba(52,211,153,0.08),transparent);}
+#s9::before{background:radial-gradient(ellipse 65% 55% at 50% 45%,rgba(249,188,17,0.09),transparent);}
+#s10::before{background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(251,191,36,0.06),transparent);}
+#s11::before{background:radial-gradient(ellipse 65% 60% at 50% 50%,rgba(249,188,17,0.07),transparent);}
+#s12::before{background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(52,211,153,0.11),transparent);}
+
+#progress{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:100;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .3s;cursor:pointer;}
+.dot.active{background:var(--gold);width:22px;border-radius:4px;}
+.nav-btn{position:fixed;bottom:18px;padding:9px 20px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--dim);font-size:14px;
+  cursor:pointer;z-index:100;transition:all .2s;font-family:inherit;}
+.nav-btn:hover{color:var(--white);background:rgba(255,255,255,0.1);}
+#btn-prev{left:24px;}#btn-next{right:24px;}
+
+.inner{max-width:980px;width:100%;position:relative;z-index:1;}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:16px;}
+h1{font-size:clamp(56px,8vw,100px);font-weight:900;line-height:.9;letter-spacing:-4px;color:var(--white);}
+h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spacing:-2px;color:var(--white);}
+.lead{font-size:18px;color:var(--dim);line-height:1.7;margin-top:16px;}
+.g-gold{background:linear-gradient(130deg,#F9BC11,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.g-green{background:linear-gradient(130deg,#34d399,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
+.quote{padding:18px 20px;border-radius:14px;background:rgba(255,255,255,0.04);border-left:3px solid rgba(249,188,17,0.5);}
+.quote-text{font-size:16px;font-weight:500;color:var(--white);line-height:1.6;font-style:italic;}
+
+.pain-list{display:flex;flex-direction:column;gap:14px;margin-top:24px;}
+.pain{display:flex;align-items:flex-start;gap:18px;padding:20px 22px;border-radius:14px;
+  background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);}
+.pain-icon{font-size:26px;flex-shrink:0;line-height:1;}
+.pain-title{font-size:18px;font-weight:700;color:var(--white);line-height:1.4;}
+.pain-sub{font-size:15px;color:var(--dim);margin-top:5px;line-height:1.5;}
+
+.box-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;}
+.sbox{padding:24px;border-radius:16px;border:1px solid;}
+.sbox-icon{font-size:32px;margin-bottom:12px;}
+.sbox-title{font-size:18px;font-weight:800;color:var(--white);margin-bottom:8px;line-height:1.3;}
+.sbox-text{font-size:16px;color:var(--dim);line-height:1.65;}
+
+.target-flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;margin-top:28px;}
+.t-card{text-align:center;padding:20px 18px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.04);min-width:130px;}
+.t-card.on{border-color:rgba(249,188,17,0.5);background:rgba(249,188,17,0.06);}
+.t-icon{font-size:28px;margin-bottom:8px;}
+.t-label{font-size:14px;font-weight:700;color:var(--white);}
+.t-sub{font-size:12px;color:var(--dim);margin-top:4px;}
+.t-arr{font-size:20px;color:var(--faint);padding:0 8px;margin-bottom:20px;}
+
+.flow{display:flex;align-items:center;justify-content:center;margin-top:24px;flex-wrap:wrap;}
+.f-box{background:rgba(255,255,255,0.04);border-radius:14px;padding:22px 16px;
+  width:175px;text-align:center;border:1.5px solid;}
+.f-box-t{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.f-box-body{font-size:14px;color:var(--dim);line-height:1.8;}
+.f-b1{border-color:rgba(249,188,17,0.5);} .f-b1 .f-box-t{color:#fcd34d;}
+.f-b2{border-color:rgba(96,165,250,0.5);} .f-b2 .f-box-t{color:#93c5fd;}
+.f-b3{border-color:rgba(52,211,153,0.5);} .f-b3 .f-box-t{color:#6ee7b7;}
+.f-b4{border-color:rgba(167,139,250,0.4);} .f-b4 .f-box-t{color:#c4b5fd;}
+.f-arr{display:flex;align-items:center;padding-bottom:24px;margin:0 6px;}
+.f-arr::before{content:'';display:block;width:26px;height:1.5px;background:rgba(255,255,255,0.12);}
+.f-arr::after{content:'';display:block;border-top:5px solid transparent;
+  border-bottom:5px solid transparent;border-left:7px solid rgba(255,255,255,0.12);}
+
+.inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;}
+.inc-item{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-radius:12px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);}
+.inc-icon{font-size:20px;flex-shrink:0;}
+.inc-title{font-size:17px;font-weight:700;color:var(--white);line-height:1.3;}
+.inc-note{font-size:14px;color:var(--dim);margin-top:3px;}
+.value-callout{margin-top:18px;padding:16px 20px;border-radius:14px;
+  background:rgba(249,188,17,0.07);border:1px solid rgba(249,188,17,0.3);}
+.vc-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fcd34d;margin-bottom:6px;}
+.vc-text{font-size:16px;font-weight:700;color:var(--white);line-height:1.5;}
+.vc-note{font-size:14px;color:var(--dim);margin-top:4px;}
+
+.roi-formula{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:12px;margin-top:24px;}
+.roi-step{text-align:center;padding:22px 16px;border-radius:16px;border:1px solid;background:rgba(255,255,255,0.04);}
+.roi-step.s1{border-color:rgba(249,188,17,0.35);background:rgba(249,188,17,0.06);}
+.roi-step.s2{border-color:rgba(96,165,250,0.35);background:rgba(96,165,250,0.06);}
+.roi-step.s3{border-color:rgba(52,211,153,0.35);background:rgba(52,211,153,0.06);}
+.roi-num{font-size:36px;font-weight:900;line-height:1;margin-bottom:6px;}
+.roi-label{font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px;}
+.roi-sub{font-size:13px;color:var(--dim);line-height:1.4;}
+.roi-arrow{font-size:24px;color:var(--faint);text-align:center;}
+.roi-result{margin-top:20px;padding:20px 24px;border-radius:16px;
+  background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.35);text-align:center;}
+.roi-result-num{font-size:48px;font-weight:900;color:#34d399;line-height:1;}
+.roi-result-label{font-size:16px;color:var(--white);font-weight:600;margin-top:6px;}
+.roi-result-note{font-size:14px;color:var(--dim);margin-top:6px;line-height:1.6;}
+
+.bigpc{max-width:520px;margin:24px auto 0;padding:36px 40px;border-radius:24px;
+  background:rgba(249,188,17,0.07);border:2px solid rgba(249,188,17,0.4);text-align:center;}
+.bigpc-label{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.bigpc-name{font-size:22px;font-weight:800;color:var(--white);margin-bottom:24px;line-height:1.3;}
+.bigpc-row{display:flex;justify-content:space-around;gap:20px;flex-wrap:wrap;}
+.bigpc-col{text-align:center;}
+.bigpc-col-label{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.bigpc-price{font-size:58px;font-weight:900;color:var(--white);line-height:1;}
+.bigpc-per{font-size:16px;color:var(--dim);margin-top:4px;}
+.bigpc-strike{font-size:28px;text-decoration:line-through;opacity:0.35;color:var(--white);}
+.promo{display:inline-block;background:rgba(251,191,36,0.12);color:#fbbf24;
+  border:1px solid rgba(251,191,36,0.3);padding:4px 12px;border-radius:5px;
+  font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-left:8px;}
+
+.alt-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;}
+.alt-card{padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);}
+.alt-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.alt-name{font-size:18px;font-weight:800;color:var(--white);margin-bottom:14px;line-height:1.3;}
+.alt-price{font-size:40px;font-weight:900;color:var(--white);line-height:1;}
+.alt-per{font-size:16px;color:var(--dim);margin-top:4px;}
+.alt-setup{font-size:15px;color:var(--dim);margin-top:8px;}
+.mgmt-warn{margin-top:20px;padding:20px 24px;border-radius:16px;
+  background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.28);}
+.mgmt-warn-title{font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fbbf24;margin-bottom:10px;}
+.mgmt-warn-text{font-size:17px;font-weight:600;color:var(--white);line-height:1.65;}
+.mgmt-warn-note{font-size:15px;color:var(--dim);margin-top:8px;line-height:1.6;}
+
+.pay-timeline{display:flex;flex-direction:column;gap:10px;margin-top:22px;}
+.pay-row{display:flex;align-items:center;gap:20px;padding:16px 20px;border-radius:12px;}
+.pay-row.today{background:rgba(249,188,17,0.08);border:1px solid rgba(249,188,17,0.3);}
+.pay-row.d20{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.25);}
+.pay-row.monthly{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);}
+.pay-row.review{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.25);}
+.pay-row.total{background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.3);}
+.pay-day{font-size:13px;font-weight:800;min-width:110px;text-transform:uppercase;letter-spacing:1px;}
+.pay-desc{flex:1;font-size:16px;color:var(--white);font-weight:500;}
+.pay-amt{font-size:20px;font-weight:900;color:var(--white);}
+
+.steps{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap;}
+.step{flex:1;min-width:155px;text-align:center;padding:22px 16px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;}
+.step-n{font-size:32px;font-weight:900;color:rgba(52,211,153,0.3);margin-bottom:8px;}
+.step-t{font-size:17px;font-weight:800;color:var(--white);margin-bottom:6px;}
+.step-s{font-size:14px;color:var(--dim);line-height:1.55;}
+
+.note{display:flex;gap:10px;align-items:flex-start;padding:13px 16px;border-radius:10px;
+  font-size:15px;line-height:1.6;margin-top:14px;}
+.note-warn{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.22);color:#fca5a5;}
+.note-amber{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.22);color:#fbbf24;}
+.note-info{background:rgba(249,188,17,0.06);border:1px solid rgba(249,188,17,0.2);color:#fcd34d;}
+.note-green{background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.25);color:#6ee7b7;}
+
+.mt3{margin-top:14px;}.mt4{margin-top:20px;}
+
+@media print{
+  html,body{height:auto;overflow:visible !important;background:#09090a !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #deck{position:static;height:auto;}
+  .slide{position:relative !important;display:flex !important;height:100vh;page-break-after:always;break-after:page;}
+  .r{opacity:1 !important;transform:none !important;transition:none !important;}
+  #progress,#btn-prev,#btn-next{display:none !important;}
+}
+@media(max-width:760px){
+  .slide{padding:44px 24px;}
+  h1{font-size:52px;letter-spacing:-3px;}h2{font-size:34px;}
+  .quote-grid,.box-grid,.inc-grid,.alt-grid{grid-template-columns:1fr;}
+  .flow,.roi-formula{flex-direction:column;}
+  .f-arr,.roi-arrow{transform:rotate(90deg);}
+  .target-flow{gap:6px;}.t-arr{display:none;}
+  .steps,.bigpc-row{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ══ S0 — COVER ══ -->
+<section class="slide active" id="s0">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <div class="eyebrow">Torrevieja · Escuela de Surf &amp; Paddle</div>
+    <h1 style="margin:12px 0;"><span class="g-gold">SURFIN'</span><br>Torrevieja</h1>
+  </div>
+  <div class="r" style="margin-top:14px;">
+    <p class="lead" style="max-width:480px;margin:0 auto;">Tu sistema para <strong>llenar la agenda todo el año</strong> — en temporada alta y en invierno.</p>
+    <div style="margin-top:30px;font-size:13px;color:var(--dim);letter-spacing:2px;">TOCA EN CUALQUIER LUGAR PARA CONTINUAR →</div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S1 — PROBLEMA ACTUAL ══ -->
+<section class="slide" id="s1">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Lo que está pasando hoy</div>
+    <h2>Sin sistema,<br><span style="color:#ef4444;">estás dejando dinero en la mesa.</span></h2>
+  </div>
+  <div class="r">
+    <div class="pain-list">
+      <div class="pain">
+        <span class="pain-icon">📵</span>
+        <div>
+          <div class="pain-title">El cliente busca paddle o surf en Google — <strong>si no apareces, reserva con la competencia</strong></div>
+          <div class="pain-sub">Cada búsqueda sin resultado tuyo es un cliente que ya fue. Y no vuelve.</div>
+        </div>
+      </div>
+      <div class="pain">
+        <span class="pain-icon">❄️</span>
+        <div>
+          <div class="pain-title">En invierno <strong>el negocio para</strong> porque no hay sistema que venda cuando baja la demanda local</div>
+          <div class="pain-sub">Sin turismo activo, sin ingresos. El paddle funciona todo el año — pero nadie en Torrevieja lo sabe todavía.</div>
+        </div>
+      </div>
+      <div class="pain">
+        <span class="pain-icon">🛶</span>
+        <div>
+          <div class="pain-title">El paddle tiene <strong>margen ilimitado y sin restricción de aforo</strong> — y casi no se está vendiendo</div>
+          <div class="pain-sub">Es tu servicio más escalable. Un funnel bien hecho lo convierte en tu mayor fuente de ingresos constantes.</div>
+        </div>
+      </div>
+    </div>
+    <div class="note note-green" style="margin-top:16px;">
+      <span>✅</span>
+      <span>Este problema tiene solución. Se puede implementar en <strong>menos de 20 días</strong>. Sigue viendo →</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S2 — LO QUE NOS DIJISTE ══ -->
+<section class="slide" id="s2">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Lo que nos dijiste</div>
+    <h2>Escuchamos.<br><span class="g-gold">Esto es lo que importa.</span></h2>
+  </div>
+  <div class="r">
+    <div class="quote-grid">
+      <div class="quote"><div class="quote-text">🗣️ "Quiero que Torrevieja sea mi <strong>base todo el año</strong> — sin tener que volver a Suecia cada invierno."</div></div>
+      <div class="quote"><div class="quote-text">🗣️ "Tengo web, Google My Business y redes — pero <strong>no estoy convirtiendo ese tráfico en reservas reales</strong>."</div></div>
+      <div class="quote"><div class="quote-text">🗣️ "En invierno la demanda es insuficiente. <strong>No hay suficiente actividad para mantener el negocio abierto</strong>."</div></div>
+      <div class="quote"><div class="quote-text">🗣️ "El presupuesto tiene que ser razonable para empezar — <strong>si funciona, crecemos juntos</strong>."</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S3 — DIAGNÓSTICO ══ -->
+<section class="slide" id="s3">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">El diagnóstico</div>
+    <h2>Tres frenos.<br><span style="color:var(--dim);">Uno mismo los resuelve.</span></h2>
+  </div>
+  <div class="r">
+    <div class="pain-list">
+      <div class="pain"><span class="pain-icon">🌊</span><div><div class="pain-title">Tienes tráfico pero <strong>no tienes sistema</strong> — el 80% se va sin reservar</div></div></div>
+      <div class="pain"><span class="pain-icon">❄️</span><div><div class="pain-title">En invierno la <strong>demanda local es insuficiente</strong> y te obliga a volver a Suecia</div></div></div>
+      <div class="pain"><span class="pain-icon">📵</span><div><div class="pain-title">El negocio <strong>depende de que tú estés disponible</strong> — si paras, para todo</div></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S4 — ESTRATEGIA ══ -->
+<section class="slide" id="s4">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">La estrategia</div>
+    <h2>Empezamos con paddle.<br><span class="g-green">Después construimos el resto.</span></h2>
+  </div>
+  <div class="r">
+    <div class="box-grid">
+      <div class="sbox" style="border-color:rgba(249,188,17,0.35);background:rgba(249,188,17,0.05);">
+        <div class="sbox-icon">🎣</div>
+        <div class="sbox-title">Guía gratuita de paddle como anzuelo</div>
+        <div class="sbox-text">Un PDF descargable — <strong>"Aprende paddle en 1 día en Torrevieja"</strong> — como primer contacto. El cliente lo descarga, deja su email y <span style="color:#34d399;font-weight:600;">entra al sistema de forma natural</span>. Sin vender directamente desde el anuncio.</div>
+      </div>
+      <div class="sbox" style="border-color:rgba(52,211,153,0.35);background:rgba(52,211,153,0.05);">
+        <div class="sbox-icon">🤖</div>
+        <div class="sbox-title">Sistema de captación de clientes</div>
+        <div class="sbox-text">Una página con <strong>todos los servicios + formulario de contacto</strong> con varios campos para filtrar el interés + chatbot 24h + Telegram. <span style="color:#34d399;font-weight:600;">El sistema trabaja aunque estés en Suecia.</span></div>
+      </div>
+    </div>
+    <div class="note note-info">
+      <span>📅</span><span>Google Ads activo <strong>abr–oct</strong> · Sistema Telegram activo <strong>12 meses</strong> · Surf camps a partir del <strong>mes 4</strong> · Meta Ads incluidas cuando estén disponibles</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S5 — PLAN DE CRECIMIENTO ══ -->
+<section class="slide" id="s5">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <div class="eyebrow">Plan de crecimiento</div>
+    <h2>Empezamos con 1.<br><span class="g-green">Después escalamos.</span></h2>
+    <p class="lead" style="max-width:540px;margin:0 auto;">Cada segmento se activa cuando el anterior funciona. <strong>Sin diluir el presupuesto</strong>, sin apostar a todo a la vez.</p>
+  </div>
+  <div class="r">
+    <div class="target-flow">
+      <div class="t-card on"><div class="t-icon">🛶</div><div class="t-label">Paddle surf</div><div class="t-sub">🎯 Empezamos aquí</div></div>
+      <div class="t-arr">→</div>
+      <div class="t-card"><div class="t-icon">🏄</div><div class="t-label">Surf learners</div><div class="t-sub">Mes 2+</div></div>
+      <div class="t-arr">→</div>
+      <div class="t-card"><div class="t-icon">👨‍👩‍👧</div><div class="t-label">Familias</div><div class="t-sub">Temporada alta</div></div>
+      <div class="t-arr">→</div>
+      <div class="t-card"><div class="t-icon">🏕️</div><div class="t-label">Surf camps</div><div class="t-sub">Mes 4 · todo el año</div></div>
+      <div class="t-arr">→</div>
+      <div class="t-card"><div class="t-icon">👶</div><div class="t-label">Niños</div><div class="t-sub">Verano</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S6 — EL SISTEMA ══ -->
+<section class="slide" id="s6">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <div class="eyebrow">El sistema en acción</div>
+    <h2>De interés a<br><span class="g-gold">reserva confirmada.</span></h2>
+  </div>
+  <div class="r">
+    <div class="flow">
+      <div class="f-box f-b1">
+        <div class="f-box-t">Captación</div>
+        <div class="f-box-body">Google Ads<br>"Guía Gratis<br>Paddle" PDF<br>(optin)</div>
+      </div>
+      <div class="f-arr"></div>
+      <div class="f-box f-b2">
+        <div class="f-box-t">Nutrición</div>
+        <div class="f-box-body">Email 5 días<br>Paddle tips<br>→ Servicios<br>→ Oferta</div>
+      </div>
+      <div class="f-arr"></div>
+      <div class="f-box f-b3">
+        <div class="f-box-t">Conversión</div>
+        <div class="f-box-body">Sistema captación<br>Todos servicios<br>Formulario<br>+ chatbot</div>
+      </div>
+      <div class="f-arr"></div>
+      <div class="f-box f-b4">
+        <div class="f-box-t">Automatización</div>
+        <div class="f-box-body">Bot Telegram<br>Confirma reserva<br>CRM BAI</div>
+      </div>
+    </div>
+    <div class="note note-warn" style="max-width:680px;margin:16px auto 0;">
+      <span>⚠️</span><span>Meta Ads no disponibles actualmente — se activan e incluyen <strong>sin coste extra</strong> cuando estén disponibles</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S7 — QUÉ INCLUYE ══ -->
+<section class="slide" id="s7">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Opción A — incluye</div>
+    <h2>Todo lo que necesitas<br><span class="g-green">para crecer.</span></h2>
+  </div>
+  <div class="r">
+    <div class="inc-grid">
+      <div class="inc-item"><span class="inc-icon">🎣</span><div><div class="inc-title">2 funnels de captación de clientes</div><div class="inc-note">Guía paddle (optin) + sistema captación con todos los servicios</div></div></div>
+      <div class="inc-item"><span class="inc-icon">📢</span><div><div class="inc-title">Campañas digitales gestionadas</div><div class="inc-note">Google Ads activo abr–oct · Meta Ads incluidas cuando disponibles</div></div></div>
+      <div class="inc-item"><span class="inc-icon">📧</span><div><div class="inc-title">Secuencia email automática</div><div class="inc-note">5 emails de nurturing con contenido real y útil</div></div></div>
+      <div class="inc-item"><span class="inc-icon">🤖</span><div><div class="inc-title">Bot Telegram 24/7 + chatbot web</div><div class="inc-note">Responde, filtra y confirma reservas mientras duermes</div></div></div>
+      <div class="inc-item"><span class="inc-icon">📊</span><div><div class="inc-title">CRM BAI · pipeline completo</div><div class="inc-note">Ves cada lead, su estado y el próximo paso</div></div></div>
+      <div class="inc-item"><span class="inc-icon">📈</span><div><div class="inc-title">Informe KPI mensual</div><div class="inc-note">Sabes exactamente qué funciona y qué ajustar</div></div></div>
+      <div class="inc-item" style="grid-column:span 2;border-color:rgba(249,188,17,0.3);background:rgba(249,188,17,0.05);">
+        <span class="inc-icon">🧠</span>
+        <div><div class="inc-title">1 consultoría estratégica mensual con Marco</div>
+        <div class="inc-note">Análisis de resultados + ajuste de estrategia · <span style="color:#34d399;font-weight:600;">Incluido en Opción A</span></div></div>
+      </div>
+    </div>
+    <div class="value-callout">
+      <div class="vc-label">⭐ Incluido en el setup</div>
+      <div class="vc-text">Análisis de mercado + estrategia escrita</div>
+      <div class="vc-note">Valor: <strong>€2.000</strong> · Tu hoja de ruta completa, por escrito — explicada paso a paso como una lección de marketing real adaptada a tu negocio</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S8 — ROI CASO PRÁCTICO ══ -->
+<section class="slide" id="s8">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">¿Vale la pena la inversión?</div>
+    <h2>Lo que hacen<br><span class="g-gold">€150 en anuncios.</span></h2>
+    <p class="lead" style="max-width:560px;">Ejemplo real con los precios de <strong>SURFIN' Torrevieja</strong> — solo con paddle, primer mes:</p>
+  </div>
+  <div class="r">
+    <div class="roi-formula">
+      <div class="roi-step s1">
+        <div class="roi-num" style="color:#F9BC11;">€150</div>
+        <div class="roi-label">Google Ads/mes</div>
+        <div class="roi-sub">directo a<br>tu cuenta</div>
+      </div>
+      <div class="roi-arrow">→</div>
+      <div class="roi-step s2">
+        <div class="roi-num" style="color:#93c5fd;">10–15</div>
+        <div class="roi-label">leads paddle/mes</div>
+        <div class="roi-sub">personas que buscan<br>paddle en Torrevieja</div>
+      </div>
+      <div class="roi-arrow">→</div>
+      <div class="roi-step s3">
+        <div class="roi-num" style="color:#34d399;">4–6</div>
+        <div class="roi-label">alquileres/semana</div>
+        <div class="roi-sub">+ 2 clases grupo<br>SUP/semana</div>
+      </div>
+    </div>
+    <div class="roi-result">
+      <div class="roi-result-num">€560–720</div>
+      <div class="roi-result-label">ingresos estimados al mes — <strong>solo con paddle 🛶</strong></div>
+      <div class="roi-result-note">
+        🔢 4–6 alquileres × <strong style="color:#F9BC11;">€20</strong> (2h) = €80–120/sem · 2 clases grupo × 4 personas × <strong style="color:#F9BC11;">€30</strong> = €240/sem<br>
+        <span style="color:#34d399;font-weight:700;">Con el sistema activo: el chatbot convierte consultas incluso a las 2am. Sin sistema, cada lead sin respuesta en 10 min se pierde.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S9 — OPCIÓN A · PRECIO ══ -->
+<section class="slide" id="s9">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <div class="eyebrow">La inversión · Opción A</div>
+    <h2>Sistema Completo<br><span class="g-gold">+ Plataforma BAI</span></h2>
+  </div>
+  <div class="r">
+    <div class="bigpc">
+      <div class="bigpc-label">Opción A · Recomendada</div>
+      <div class="bigpc-name">Sistema Completo + Plataforma BAI<br>2 funnels · Ads · Bot · CRM · Estrategia</div>
+      <div class="bigpc-row">
+        <div class="bigpc-col">
+          <div class="bigpc-col-label">Setup único</div>
+          <div class="bigpc-price">€1.500</div>
+          <div class="bigpc-per">+ IVA</div>
+        </div>
+        <div class="bigpc-col">
+          <div class="bigpc-col-label">Gestión mensual</div>
+          <div class="bigpc-strike">€500</div>
+          <div class="bigpc-price" style="color:#F9BC11;">€300</div>
+          <div class="bigpc-per">/mes + IVA <span class="promo">PROMO</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:18px;font-size:16px;color:var(--dim);line-height:1.8;">
+      Mínimo 90 días · Revisión de cuota al mes 4 · Renovación mensual<br>
+      <strong style="color:var(--white);">Análisis de mercado + estrategia escrita incluidos — valor €2.000</strong>
+    </div>
+    <div style="margin-top:14px;padding:14px 20px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;gap:20px;justify-content:center;flex-wrap:wrap;align-items:center;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);">Budget publicitario recomendado (va directo a tu cuenta)</div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+        <div><span style="font-size:20px;font-weight:900;color:#F9BC11;">€150–250</span><span style="font-size:14px;color:var(--dim);margin-left:6px;">Google Ads/mes</span></div>
+        <div><span style="font-size:20px;font-weight:900;color:#c4b5fd;">€100–150</span><span style="font-size:14px;color:var(--dim);margin-left:6px;">Meta Ads/mes</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S10 — OTRAS OPCIONES ══ -->
+<section class="slide" id="s10">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Otras opciones</div>
+    <h2>Si prefieres<br><span style="color:var(--dim);">gestionar tú la plataforma.</span></h2>
+  </div>
+  <div class="r">
+    <div class="alt-grid">
+      <div class="alt-card">
+        <div class="alt-label">Opción B</div>
+        <div class="alt-name">Configuración BAI<br>+ Gestión Autónoma</div>
+        <div class="alt-price">€50</div>
+        <div class="alt-per">/mes + IVA</div>
+        <div class="alt-setup">Setup: desde <strong style="color:var(--white);">€750</strong> + IVA · Formación incluida · Tú gestionas el día a día</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-label">Opción C</div>
+        <div class="alt-name">Solo Plataforma<br>BAI</div>
+        <div class="alt-price">€50</div>
+        <div class="alt-per">/mes + IVA</div>
+        <div class="alt-setup" style="color:var(--dim);">Sin setup obligatorio · Acceso directo a la plataforma</div>
+      </div>
+    </div>
+    <div class="mgmt-warn">
+      <div class="mgmt-warn-title">⚠️ Lo que hace la diferencia</div>
+      <div class="mgmt-warn-text">El sistema es el motor. <strong>La gestión es el piloto.</strong><br>Sin una buena configuración y sin optimización mensual, los anuncios traen tráfico que no convierte — y los leads se pierden.</div>
+      <div class="mgmt-warn-note">Sin un buen sistema de captación bien montado, es muy difícil obtener resultados reales. La Opción A garantiza que todo funcione desde el primer día — y <span style="color:#34d399;font-weight:600;">mejore cada mes</span>.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S11 — PLAN DE PAGOS ══ -->
+<section class="slide" id="s11">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Plan de pagos · Opción A</div>
+    <h2>Sin sorpresas.<br><span class="g-green">Todo claro.</span></h2>
+    <p class="lead">Mínimo 90 días · Después renovación mensual con <strong>30 días de preaviso</strong></p>
+  </div>
+  <div class="r">
+    <div class="pay-timeline">
+      <div class="pay-row today"><div class="pay-day" style="color:#F9BC11;">Hoy · Día 0</div><div class="pay-desc">50% setup + Mes 1</div><div class="pay-amt" style="color:#F9BC11;">€1.050 + IVA</div></div>
+      <div class="pay-row d20"><div class="pay-day" style="color:#93c5fd;">Día 20</div><div class="pay-desc">Saldo setup · Sistema activo · <span style="color:#34d399;font-weight:700;">Anuncios encendidos 🟢</span></div><div class="pay-amt" style="color:#93c5fd;">€750 + IVA</div></div>
+      <div class="pay-row monthly"><div class="pay-day" style="color:var(--dim);">Día 30 · Mes 2</div><div class="pay-desc">Gestión mensual</div><div class="pay-amt">€300 + IVA</div></div>
+      <div class="pay-row monthly"><div class="pay-day" style="color:var(--dim);">Día 60 · Mes 3</div><div class="pay-desc">Gestión mensual</div><div class="pay-amt">€300 + IVA</div></div>
+      <div class="pay-row review"><div class="pay-day" style="color:#fbbf24;">Día 90 · Mes 4</div><div class="pay-desc" style="font-weight:700;">Revisión de objetivos · Ajuste de cuota según resultados</div><div class="pay-amt" style="color:#fbbf24;">€300–500</div></div>
+      <div class="pay-row total"><div class="pay-day" style="color:#34d399;">Total 90 días</div><div class="pay-desc" style="font-weight:700;">Setup completo + 3 meses de gestión</div><div class="pay-amt" style="color:#34d399;font-size:24px;">€2.400 + IVA</div></div>
+    </div>
+    <div class="note note-info" style="margin-top:12px;">
+      <span>💡</span><span>Los anuncios (<strong>€150–250 Google/mes</strong>) van directos a tu cuenta — tú controlas el gasto publicitario</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S12 — CTA ══ -->
+<section class="slide" id="s12">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <div class="eyebrow">Próximos pasos</div>
+    <h1>¿Tiene sentido<br><span class="g-green">para ti?</span></h1>
+    <p class="lead" style="max-width:480px;margin:0 auto;">Temporada 2026 empieza ya. <strong>Cada semana sin el sistema es una reserva que se va a la competencia.</strong></p>
+  </div>
+  <div class="r">
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-t">Hoy mismo</div><div class="step-s">Email + IBAN · Esta tarde o mañana recibirás el contrato 📄</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">Tras la firma</div><div class="step-s">Cuestionario de onboarding + cita de briefing completo 📋</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Semana 1</div><div class="step-s">€1.050 + IVA anticipo · Setup inicia · Estrategia entregada 🚀</div></div>
+      <div class="step"><div class="step-n">20</div><div class="step-t">Go Live</div><div class="step-s">€750 saldo · Sistema activo · <span style="color:#34d399;font-weight:700;">Anuncios encendidos ✅</span></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+</div>
+
+<div id="progress">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+  <div class="dot" onclick="goTo(6)"></div>
+  <div class="dot" onclick="goTo(7)"></div>
+  <div class="dot" onclick="goTo(8)"></div>
+  <div class="dot" onclick="goTo(9)"></div>
+  <div class="dot" onclick="goTo(10)"></div>
+  <div class="dot" onclick="goTo(11)"></div>
+  <div class="dot" onclick="goTo(12)"></div>
+</div>
+<button class="nav-btn" id="btn-prev" onclick="prev()">← Atrás</button>
+<button class="nav-btn" id="btn-next" onclick="next()">Siguiente →</button>
+
+<script>
+const slides=Array.from(document.querySelectorAll('.slide'));
+const dots=Array.from(document.querySelectorAll('#progress .dot'));
+let si=0;
+function updateDots(){
+  dots.forEach((d,i)=>d.classList.toggle('active',i===si));
+  document.getElementById('btn-prev').style.opacity=si===0?'0.3':'1';
+  document.getElementById('btn-next').style.opacity=si===slides.length-1?'0.3':'1';
+}
+function showSlide(n){
+  slides[si].classList.remove('active');
+  si=Math.max(0,Math.min(n,slides.length-1));
+  slides[si].classList.add('active');
+  updateDots();
+}
+function next(){
+  const p=slides[si].querySelectorAll('.r:not(.shown)');
+  if(p.length>0){p[0].classList.add('shown');}
+  else if(si<slides.length-1){showSlide(si+1);}
+}
+function prev(){
+  const s=slides[si].querySelectorAll('.r.shown');
+  if(s.length>0){s[s.length-1].classList.remove('shown');}
+  else if(si>0){showSlide(si-1);slides[si].querySelectorAll('.r').forEach(e=>e.classList.add('shown'));}
+}
+function goTo(n){showSlide(n);slides[n].querySelectorAll('.r').forEach(e=>e.classList.add('shown'));}
+document.addEventListener('click',e=>{if(!e.target.closest('button')&&!e.target.closest('#progress'))next();});
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'){e.preventDefault();prev();}
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.changedTouches[0].screenX,{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-tx;if(Math.abs(dx)>50){if(dx<0)next();else prev();}},{passive:true});
+updateDots();
+</script>
+</body>
+</html>
