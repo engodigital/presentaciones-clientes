@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema MOTOR — Precios y Estructura | Engo Agency</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; line-height:1.6; font-size:14px; }
+  .container { max-width:960px; margin:0 auto; padding:40px 24px 80px; }
+  .badge-internal { display:inline-block; background:#1d4ed8; color:#fff; padding:3px 10px; border-radius:4px; font-size:11px; font-weight:700; letter-spacing:1px; }
+  h1 { font-size:26px; color:#fff; margin:12px 0 4px; }
+  .subtitle { color:#666; font-size:13px; margin-bottom:40px; }
+  h2 { font-size:16px; font-weight:700; color:#fff; padding-left:14px; border-left:3px solid #3b82f6; margin-bottom:16px; }
+  h3 { font-size:13px; font-weight:600; color:#94a3b8; margin-bottom:10px; }
+  .section { margin-bottom:44px; }
+  .card { background:#111; border:1px solid #1e1e1e; border-radius:8px; padding:20px; margin-bottom:12px; }
+  .card.blue { border-color:#3b82f6; }
+  .card.green { border-color:#10b981; }
+  .card.yellow { border-color:#f59e0b; }
+  .card.red { border-color:#ef4444; }
+  .card.purple { border-color:#8b5cf6; }
+  table { width:100%; border-collapse:collapse; }
+  th { background:#161616; color:#94a3b8; font-size:11px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; padding:10px 12px; text-align:left; border-bottom:1px solid #222; }
+  td { padding:10px 12px; border-bottom:1px solid #1a1a1a; vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  .num { font-weight:700; color:#fff; }
+  .green-text { color:#10b981; font-weight:700; }
+  .blue-text { color:#3b82f6; }
+  .yellow-text { color:#f59e0b; }
+  .red-text { color:#ef4444; }
+  .purple-text { color:#a78bfa; }
+  .gray-text { color:#666; }
+  .tag { display:inline-block; background:#1e293b; color:#93c5fd; padding:2px 8px; border-radius:4px; font-size:11px; margin:2px; }
+  .tag.green { background:#052e16; color:#4ade80; }
+  .tag.yellow { background:#2d1d00; color:#fbbf24; }
+  .tag.purple { background:#2e1065; color:#c4b5fd; }
+  .row-space { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #1a1a1a; }
+  .row-space:last-child { border-bottom:none; }
+  .formula { background:#0f172a; border:1px solid #1e3a5f; border-radius:6px; padding:16px 20px; font-family:monospace; font-size:13px; color:#93c5fd; line-height:2; }
+  .formula .comment { color:#475569; }
+  .step { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid #1a1a1a; }
+  .step:last-child { border-bottom:none; }
+  .step-num { background:#3b82f6; color:#fff; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+  .divider { border:none; border-top:1px solid #1a1a1a; margin:32px 0; }
+  .alert { background:#1c0a00; border:1px solid #f59e0b; border-radius:6px; padding:12px 16px; font-size:13px; color:#fbbf24; }
+  .info-box { background:#0f172a; border:1px solid #3b82f6; border-radius:6px; padding:12px 16px; font-size:13px; color:#93c5fd; }
+  .puzzle-box { background:#0d0d1a; border:1px solid #8b5cf6; border-radius:8px; padding:20px; }
+  .puzzle-box p { color:#c4b5fd; font-size:13px; line-height:1.8; margin-bottom:10px; }
+  .puzzle-box p:last-child { margin-bottom:0; }
+  .leg { display:inline-flex; align-items:center; gap:6px; background:#1a0d2e; border:1px solid #6d28d9; border-radius:6px; padding:6px 12px; margin:4px; font-size:12px; color:#c4b5fd; }
+  .footer { text-align:center; padding-top:32px; border-top:1px solid #1a1a1a; color:#333; font-size:11px; }
+  @media(max-width:640px){ .two-col,.three-col { grid-template-columns:1fr; } }
+
+  /* ── ZOOM & FULLSCREEN ── */
+  #zoom-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 8px 12px;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+  #zoom-bar button {
+    background: #1e293b;
+    color: #e0e0e0;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s;
+    line-height: 1;
+  }
+  #zoom-bar button:hover { background: #2d4263; border-color: #3b82f6; color: #fff; }
+  #zoom-bar button:active { background: #3b82f6; }
+  #zoom-display {
+    font-size: 12px;
+    color: #94a3b8;
+    min-width: 38px;
+    text-align: center;
+    font-family: monospace;
+    user-select: none;
+  }
+  #zoom-bar .divider-v {
+    width: 1px;
+    height: 20px;
+    background: #2a2a2a;
+    margin: 0 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── CONTROLS ── -->
+<div id="zoom-bar">
+  <button id="btn-zoom-out" title="Reducir zoom">−</button>
+  <span id="zoom-display">100%</span>
+  <button id="btn-zoom-in" title="Aumentar zoom">+</button>
+  <div class="divider-v"></div>
+  <button id="btn-fullscreen" title="Pantalla completa">⛶</button>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <span class="badge-internal">ENGO AGENCY — SISTEMA MOTOR</span>
+  <h1>Precios y Estructura de Servicios</h1>
+  <div class="subtitle">Engo Agency · Orihuela Coast · Abril 2026</div>
+
+  <!-- 1. LOS 3 MOTOR -->
+  <div class="section">
+    <h2>1. Los 3 Paquetes MOTOR</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>MOTOR INICIO</th>
+          <th>MOTOR ACTIVO</th>
+          <th>MOTOR TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="gray-text">Setup (pago único)</td><td class="num">€1.500</td><td class="num">€2.500</td><td class="num">€4.000</td></tr>
+        <tr><td class="gray-text">Cuota mensual</td><td class="num">€500/mes</td><td class="num">€900/mes</td><td class="num">€1.400/mes</td></tr>
+        <tr><td class="gray-text">Duración mínima</td><td>3 meses</td><td>3 meses</td><td>3 meses</td></tr>
+        <tr><td class="gray-text">Facturación del cliente</td><td>€150K–€300K/año</td><td>€300K–€700K/año</td><td>€700K+/año</td></tr>
+        <tr><td class="gray-text">Típico Orihuela Costa</td><td>Bar, chiringuito, escuela de deporte</td><td>Restaurante, clínica, inmobiliaria</td><td>Hotel, real estate premium</td></tr>
+        <tr><td class="gray-text">Canales incluidos</td><td>Google Ads + Email</td><td>Google Ads + Email + Telegram</td><td>Todo + multicanal avanzado</td></tr>
+        <tr><td class="gray-text">Presupuesto Ads (cliente, directo)</td><td>€200–400/mes</td><td>€400–700/mes</td><td>€700–1.200/mes</td></tr>
+        <tr><td class="gray-text">Valor año 1 por cliente</td><td class="green-text">€4.500</td><td class="green-text">€7.900</td><td class="green-text">€12.400</td></tr>
+      </tbody>
+    </table>
+    <div class="alert" style="margin-top:12px;">
+      ⚠️ Meta Ads: cuenta bloqueada. En los contratos usar "campañas digitales" (término genérico). Meta se activa en cuanto se resuelva.
+    </div>
+  </div>
+
+  <!-- 2. ESCALADO -->
+  <div class="section">
+    <h2>2. Escalado de Performance — La cuota crece con los Ads</h2>
+    <p style="color:#888; margin-bottom:14px; font-size:13px;">A medida que el cliente obtiene resultados y aumenta su presupuesto de Ads, la cuota de gestión sube proporcionalmente. Es el crecimiento natural del sistema, no un aumento de precio.</p>
+    <table>
+      <thead>
+        <tr><th>Fase</th><th>Ads cliente/mes</th><th>Cuota Marco</th><th>Qué se añade</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tag">ARRANQUE</span></td><td>€200–400</td><td class="num">€500</td><td>Google Ads + Email base</td></tr>
+        <tr><td><span class="tag">CRECIMIENTO</span></td><td>€400–700</td><td class="num">€700</td><td>+ optimización avanzada</td></tr>
+        <tr><td><span class="tag">ACTIVO</span></td><td>€700–1.200</td><td class="num">€900</td><td>+ Telegram + Dashboard KPI</td></tr>
+        <tr><td><span class="tag">EXPANSIÓN</span></td><td>€1.200–2.000</td><td class="num">€1.200</td><td>+ remarketing + A/B test</td></tr>
+        <tr><td><span class="tag yellow">DOMINIO</span></td><td>€2.000+</td><td class="num">€1.500</td><td>+ multicanal completo + call estratégica mensual</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. MÓDULOS BAI -->
+  <div class="section">
+    <h2>3. Módulos BAI — Upsell desde el mes 3</h2>
+    <p style="color:#888; margin-bottom:14px; font-size:13px;">No se proponen en la primera cita. Se activan cuando el sistema MOTOR funciona y el cliente ve resultados.</p>
+    <table>
+      <thead><tr><th>Módulo</th><th>Setup</th><th>Mensual adicional</th><th>Momento</th></tr></thead>
+      <tbody>
+        <tr><td>Chatbot AI</td><td class="num">+€500</td><td class="num">+€150/mes</td><td>Mes 3–4</td></tr>
+        <tr><td>Automatizaciones BAI avanzadas</td><td class="num">+€800</td><td class="num">+€200/mes</td><td>Mes 5–6</td></tr>
+        <tr><td>Reporte KPI avanzado</td><td>—</td><td class="num">+€100/mes</td><td>Cualquier momento</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. DOWNSELL -->
+  <div class="section">
+    <h2>4. Downsell — Servicios Individuales</h2>
+
+    <div class="puzzle-box">
+      <p><strong style="color:#a78bfa;">¿Se puede contratar un solo servicio?</strong> Sí, es posible. Pero hay que entender qué significa.</p>
+      <p>La estrategia MOTOR funciona como un puzzle: cada pieza existe para encajar con las demás. Contratar solo Google Ads sin email marketing, sin automatizaciones y sin seguimiento es como montar un puzzle al que le faltan piezas — la imagen nunca queda completa.</p>
+      <p style="font-size:14px; font-weight:600; color:#c4b5fd;">Una mesa se aguanta con 4 patas. La estrategia digital también.</p>
+      <div style="margin:14px 0;">
+        <span class="leg">📣 Captación (Ads)</span>
+        <span class="leg">📧 Seguimiento (Email/Telegram)</span>
+        <span class="leg">🤖 Automatización (CRM)</span>
+        <span class="leg">📊 Medición (KPI)</span>
+      </div>
+      <p>Si falta una, el cliente obtiene resultados parciales y acaba pensando que "el marketing digital no funciona". <strong style="color:#a78bfa;">Los resultados satisfactorios solo llegan con la estrategia completa.</strong></p>
+    </div>
+
+    <div style="margin-top:16px;">
+      <table>
+        <thead><tr><th>Servicio individual</th><th>Precio orientativo</th><th>Advertencia</th></tr></thead>
+        <tbody>
+          <tr><td>Google Ads (solo gestión)</td><td class="num">€300–500/mes</td><td class="yellow-text">Sin email ni CRM, conversiones muy limitadas</td></tr>
+          <tr><td>Email Marketing (solo)</td><td class="num">€200–350/mes</td><td class="yellow-text">Sin tráfico nuevo, base de datos no crece</td></tr>
+          <tr><td>Automatización CRM (solo)</td><td class="num">€250–400/mes</td><td class="yellow-text">Sin leads entrantes, el sistema queda vacío</td></tr>
+          <tr><td>Dashboard KPI (solo)</td><td class="num">€100–150/mes</td><td class="yellow-text">Mide bien, pero no hay nada que optimizar solo</td></tr>
+        </tbody>
+      </table>
+      <div class="info-box" style="margin-top:10px;">
+        ℹ️ El downsell se usa para no perder una trattativa, no como propuesta principal. Siempre con la puerta abierta: "Cuando quieras el sistema completo, aquí estamos."
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SITIO WEB -->
+  <div class="section">
+    <h2>5. Sitio Web — Siempre Separado</h2>
+
+    <div class="card purple">
+      <p style="font-size:13px; color:#c4b5fd; margin-bottom:14px;">El sitio web <strong>no está incluido</strong> en los paquetes MOTOR. Es un servicio adicional con precio propio, definido según el número de páginas y las funciones requeridas.</p>
+      <p style="font-size:13px; color:#c4b5fd;">Sin embargo, <strong>en muchos casos no hace falta</strong>: la estrategia MOTOR ya incluye una página de captación (landing page) optimizada para recibir solicitudes de información. Esta página puede sustituir perfectamente a un sitio web completo para el primer año de actividad.</p>
+    </div>
+
+    <div class="two-col" style="margin-top:12px;">
+      <div class="card">
+        <h3>Opción A — Landing page estratégica</h3>
+        <div class="row-space"><span class="gray-text">Incluida en</span><span class="blue-text">todos los paquetes MOTOR</span></div>
+        <div class="row-space"><span class="gray-text">Función</span><span>Captación + solicitud info</span></div>
+        <div class="row-space"><span class="gray-text">Coste adicional</span><span class="green-text">€0</span></div>
+        <div class="row-space"><span class="gray-text">Ideal para</span><span>Negocios sin web o con web obsoleta</span></div>
+      </div>
+      <div class="card blue">
+        <h3>Opción B — Sitio web completo</h3>
+        <div class="row-space"><span class="gray-text">Páginas</span><span>A definir (mín. 3–4 pág.)</span></div>
+        <div class="row-space"><span class="gray-text">Precio setup</span><span class="num">A presupuestar</span></div>
+        <div class="row-space"><span class="gray-text">Mantenimiento</span><span class="num">A presupuestar</span></div>
+        <div class="row-space"><span class="gray-text">Precio depende de</span><span>N.° de páginas · Funciones · Integraciones</span></div>
+      </div>
+    </div>
+    <div class="alert" style="margin-top:12px;">
+      El precio del sitio web se establece siempre de forma personalizada según el briefing del cliente: número de páginas, idiomas, formularios, reservas online, tienda, integraciones CRM, etc.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 6. PLAN DE COMPENSACIONES -->
+  <div class="section">
+    <h2>6. Plan de Compensaciones — Todos los roles</h2>
+
+    <div class="formula">
+      <span class="comment">// FÓRMULA DE DISTRIBUCIÓN (aplicada en este orden)</span><br>
+      Bruto (cuota del cliente)<br>
+      &nbsp;&nbsp;− CF 15% del bruto &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// costos fijos del proyecto</span><br>
+      &nbsp;&nbsp;− Comisión comercial<br>
+      &nbsp;&nbsp;− Steeno (fijo por tier) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// revisión estratégica, costo del proyecto</span><br>
+      = NET A<br>
+      &nbsp;&nbsp;÷ 2 → <strong>Hector 50%</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// siempre, en cada cliente</span><br>
+      &nbsp;&nbsp;÷ 2 → <strong>Marco 50%</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// beneficio neto Marco</span><br>
+    </div>
+
+    <div style="margin-top:20px;">
+      <table>
+        <thead><tr><th>Nombre</th><th>Rol</th><th>Sobre Setup</th><th>Sobre Mensual</th><th>Duración</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="num">Hector</td>
+            <td>Plataforma AI / Partner</td>
+            <td class="num">50% del NET A</td>
+            <td class="num">50% del NET A</td>
+            <td>Siempre</td>
+            <td class="gray-text">Siempre, en cada cliente, porque usa siempre sus herramientas</td>
+          </tr>
+          <tr>
+            <td class="num">Álvaro</td>
+            <td>Comercial (cierra)</td>
+            <td class="num">12% bruto</td>
+            <td class="num">8% bruto</td>
+            <td>12% setup (pago único) · 8% solo primeros 6 meses</td>
+            <td class="gray-text">Descontado antes del cálculo NET A</td>
+          </tr>
+          <tr>
+            <td class="num">Camila</td>
+            <td>Captación de leads</td>
+            <td class="num">5% bruto</td>
+            <td>—</td>
+            <td>Pago único al cierre</td>
+            <td class="gray-text">Solo si el lead viene de ella. Se suma a Álvaro si ambos están involucrados.</td>
+          </tr>
+          <tr>
+            <td class="num">Steeno</td>
+            <td>Revisión estratégica</td>
+            <td>Fijo por tier</td>
+            <td>Fijo por tier</td>
+            <td>Siempre, mientras el cliente esté activo</td>
+            <td class="gray-text">Costo del proyecto (no de Marco). Se descuenta del bruto antes de repartir.</td>
+          </tr>
+          <tr>
+            <td class="num">Marco</td>
+            <td>CEO / Estratega / Supervisor</td>
+            <td colspan="4" style="color:#10b981;">Beneficio neto — 50% del NET A (después de CF + comisiones + Steeno)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:16px;">
+      <h3>Steeno — Compensación fija por tier (costo proyecto)</h3>
+      <table>
+        <thead><tr><th></th><th>MOTOR INICIO</th><th>MOTOR ACTIVO</th><th>MOTOR TOTAL</th></tr></thead>
+        <tbody>
+          <tr><td class="gray-text">Setup</td><td>€150</td><td>€225</td><td>€350</td></tr>
+          <tr><td class="gray-text">Mensual</td><td>€75/mes</td><td>€125/mes</td><td>€175/mes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 7. REGLA DE COMPOSICIÓN -->
+  <div class="section">
+    <h2>7. Regla de Composición — 2ª Cita</h2>
+    <div class="card">
+      <div class="step"><div class="step-num">1</div><div><strong>CALIFICA</strong> — "¿Cuánto facturas al año?" → elige INICIO / ACTIVO / TOTAL</div></div>
+      <div class="step"><div class="step-num">2</div><div><strong>ADS</strong> — "¿Cuánto puedes invertir en publicidad cada mes?" → define la línea de ads (el cliente paga directamente en sus propias cuentas)</div></div>
+      <div class="step"><div class="step-num">3</div><div><strong>MUESTRA</strong> en iPad: <code style="background:#1e293b; padding:2px 6px; border-radius:3px;">[cuota] + [tus ads] = total mensual</code></div></div>
+      <div class="step"><div class="step-num">4</div><div><strong>CASO DE ÉXITO</strong> — restaurante u otro sector similar, números reales. "Mira, este negocio similar al tuyo…"</div></div>
+      <div class="step"><div class="step-num">5</div><div><strong>CIERRA</strong> — "¿Empezamos? Te mando email con IBAN. El 50% antes de mañana y empezamos esta semana."</div></div>
+    </div>
+    <div class="alert" style="margin-top:12px;">
+      Anticipo 50% upfront = regla no negociable. Sin anticipo no se empieza. El setup comienza solo después de recibir el pago.
+    </div>
+  </div>
+
+  <!-- 8. CALIFICACIÓN PRE-CITA -->
+  <div class="section">
+    <h2>8. Calificación Pre-Cita (desde marcomarengo.es)</h2>
+    <table>
+      <thead><tr><th>Campo formulario</th><th>Qué indica</th><th>Acción</th></tr></thead>
+      <tbody>
+        <tr><td>Presupuesto €0–500</td><td class="red-text">Fuera de target</td><td>No confirmar cita</td></tr>
+        <tr><td>Presupuesto €500–1.000</td><td class="yellow-text">INICIO</td><td>Prepara caso de éxito negocio pequeño</td></tr>
+        <tr><td>Presupuesto €1.000–2.000</td><td class="blue-text">ACTIVO</td><td>Prepara caso de éxito restaurante/clínica</td></tr>
+        <tr><td>Presupuesto €2.000+</td><td class="green-text">TOTAL</td><td>Prepara caso de éxito sector premium</td></tr>
+        <tr><td>Nombre negocio en Google</td><td>Estimación de facturación</td><td>Busca en Maps / TripAdvisor / Idealista antes de la call</td></tr>
+        <tr><td>Google: NO</td><td>Primera prioridad</td><td>Primera propuesta: Google Ads inmediato</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 9. SIMULACIÓN TARGET -->
+  <div class="section">
+    <h2>9. Simulación Target €10.000/mes</h2>
+    <table>
+      <thead><tr><th>Escenario</th><th>Clientes</th><th>Cuota mensual</th><th>Setup extra</th><th>Beneficio neto Marco</th></tr></thead>
+      <tbody>
+        <tr><td>6 clientes ACTIVO en régimen</td><td>6 × ACTIVO</td><td>6 × €221 = €1.326</td><td>—</td><td class="num">€1.326/mes</td></tr>
+        <tr><td>+ 2 setup ACTIVO/mes</td><td>+2 nuevos</td><td>como arriba</td><td>2 × €687 = €1.374</td><td class="green-text">+€1.374 extra</td></tr>
+        <tr><td>Mix 4 ACTIVO + 2 TOTAL (mes 8+)</td><td>6 clientes</td><td>€884 + €728 = €1.612</td><td>+setup variable</td><td class="green-text">€1.612+ / mes</td></tr>
+        <tr><td><strong>Target realista septiembre 2026</strong></td><td colspan="3">8 clientes gestión + 2 setup/mes</td><td class="green-text"><strong>€3.000–4.000/mes neto</strong></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px; color:#666; font-size:12px;">
+      * Cálculo con Álvaro ongoing aún activo (primeros 6 meses de cada cliente). Después de los 6 meses los márgenes mejoran un ~4-5% por cliente.
+    </div>
+  </div>
+
+  <div class="footer">
+    Sistema MOTOR · Engo Agency · Precios y Estructura · Abril 2026<br>
+    Uso exclusivo para colaboradores del equipo Engo Agency.
+  </div>
+
+</div>
+
+<script>
+  let zoom = 100;
+  const STEP = 10, MIN = 50, MAX = 200;
+  const display = document.getElementById('zoom-display');
+
+  function applyZoom() {
+    display.textContent = zoom + '%';
+    document.body.style.zoom = zoom / 100;
+  }
+
+  document.getElementById('btn-zoom-in').addEventListener('click', () => { if (zoom < MAX) { zoom += STEP; applyZoom(); } });
+  document.getElementById('btn-zoom-out').addEventListener('click', () => { if (zoom > MIN) { zoom -= STEP; applyZoom(); } });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '+' || e.key === '=') { if (zoom < MAX) { zoom += STEP; applyZoom(); } }
+    if (e.key === '-') { if (zoom > MIN) { zoom -= STEP; applyZoom(); } }
+    if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+  });
+
+  const btnFs = document.getElementById('btn-fullscreen');
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+    else document.exitFullscreen();
+  }
+  btnFs.addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', () => {
+    btnFs.textContent = document.fullscreenElement ? '✕' : '⛶';
+    btnFs.title = document.fullscreenElement ? 'Salir de pantalla completa' : 'Pantalla completa';
+  });
+</script>
+</body>
+</html>
