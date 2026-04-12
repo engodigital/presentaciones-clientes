@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- CUSTOMIZE: client name -->
+<title>[CLIENT NAME] · Commercial Proposal</title>
+<style>
+/* ═══════════════════════════════════════════════
+   VARIABLES — change accent color per client
+═══════════════════════════════════════════════ */
+:root{
+  --bg:#080604;
+  --white:#ffffff;
+  --dim:rgba(255,255,255,0.62);
+  --faint:rgba(255,255,255,0.28);
+  --border:rgba(255,255,255,0.1);
+  --gold:#C9A961;   /* main accent */
+  --green:#34d399;  /* positive / CTA */
+  --amber:#fbbf24;  /* warning */
+  --red:#ef4444;    /* pain / problem */
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--white);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:17px;}
+
+/* ═══════════════════════════════════════════════
+   SLIDE SYSTEM
+═══════════════════════════════════════════════ */
+#deck{position:fixed;inset:0;}
+.slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  padding:52px 72px;flex-direction:column;}
+.slide.active{display:flex;}
+/* Each slide gets its own radial gradient via inline style or per-id rule */
+.slide::before{content:'';position:absolute;inset:0;pointer-events:none;}
+/* CUSTOMIZE: add gradient per slide like:
+   #s0::before{background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(201,169,97,0.1),transparent);}
+*/
+
+/* ═══════════════════════════════════════════════
+   REVEAL ANIMATION — .r / .r.shown
+   Click/arrow reveals next .r:not(.shown)
+   then advances to next slide
+═══════════════════════════════════════════════ */
+.r{opacity:0;transform:translateY(18px);transition:opacity .45s ease,transform .45s ease;}
+.r.shown{opacity:1;transform:none;}
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+#progress{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:100;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .3s;cursor:pointer;}
+.dot.active{background:var(--gold);width:22px;border-radius:4px;}
+.nav-btn{position:fixed;bottom:18px;padding:9px 20px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--dim);font-size:14px;
+  cursor:pointer;z-index:100;transition:all .2s;font-family:inherit;}
+.nav-btn:hover{color:var(--white);background:rgba(255,255,255,0.1);}
+#btn-prev{left:24px;}#btn-next{right:24px;}
+
+/* ═══════════════════════════════════════════════
+   ZOOM + FULLSCREEN CONTROLS
+═══════════════════════════════════════════════ */
+#zoom-controls{position:fixed;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:200;}
+.zoom-btn{width:36px;height:36px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
+  border-radius:8px;color:rgba(255,255,255,0.7);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:inherit;}
+.zoom-btn:hover{background:rgba(255,255,255,0.14);color:#fff;}
+#zoom-label{font-size:12px;color:rgba(255,255,255,0.35);min-width:36px;text-align:center;letter-spacing:1px;}
+.zoom-sep{width:1px;height:20px;background:rgba(255,255,255,0.1);display:inline-block;}
+
+/* ═══════════════════════════════════════════════
+   TYPOGRAPHY
+═══════════════════════════════════════════════ */
+.inner{max-width:900px;width:100%;position:relative;z-index:1;}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:16px;}
+h1{font-size:clamp(56px,8vw,100px);font-weight:900;line-height:.9;letter-spacing:-4px;}
+h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spacing:-2px;}
+.lead{font-size:18px;color:var(--dim);line-height:1.8;margin-top:16px;}
+.g-gold{background:linear-gradient(130deg,#C9A961,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.g-green{background:linear-gradient(130deg,#34d399,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ═══════════════════════════════════════════════
+   CONTENT BLOCKS
+═══════════════════════════════════════════════ */
+/* Pain list */
+.pain-list{display:flex;flex-direction:column;gap:14px;margin-top:24px;}
+.pain{display:flex;align-items:flex-start;gap:18px;padding:20px 22px;border-radius:14px;
+  background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);}
+.pain-icon{font-size:26px;flex-shrink:0;line-height:1;}
+.pain-title{font-size:17px;font-weight:700;color:var(--white);line-height:1.5;}
+.pain-sub{font-size:15px;color:var(--dim);margin-top:6px;line-height:1.65;}
+
+/* Quote grid */
+.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
+.quote{padding:18px 20px;border-radius:14px;background:rgba(255,255,255,0.04);border-left:3px solid rgba(201,169,97,0.5);}
+.quote-text{font-size:16px;font-weight:500;color:var(--white);line-height:1.7;font-style:italic;}
+
+/* Box grid (2 columns) */
+.box-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;}
+.sbox{padding:24px;border-radius:16px;border:1px solid;}
+.sbox-icon{font-size:32px;margin-bottom:12px;}
+.sbox-title{font-size:18px;font-weight:800;color:var(--white);margin-bottom:10px;line-height:1.3;}
+.sbox-text{font-size:15px;color:var(--dim);line-height:1.75;}
+
+/* Included list */
+.inc-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;}
+.inc-item{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-radius:12px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);}
+.inc-icon{font-size:20px;flex-shrink:0;}
+.inc-title{font-size:17px;font-weight:700;color:var(--white);line-height:1.3;}
+.inc-note{font-size:14px;color:var(--dim);margin-top:3px;line-height:1.55;}
+
+/* Value callout */
+.value-callout{margin-top:18px;padding:16px 20px;border-radius:14px;
+  background:rgba(201,169,97,0.07);border:1px solid rgba(201,169,97,0.3);}
+.vc-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#e2c97e;margin-bottom:6px;}
+.vc-text{font-size:16px;font-weight:600;color:var(--white);line-height:1.5;}
+.vc-value{font-size:14px;color:var(--dim);margin-top:4px;line-height:1.65;}
+
+/* ROI formula */
+.roi-formula{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:12px;margin-top:24px;}
+.roi-step{text-align:center;padding:22px 16px;border-radius:16px;border:1px solid;background:rgba(255,255,255,0.04);}
+.roi-step.s1{border-color:rgba(201,169,97,0.35);background:rgba(201,169,97,0.06);}
+.roi-step.s2{border-color:rgba(96,165,250,0.35);background:rgba(96,165,250,0.06);}
+.roi-step.s3{border-color:rgba(52,211,153,0.35);background:rgba(52,211,153,0.06);}
+.roi-num{font-size:36px;font-weight:900;line-height:1;margin-bottom:6px;}
+.roi-label{font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px;}
+.roi-sub{font-size:13px;color:var(--dim);line-height:1.4;}
+.roi-arrow{font-size:24px;color:var(--faint);text-align:center;}
+.roi-result{margin-top:20px;padding:20px 24px;border-radius:16px;
+  background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.35);text-align:center;}
+.roi-result-num{font-size:48px;font-weight:900;color:#34d399;line-height:1;}
+.roi-result-label{font-size:16px;color:var(--white);font-weight:600;margin-top:6px;}
+.roi-result-note{font-size:14px;color:var(--dim);margin-top:8px;line-height:1.7;}
+
+/* Price block */
+.bigpc{max-width:520px;margin:24px auto 0;padding:36px 40px;border-radius:24px;text-align:center;}
+.bigpc-label{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.bigpc-name{font-size:22px;font-weight:800;color:var(--white);margin-bottom:24px;line-height:1.3;}
+.bigpc-row{display:flex;justify-content:space-around;gap:20px;flex-wrap:wrap;}
+.bigpc-col{text-align:center;}
+.bigpc-col-label{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.bigpc-price{font-size:58px;font-weight:900;color:var(--white);line-height:1;}
+.bigpc-per{font-size:16px;color:var(--dim);margin-top:4px;}
+
+/* Steps (CTA) */
+.steps{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap;}
+.step{flex:1;min-width:155px;text-align:center;padding:22px 16px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;}
+.step-n{font-size:32px;font-weight:900;color:rgba(52,211,153,0.3);margin-bottom:8px;}
+.step-t{font-size:17px;font-weight:800;color:var(--white);margin-bottom:6px;}
+.step-s{font-size:14px;color:var(--dim);line-height:1.6;}
+
+/* Notes */
+.note{display:flex;gap:10px;align-items:flex-start;padding:13px 16px;border-radius:10px;
+  font-size:15px;line-height:1.65;margin-top:14px;}
+.note-warn{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.22);color:#fca5a5;}
+.note-info{background:rgba(201,169,97,0.07);border:1px solid rgba(201,169,97,0.2);color:#e2c97e;}
+.note-amber{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.22);color:#fbbf24;}
+.note-green{background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.25);color:#6ee7b7;}
+
+/* ═══════════════════════════════════════════════
+   PAYMENT PLANS
+   Pattern: Plan A always shown.
+   Plan B hidden behind a button (revealPlanB).
+   If client accepts Plan A → remove #plan-b-trigger from HTML.
+   If downsell flow → revealPlanB() called automatically.
+═══════════════════════════════════════════════ */
+.plan-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.plan-back{display:inline-flex;align-items:center;gap:6px;background:transparent;
+  border:1px solid rgba(255,255,255,0.12);border-radius:7px;color:rgba(255,255,255,0.45);
+  font-size:13px;padding:6px 14px;cursor:pointer;font-family:inherit;transition:all .2s;margin-bottom:14px;}
+.plan-back:hover{color:var(--dim);border-color:rgba(255,255,255,0.22);}
+
+.pay-timeline{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.pay-row{display:flex;align-items:flex-start;gap:20px;padding:16px 20px;border-radius:12px;}
+.pay-row.today{background:rgba(201,169,97,0.08);border:1px solid rgba(201,169,97,0.3);}
+.pay-row.d20{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.25);}
+.pay-row.monthly{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);}
+.pay-row.total{background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.3);}
+.pay-row.renew{background:rgba(52,211,153,0.04);border:1px solid rgba(52,211,153,0.2);}
+.pay-day{font-size:13px;font-weight:800;min-width:120px;text-transform:uppercase;letter-spacing:1px;padding-top:2px;}
+.pay-desc{flex:1;font-size:16px;color:var(--white);font-weight:500;}
+/* Sub-line: what happens at this milestone — helps during negotiation */
+.pay-milestone{font-size:13px;color:rgba(255,255,255,0.42);margin-top:4px;font-weight:400;line-height:1.5;}
+.pay-amt{font-size:20px;font-weight:900;color:var(--white);white-space:nowrap;padding-top:2px;}
+
+/* ═══════════════════════════════════════════════
+   DOWNSELL — locked slide
+   Hidden from next()/prev() until unlockDownsell() is called.
+   Triggered by a discreet button on the price slide.
+═══════════════════════════════════════════════ */
+.downsell-btn{margin-top:18px;text-align:center;}
+.downsell-btn button{background:transparent;border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px;color:rgba(255,255,255,0.3);font-size:13px;padding:8px 18px;
+  cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px;}
+.downsell-btn button:hover{color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.2);}
+
+/* Downsell content styles */
+.alt-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;}
+.alt-card{padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);}
+.alt-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.alt-name{font-size:18px;font-weight:800;color:var(--white);margin-bottom:14px;line-height:1.3;}
+.alt-price{font-size:40px;font-weight:900;color:var(--white);line-height:1;}
+.alt-per{font-size:16px;color:var(--dim);margin-top:4px;}
+.alt-setup{font-size:15px;color:var(--dim);margin-top:8px;}
+.mgmt-warn{margin-top:20px;padding:20px 24px;border-radius:16px;
+  background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.28);}
+.mgmt-warn-title{font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fbbf24;margin-bottom:10px;}
+.mgmt-warn-text{font-size:17px;font-weight:600;color:var(--white);line-height:1.7;}
+.mgmt-warn-note{font-size:15px;color:var(--dim);margin-top:8px;line-height:1.65;}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE + PRINT
+═══════════════════════════════════════════════ */
+@media(max-width:760px){
+  .slide{padding:44px 24px;}
+  h1{font-size:52px;letter-spacing:-3px;}h2{font-size:34px;}
+  .quote-grid,.box-grid,.inc-list,.alt-grid,.roi-formula{grid-template-columns:1fr;}
+  .steps,.bigpc-row{flex-direction:column;}
+}
+@media print{
+  html,body{height:auto;overflow:visible !important;background:#080604 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #deck{position:static;height:auto;}
+  .slide{position:relative !important;display:flex !important;height:100vh;page-break-after:always;break-after:page;}
+  .r{opacity:1 !important;transform:none !important;transition:none !important;}
+  #progress,#btn-prev,#btn-next,#zoom-controls{display:none !important;}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ══════════════════════════════════════════════════
+  HOW TO USE THIS TEMPLATE
+  ─────────────────────────────────────────────────────
+  1. Copy this file → rename to bai/propuesta-[client].html
+  2. Fill all [PLACEHOLDER] and <!-- CUSTOMIZE --> comments
+  3. Set DOWNSELL_SLIDE_IDX and PAYMENT_SLIDE_IDX in JS (bottom)
+  4. Push to github.com/engodigital/presentaciones-clientes
+  5. Preview via htmlpreview.github.io
+
+  SLIDE ORDER EXAMPLE (adjust to your needs):
+  S0 Cover → S1 Pain → S2 Diagnosis → S3 Strategy →
+  S4 Price → [S5 Downsell — locked] → S6 Payment → S7 CTA
+
+  PAYMENT PLANS:
+  • Plan A shown by default — NO visible switch
+  • Remove #plan-b-trigger button to never show Plan B
+  • Plan B revealed by button or automatically via downsell flow
+══════════════════════════════════════════════════ -->
+
+<!-- ══ S0 — COVER ══ -->
+<section class="slide active" id="s0"
+  style="background-image:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(201,169,97,0.1),transparent);">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <!-- CUSTOMIZE: location / market / sector -->
+    <div class="eyebrow">[Location] · [Market / Sector]</div>
+    <!-- CUSTOMIZE: client name -->
+    <h1 style="margin:12px 0;">[Client<br><span class="g-gold">Name]</span></h1>
+    <p class="lead" style="max-width:480px;margin:0 auto;">
+      <!-- CUSTOMIZE: one-line value proposition -->
+      [Your system for converting international buyers automatically —]<br>
+      [24 hours a day, across your key markets.]
+    </p>
+  </div>
+  <div class="r" style="margin-top:28px;">
+    <div style="font-size:13px;color:var(--dim);letter-spacing:2px;">TAP ANYWHERE TO CONTINUE →</div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S1 — PAIN ══ -->
+<!-- CUSTOMIZE: 2-3 pain points from the discovery call -->
+<section class="slide" id="s1"
+  style="background-image:radial-gradient(ellipse 70% 55% at 30% 40%,rgba(239,68,68,0.08),transparent);">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">What's happening today</div>
+    <h2>Without a system,<br><span style="color:#ef4444;">serious buyers go elsewhere</span></h2>
+  </div>
+  <div class="r">
+    <div class="pain-list">
+      <div class="pain">
+        <span class="pain-icon">🔍</span>
+        <div>
+          <div class="pain-title">[Pain point 1 — visibility problem]</div>
+          <div class="pain-sub">[Elaboration — specific to this client]</div>
+        </div>
+      </div>
+      <div class="pain">
+        <span class="pain-icon">⏱️</span>
+        <div>
+          <div class="pain-title">[Pain point 2 — time/efficiency problem]</div>
+          <div class="pain-sub">[Elaboration]</div>
+        </div>
+      </div>
+      <div class="pain">
+        <span class="pain-icon">📊</span>
+        <div>
+          <div class="pain-title">[Pain point 3 — revenue/growth problem]</div>
+          <div class="pain-sub">[Elaboration]</div>
+        </div>
+      </div>
+    </div>
+    <div class="note note-green" style="margin-top:16px;">
+      <span>✅</span>
+      <span>This is a system problem. And it has a solution that can be <strong>live in 20 days</strong>. Keep reading →</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S2 — PRICE (Option A) ══ -->
+<!-- CUSTOMIZE: pricing for this client -->
+<section class="slide" id="s2"
+  style="background-image:radial-gradient(ellipse 65% 60% at 50% 50%,rgba(201,169,97,0.08),transparent);">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <!-- CUSTOMIZE -->
+    <div class="eyebrow">The investment · Option A</div>
+    <h2>Complete Management<br><span class="g-gold">+ BAI Platform</span></h2>
+  </div>
+  <div class="r">
+    <div class="bigpc" style="background:rgba(201,169,97,0.07);border:2px solid rgba(201,169,97,0.4);">
+      <div class="bigpc-label">Option A · Recommended</div>
+      <!-- CUSTOMIZE -->
+      <div class="bigpc-name">Full Management + BAI Platform<br>Lead gen · Ads · Bot · CRM · Strategy</div>
+      <div class="bigpc-row">
+        <div class="bigpc-col">
+          <div class="bigpc-col-label">One-time setup</div>
+          <!-- CUSTOMIZE: setup fee -->
+          <div class="bigpc-price" style="color:#C9A961;">€X.XXX</div>
+          <div class="bigpc-per">+ VAT</div>
+        </div>
+        <div class="bigpc-col">
+          <div class="bigpc-col-label">Monthly management</div>
+          <!-- CUSTOMIZE: monthly fee -->
+          <div class="bigpc-price">€XXX</div>
+          <div class="bigpc-per">/month + VAT</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:16px;color:var(--dim);line-height:1.8;">
+      Minimum 90 days · Monthly renewal with 30-day advance notice<br>
+      <strong style="color:var(--white);">Market analysis + written strategy included</strong>
+    </div>
+    <!-- DOWNSELL TRIGGER: remove this button if client accepted Plan A -->
+    <div class="downsell-btn">
+      <button id="btn-downsell" onclick="unlockDownsell()">This doesn't fit? See alternative setups ↓</button>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S3 — DOWNSELL (locked — hidden from main flow) ══ -->
+<!-- IMPORTANT: set DOWNSELL_SLIDE_IDX = 3 in JS below -->
+<!-- Remove this entire section if there is no downsell -->
+<section class="slide locked-slide" id="s3"
+  style="background-image:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(251,191,36,0.06),transparent);">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Other options</div>
+    <h2>If you prefer<br><span style="color:var(--dim);">to manage it yourself.</span></h2>
+  </div>
+  <div class="r">
+    <!-- CUSTOMIZE: alternative packages -->
+    <div class="alt-grid">
+      <div class="alt-card">
+        <div class="alt-label">Option B</div>
+        <div class="alt-name">[Package name]</div>
+        <div class="alt-price">€XX</div>
+        <div class="alt-per">/month + VAT</div>
+        <div class="alt-setup">Setup: from <strong style="color:var(--white);">€XXX</strong> + VAT</div>
+      </div>
+      <div class="alt-card">
+        <div class="alt-label">Option C</div>
+        <div class="alt-name">[Platform only]</div>
+        <div class="alt-price">€XX</div>
+        <div class="alt-per">/month + VAT</div>
+        <div class="alt-setup" style="color:var(--dim);">No setup required</div>
+      </div>
+    </div>
+    <div class="mgmt-warn">
+      <div class="mgmt-warn-title">⚠️ What makes the difference</div>
+      <div class="mgmt-warn-text">The system is the engine. <strong>Management is the pilot.</strong></div>
+      <div class="mgmt-warn-note">Without proper setup and monthly optimisation, results are unpredictable. Option A ensures everything works from day one — and <span style="color:#34d399;font-weight:600;">improves every month.</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S4 — PAYMENT ══ -->
+<!-- IMPORTANT: set PAYMENT_SLIDE_IDX = 4 in JS below -->
+<!-- PAYMENT PLAN LOGIC:
+     • Plan A shown by default — clean, no tabs
+     • Remove #plan-b-trigger button to never reveal Plan B
+     • If client came via downsell: Plan B shown automatically
+     • Plan B has a ← Back button to return to Plan A
+-->
+<section class="slide" id="s4"
+  style="background-image:radial-gradient(ellipse 65% 60% at 50% 50%,rgba(201,169,97,0.07),transparent);">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Payment schedule</div>
+    <h2>No surprises.<br><span class="g-green">Everything clear</span></h2>
+  </div>
+  <div class="r">
+
+    <!-- ── PLAN A (main — always shown first) ── -->
+    <div id="pay-a">
+      <div class="plan-label">90-day plan · recommended</div>
+      <div style="font-size:15px;color:var(--dim);margin-bottom:12px;">
+        Minimum 90 days · Monthly renewal with <strong style="color:var(--white);">30-day advance notice</strong>
+      </div>
+      <div class="pay-timeline">
+        <!-- CUSTOMIZE: adjust amounts and milestone descriptions -->
+        <div class="pay-row today">
+          <div class="pay-day" style="color:#C9A961;">Today · Day 0</div>
+          <div class="pay-desc">
+            50% setup deposit + Month 1
+            <div class="pay-milestone">Contract signed · Briefing call · Setup starts · Strategy in 5 days</div>
+          </div>
+          <div class="pay-amt" style="color:#C9A961;">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row d20">
+          <div class="pay-day" style="color:#93c5fd;">Day 20</div>
+          <div class="pay-desc">
+            Setup balance · System live · <span style="color:#34d399;font-weight:700;">Ads running 🟢</span>
+            <div class="pay-milestone">You pay only when everything is live and working</div>
+          </div>
+          <div class="pay-amt" style="color:#93c5fd;">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row monthly">
+          <div class="pay-day" style="color:var(--dim);">Month 2</div>
+          <div class="pay-desc">
+            Monthly management
+            <div class="pay-milestone">First KPI report · Campaign optimisation</div>
+          </div>
+          <div class="pay-amt">€XXX + VAT</div>
+        </div>
+        <div class="pay-row monthly">
+          <div class="pay-day" style="color:var(--dim);">Month 3</div>
+          <div class="pay-desc">
+            Monthly management
+            <div class="pay-milestone">90-day review · Strategy adjustment</div>
+          </div>
+          <div class="pay-amt">€XXX + VAT</div>
+        </div>
+        <div class="pay-row total">
+          <div class="pay-day" style="color:#34d399;">90-Day Total</div>
+          <div class="pay-desc" style="font-weight:700;">Full setup + 3 months management</div>
+          <div class="pay-amt" style="color:#34d399;font-size:24px;">€X.XXX + VAT</div>
+        </div>
+      </div>
+      <div class="note note-info" style="margin-top:12px;">
+        <span>💡</span>
+        <!-- CUSTOMIZE: ad budget recommendation -->
+        <span>Recommended ad budget: <strong>€XXX–XXX Google Ads + €XXX–XXX Meta Ads</strong> — goes directly into your own accounts</span>
+      </div>
+      <!-- PLAN B TRIGGER: remove this block entirely if you never want to show Plan B -->
+      <div class="downsell-btn" id="plan-b-trigger">
+        <button onclick="revealPlanB()">Prefer to spread payments? See 6-month plan ↓</button>
+      </div>
+    </div>
+
+    <!-- ── PLAN B (hidden by default — 6 month spread) ── -->
+    <!-- Remove this entire block if Plan B is not needed -->
+    <div id="pay-b" style="display:none;">
+      <button class="plan-back" onclick="backToPlanA()">← 90-day plan</button>
+      <div class="plan-label">6-month spread</div>
+      <div style="font-size:15px;color:var(--dim);margin-bottom:12px;">
+        Minimum 6 months · From month 7: quarterly renewal with <strong style="color:var(--white);">30-day advance notice</strong>
+      </div>
+      <div class="pay-timeline">
+        <!-- CUSTOMIZE: 6-month payment rows -->
+        <div class="pay-row today">
+          <div class="pay-day" style="color:#C9A961;">Month 1 · Day 0</div>
+          <div class="pay-desc">
+            First instalment · Setup begins
+            <div class="pay-milestone">Contract signed · Briefing call · Setup starts · Strategy in 5 days</div>
+          </div>
+          <div class="pay-amt" style="color:#C9A961;">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row d20">
+          <div class="pay-day" style="color:#93c5fd;">Month 2 · Day 20</div>
+          <div class="pay-desc">
+            System live · <span style="color:#34d399;font-weight:700;">Google Ads running 🟢</span>
+            <div class="pay-milestone">Balance due only when system is live and working</div>
+          </div>
+          <div class="pay-amt" style="color:#93c5fd;">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row monthly">
+          <div class="pay-day" style="color:var(--dim);">Month 3</div>
+          <div class="pay-desc">Monthly management<div class="pay-milestone">First KPI report · Optimisation</div></div>
+          <div class="pay-amt">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row monthly">
+          <div class="pay-day" style="color:var(--dim);">Month 4</div>
+          <div class="pay-desc">Monthly management<div class="pay-milestone">Pipeline review · Expansion</div></div>
+          <div class="pay-amt">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row monthly">
+          <div class="pay-day" style="color:var(--dim);">Month 5</div>
+          <div class="pay-desc">Monthly management<div class="pay-milestone">Meta Ads activated when available</div></div>
+          <div class="pay-amt">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row monthly">
+          <div class="pay-day" style="color:var(--dim);">Month 6</div>
+          <div class="pay-desc">Monthly management<div class="pay-milestone">6-month review · Strategy for next quarter</div></div>
+          <div class="pay-amt">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row total">
+          <div class="pay-day" style="color:#34d399;">6-Month Total</div>
+          <div class="pay-desc" style="font-weight:700;">Full setup + 6 months management</div>
+          <div class="pay-amt" style="color:#34d399;font-size:22px;">€X.XXX + VAT</div>
+        </div>
+        <div class="pay-row renew">
+          <div class="pay-day" style="color:#34d399;">Month 7+</div>
+          <div class="pay-desc">
+            Quarterly renewal · 30-day cancellation
+            <div class="pay-milestone">Same monthly rate · Billed every 3 months</div>
+          </div>
+          <div class="pay-amt" style="color:#34d399;font-size:17px;">€X.XXX / quarter + VAT</div>
+        </div>
+      </div>
+      <div class="note note-amber" style="margin-top:12px;">
+        <span>📢</span>
+        <span>We start with <strong>Google Ads only</strong>. Meta Ads added as soon as available.</span>
+      </div>
+      <div class="note note-info" style="margin-top:8px;">
+        <span>💡</span>
+        <span>Same full service as Plan A. Predictable monthly cost — no large upfront fee.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ══ S5 — CTA ══ -->
+<section class="slide" id="s5"
+  style="background-image:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(52,211,153,0.1),transparent);">
+<div class="inner" style="text-align:center;">
+  <div class="r">
+    <div class="eyebrow">Next steps</div>
+    <h1>Ready to<br><span class="g-green">start?</span></h1>
+    <p class="lead" style="max-width:480px;margin:0 auto;">
+      <!-- CUSTOMIZE: urgency line -->
+      [Buyers are searching for you right now.]<br>
+      <strong>Every day without the system is a sale that goes to someone else.</strong>
+    </p>
+  </div>
+  <div class="r">
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-t">Today</div>
+        <div class="step-s">Email + IBAN · Contract arrives today or tomorrow 📄</div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-t">After signing</div>
+        <div class="step-s">Onboarding questionnaire + briefing call 📋</div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-t">Week 1</div>
+        <!-- CUSTOMIZE: deposit amount -->
+        <div class="step-s">€X.XXX + VAT deposit · Setup begins · Strategy delivered 🚀</div>
+      </div>
+      <div class="step">
+        <div class="step-n">20</div>
+        <div class="step-t">Go Live</div>
+        <!-- CUSTOMIZE: balance amount -->
+        <div class="step-s">€X.XXX balance · Full system active · <span style="color:#34d399;font-weight:700;">Leads in ✅</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- ══ NAVIGATION ══ -->
+<div id="progress">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <!-- DOWNSELL DOT: hidden until downsell is unlocked -->
+  <div class="dot" id="dot-downsell" onclick="goTo(3)" style="display:none;background:rgba(251,191,36,0.4);"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+</div>
+<button class="nav-btn" id="btn-prev" onclick="prev()">← Back</button>
+<button class="nav-btn" id="btn-next" onclick="next()">Next →</button>
+
+<!-- ══ ZOOM + FULLSCREEN ══ -->
+<div id="zoom-controls">
+  <button class="zoom-btn" id="btn-fs" title="Fullscreen (press F)">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/>
+    </svg>
+  </button>
+  <div class="zoom-sep"></div>
+  <button class="zoom-btn" id="btn-zoom-out" title="Smaller (-)">−</button>
+  <span id="zoom-label">100%</span>
+  <button class="zoom-btn" id="btn-zoom-in" title="Larger (+)">+</button>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   PRESENTATION CONFIG — SET THESE FOR EACH DECK
+══════════════════════════════════════════════════ */
+const DOWNSELL_SLIDE_IDX = 3;   // index of the locked downsell slide (0-based)
+const PAYMENT_SLIDE_IDX  = 4;   // index of the payment slide
+
+/* ══════════════════════════════════════════════════
+   SLIDE ENGINE
+══════════════════════════════════════════════════ */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const dots   = Array.from(document.querySelectorAll('#progress .dot'));
+let si = 0;
+let cameFromDownsell = false;
+
+function isLocked(idx){ return slides[idx] && slides[idx].classList.contains('locked-slide'); }
+
+function updateDots(){
+  dots.forEach((d,i) => d.classList.toggle('active', i === si));
+  document.getElementById('btn-prev').style.opacity = si === 0 ? '0.3' : '1';
+  document.getElementById('btn-next').style.opacity = si === slides.length - 1 ? '0.3' : '1';
+}
+
+function showSlide(n){
+  slides[si].classList.remove('active');
+  si = Math.max(0, Math.min(n, slides.length - 1));
+  slides[si].classList.add('active');
+  // Payment slide: if came via downsell, skip Plan A and go straight to Plan B
+  if(si === PAYMENT_SLIDE_IDX && cameFromDownsell) revealPlanB();
+  updateDots();
+}
+
+function next(){
+  const pending = slides[si].querySelectorAll('.r:not(.shown)');
+  if(pending.length > 0){ pending[0].classList.add('shown'); }
+  else{
+    let ni = si + 1;
+    while(ni < slides.length && isLocked(ni)) ni++;
+    if(ni < slides.length) showSlide(ni);
+  }
+}
+
+function prev(){
+  const shown = slides[si].querySelectorAll('.r.shown');
+  if(shown.length > 0){ shown[shown.length - 1].classList.remove('shown'); }
+  else{
+    let pi = si - 1;
+    while(pi >= 0 && isLocked(pi)) pi--;
+    if(pi >= 0){ showSlide(pi); slides[pi].querySelectorAll('.r').forEach(e => e.classList.add('shown')); }
+  }
+}
+
+function goTo(n){
+  if(isLocked(n)) return;
+  showSlide(n);
+  slides[n].querySelectorAll('.r').forEach(e => e.classList.add('shown'));
+}
+
+/* ══════════════════════════════════════════════════
+   DOWNSELL — unlock hidden slide from price slide button
+══════════════════════════════════════════════════ */
+function unlockDownsell(){
+  slides[DOWNSELL_SLIDE_IDX].classList.remove('locked-slide');
+  document.getElementById('dot-downsell').style.display = '';
+  const btn = document.getElementById('btn-downsell');
+  if(btn) btn.style.display = 'none';
+  cameFromDownsell = true;
+  showSlide(DOWNSELL_SLIDE_IDX);
+  slides[DOWNSELL_SLIDE_IDX].querySelectorAll('.r').forEach(e => e.classList.add('shown'));
+}
+
+/* ══════════════════════════════════════════════════
+   PAYMENT PLAN SWITCH
+   Plan A: always visible first.
+   Plan B: hidden, revealed by button or downsell flow.
+   To never show Plan B: remove #plan-b-trigger from HTML.
+══════════════════════════════════════════════════ */
+function revealPlanB(){
+  const a = document.getElementById('pay-a');
+  const b = document.getElementById('pay-b');
+  if(a) a.style.display = 'none';
+  if(b) b.style.display = 'block';
+}
+function backToPlanA(){
+  const a = document.getElementById('pay-a');
+  const b = document.getElementById('pay-b');
+  if(b) b.style.display = 'none';
+  if(a) a.style.display = 'block';
+}
+
+/* ══════════════════════════════════════════════════
+   INPUT: click, keyboard, touch
+══════════════════════════════════════════════════ */
+document.addEventListener('click', e => {
+  if(!e.target.closest('button') && !e.target.closest('#progress')) next();
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight' || e.key === ' '){ e.preventDefault(); next(); }
+  else if(e.key === 'ArrowLeft'){ e.preventDefault(); prev(); }
+  else if(e.key === 'f' || e.key === 'F'){ toggleFS(); }
+  else if(e.key === '+' || e.key === '='){ zoom = Math.min(MAX_ZOOM, parseFloat((zoom+STEP).toFixed(1))); applyZoom(); }
+  else if(e.key === '-'){ zoom = Math.max(MIN_ZOOM, parseFloat((zoom-STEP).toFixed(1))); applyZoom(); }
+});
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.changedTouches[0].screenX, {passive:true});
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - tx;
+  if(Math.abs(dx) > 50){ if(dx < 0) next(); else prev(); }
+}, {passive:true});
+updateDots();
+
+/* ══════════════════════════════════════════════════
+   ZOOM — persisted in localStorage · shortcuts: +/-
+══════════════════════════════════════════════════ */
+const deck = document.getElementById('deck');
+let zoom = parseFloat(localStorage.getItem('pitchZoom') || '1');
+const MIN_ZOOM = 0.6, MAX_ZOOM = 1.6, STEP = 0.1;
+function applyZoom(){
+  deck.style.zoom = zoom;
+  document.getElementById('zoom-label').textContent = Math.round(zoom * 100) + '%';
+  localStorage.setItem('pitchZoom', zoom.toFixed(1));
+}
+document.getElementById('btn-zoom-in').addEventListener('click', e => {
+  e.stopPropagation(); zoom = Math.min(MAX_ZOOM, parseFloat((zoom+STEP).toFixed(1))); applyZoom();
+});
+document.getElementById('btn-zoom-out').addEventListener('click', e => {
+  e.stopPropagation(); zoom = Math.max(MIN_ZOOM, parseFloat((zoom-STEP).toFixed(1))); applyZoom();
+});
+applyZoom();
+
+/* ══════════════════════════════════════════════════
+   FULLSCREEN — shortcut: F
+══════════════════════════════════════════════════ */
+const fsBtn = document.getElementById('btn-fs');
+function toggleFS(){
+  if(!document.fullscreenElement){ document.documentElement.requestFullscreen().catch(()=>{}); }
+  else { document.exitFullscreen(); }
+}
+fsBtn.addEventListener('click', e => { e.stopPropagation(); toggleFS(); });
+document.addEventListener('fullscreenchange', () => {
+  const inFS = !!document.fullscreenElement;
+  fsBtn.title = inFS ? 'Exit fullscreen (F)' : 'Fullscreen (F)';
+  fsBtn.innerHTML = inFS
+    ? '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 1H1v4M13 5V1H9M9 13h4V9M1 9v4h4"/></svg>'
+    : '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/></svg>';
+});
+</script>
+</body>
+</html>
