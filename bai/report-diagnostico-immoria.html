@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico Digital — Immoria · Costa Blanca</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#E8B84B;--gold-light:#F5D076;
+  --dark:#0d0d0d;--dark-2:#161616;--dark-3:#1e1e1e;
+  --red:#FF3B3B;--green:#00C48C;--orange:#FF8C00;
+  --text:#F0F0F0;--muted:#888;--border:rgba(255,255,255,.07);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--dark);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+/* HERO */
+.hero{min-height:100vh;background:linear-gradient(135deg,#0d0d0d 0%,#1c1000 50%,#0d0d0d 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(232,184,75,.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,184,75,.1);border:1px solid rgba(232,184,75,.3);color:var(--gold);padding:8px 20px;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:36px}
+.hero h1{font-size:clamp(52px,9vw,108px);font-weight:900;letter-spacing:-3px;line-height:.95;margin-bottom:16px}
+.hero h1 span{background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(16px,2.5vw,22px);color:var(--muted);margin-bottom:56px;font-weight:400}
+.hero-stats{display:flex;gap:0;align-items:stretch;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.hs{padding:28px 36px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--border)}
+.hs:last-child{border-right:none}
+.hs .val{font-size:34px;font-weight:900;letter-spacing:-1px;line-height:1}
+.hs .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.scroll-arrow{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;animation:bob 2s infinite}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+
+/* LAYOUT */
+.wrap{max-width:1080px;margin:0 auto;padding:72px 24px}
+.wrap-sm{max-width:1080px;margin:0 auto;padding:48px 24px}
+.divider{height:1px;background:var(--border);max-width:1080px;margin:0 auto}
+.label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;margin-bottom:12px}
+.title{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:40px;line-height:1.1}
+.title span{color:var(--gold)}
+.title-sm{font-size:clamp(22px,3vw,36px);font-weight:900;letter-spacing:-1px;margin-bottom:28px;line-height:1.1}
+.title-sm span{color:var(--gold)}
+
+/* FADE */
+.fade{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+.fade.vis{opacity:1;transform:translateY(0)}
+
+/* RIEPILOGO ESECUTIVO */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.summary-grid{grid-template-columns:1fr}}
+.sum-col{display:flex;flex-direction:column;gap:16px}
+.sum-header{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:10px 16px;border-radius:10px;margin-bottom:4px}
+.sum-header.green{background:rgba(0,196,140,.12);color:var(--green)}
+.sum-header.red{background:rgba(255,59,59,.12);color:var(--red)}
+.sum-item{background:var(--dark-2);border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;align-items:flex-start;gap:14px;transition:border-color .3s}
+.sum-item:hover{border-color:rgba(255,255,255,.14)}
+.sum-item .ico{font-size:22px;flex-shrink:0;margin-top:1px}
+.sum-item-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.sum-item-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.sum-item-val{font-size:20px;font-weight:900;margin-top:6px}
+.sum-item-val.green{color:var(--green)}
+.sum-item-val.red{color:var(--red)}
+.sum-item-val.orange{color:var(--orange)}
+.sum-item-val.gold{color:var(--gold)}
+
+/* Score global */
+.global-score{background:linear-gradient(135deg,rgba(232,184,75,.09),var(--dark-2));border:1px solid rgba(232,184,75,.25);border-radius:20px;padding:36px;text-align:center;margin-bottom:40px}
+.gs-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.gs-bar-wrap{width:100%;height:12px;background:var(--dark-3);border-radius:100px;overflow:hidden;margin:20px 0}
+.gs-bar{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--red),var(--orange),var(--gold));width:15%;transition:width 1.5s ease}
+.gs-score{font-size:64px;font-weight:900;letter-spacing:-2px;color:var(--gold);line-height:1}
+.gs-sub{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* Semaforo */
+.traffic{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:600px){.traffic{grid-template-columns:1fr}}
+.traf{border-radius:16px;padding:24px;text-align:center}
+.traf.g{background:rgba(0,196,140,.08);border:1px solid rgba(0,196,140,.25)}
+.traf.r{background:rgba(255,59,59,.08);border:1px solid rgba(255,59,59,.25)}
+.traf.o{background:rgba(255,140,0,.08);border:1px solid rgba(255,140,0,.25)}
+.traf-ico{font-size:28px;margin-bottom:8px}
+.traf-title{font-size:13px;font-weight:700;margin-bottom:6px}
+.traf-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.traf.g .traf-title{color:var(--green)}
+.traf.r .traf-title{color:var(--red)}
+.traf.o .traf-title{color:var(--orange)}
+
+/* SEZIONI DETTAGLIO */
+.bn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.bn{background:var(--dark-2);border:1px solid var(--border);border-radius:20px;padding:36px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+.bn:hover{transform:translateY(-4px);border-color:rgba(232,184,75,.25)}
+.bn::after{content:'';position:absolute;top:0;right:0;width:140px;height:140px;background:radial-gradient(circle,rgba(232,184,75,.07),transparent);transform:translate(35%,-35%);pointer-events:none}
+.bn.danger::after{background:radial-gradient(circle,rgba(255,59,59,.1),transparent)}
+.bn-ico{font-size:26px;margin-bottom:16px}
+.bn-num{font-size:clamp(52px,7vw,80px);font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:8px}
+.c-gold{color:var(--gold)}.c-red{color:var(--red)}.c-green{color:var(--green)}.c-orange{color:var(--orange)}
+.bn-t{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.bn-d{font-size:13px;color:var(--muted);line-height:1.6}
+.bn-d strong{color:var(--text)}
+
+/* SCORE RINGS */
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.sc{background:var(--dark-2);border:1px solid var(--border);border-radius:20px;padding:28px;text-align:center;transition:transform .3s,border-color .3s}
+.sc:hover{transform:translateY(-4px);border-color:rgba(232,184,75,.2)}
+.ring-w{position:relative;width:110px;height:110px;margin:0 auto 18px}
+.ring-w svg{transform:rotate(-90deg)}
+.ring-c{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-c .n{font-size:26px;font-weight:900;line-height:1}
+.ring-c .d{font-size:10px;color:var(--muted)}
+.sc-title{font-size:15px;font-weight:700;margin-bottom:10px}
+.pill{display:inline-block;padding:3px 12px;border-radius:100px;font-size:11px;font-weight:700;margin-bottom:16px}
+.pill.crit{background:rgba(255,59,59,.15);color:var(--red);border:1px solid rgba(255,59,59,.3)}
+.pill.warn{background:rgba(255,140,0,.15);color:var(--orange);border:1px solid rgba(255,140,0,.3)}
+.pill.ok{background:rgba(0,196,140,.15);color:var(--green);border:1px solid rgba(0,196,140,.3)}
+.sc-items{text-align:left}
+.sc-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.sc-item:last-child{border-bottom:none}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dr{background:var(--red)}.do{background:var(--orange)}.dg{background:var(--green)}
+
+/* TABLES */
+.tbl-w{overflow-x:auto;border-radius:16px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--dark-3);padding:14px 18px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+tbody td{padding:14px 18px;font-size:13px;border-bottom:1px solid var(--border);background:var(--dark-2)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr.hl td{background:rgba(232,184,75,.05);border-left:3px solid var(--gold)}
+.yes{color:var(--green);font-weight:600}.no{color:var(--red);font-weight:600}.warn-t{color:var(--orange);font-weight:600}
+
+/* KEYWORD / BAR */
+.vb{display:flex;align-items:center;gap:10px}
+.vb-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));min-width:4px}
+.vb-n{font-size:12px;color:var(--muted);white-space:nowrap}
+
+/* OPP */
+.opp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.opp{background:var(--dark-2);border:1px solid var(--border);border-radius:16px;padding:24px}
+.opp.accent{background:linear-gradient(135deg,rgba(232,184,75,.08),var(--dark-2));border-color:rgba(232,184,75,.25)}
+.opp-n{font-size:38px;font-weight:900;color:var(--gold);letter-spacing:-1px;line-height:1.1;margin-bottom:10px}
+.opp-d{font-size:13px;color:var(--muted);line-height:1.5}
+.opp-s{font-size:11px;color:rgba(136,136,136,.5);margin-top:12px}
+
+/* HIGHLIGHT BOX */
+.hbox{background:linear-gradient(135deg,rgba(232,184,75,.07),rgba(232,184,75,.02));border:1px solid rgba(232,184,75,.2);border-radius:16px;padding:24px 28px;margin-bottom:40px}
+.hbox p{font-size:15px;line-height:1.7}
+.hbox strong{color:var(--gold)}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+
+/* PROSSIMI PASSI */
+.step-list{display:flex;flex-direction:column;gap:16px}
+.step{background:var(--dark-2);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;align-items:flex-start;gap:20px;transition:border-color .3s}
+.step:hover{border-color:rgba(232,184,75,.25)}
+.step-n{font-size:28px;font-weight:900;color:var(--gold);min-width:40px;line-height:1}
+.step-body{}
+.step-title{font-size:15px;font-weight:700;margin-bottom:6px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.step-tag{display:inline-block;padding:2px 10px;border-radius:100px;font-size:10px;font-weight:700;margin-top:10px;text-transform:uppercase;letter-spacing:.08em}
+.step-tag.now{background:rgba(255,59,59,.15);color:var(--red);border:1px solid rgba(255,59,59,.3)}
+.step-tag.soon{background:rgba(255,140,0,.15);color:var(--orange);border:1px solid rgba(255,140,0,.3)}
+.step-tag.growth{background:rgba(0,196,140,.15);color:var(--green);border:1px solid rgba(0,196,140,.3)}
+
+/* CTA */
+.cta{background:linear-gradient(135deg,#1c1000,var(--dark-2));border-top:1px solid rgba(232,184,75,.15);padding:80px 24px;text-align:center}
+.cta-inner{max-width:640px;margin:0 auto}
+.cta h2{font-size:clamp(32px,5vw,60px);font-weight:900;letter-spacing:-2px;margin-bottom:16px;line-height:1.1}
+.cta h2 span{background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cta p{font-size:17px;color:var(--muted);margin-bottom:48px}
+.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-p{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0d0d0d;padding:16px 40px;border-radius:100px;font-size:15px;font-weight:800;text-decoration:none;transition:transform .3s,box-shadow .3s;display:inline-block}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(232,184,75,.4)}
+.btn-s{background:transparent;color:var(--text);padding:16px 36px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none;border:1px solid var(--border);transition:border-color .3s,color .3s;display:inline-block}
+.btn-s:hover{border-color:var(--gold);color:var(--gold)}
+
+.foot{background:var(--dark);border-top:1px solid var(--border);padding:20px 24px;text-align:center;font-size:12px;color:var(--muted)}
+
+@media(max-width:768px){
+  .hero-stats{flex-direction:column}
+  .hs{border-right:none;border-bottom:1px solid var(--border)}
+  .hs:last-child{border-bottom:none}
+  .wrap{padding:60px 16px}
+  .wrap-sm{padding:40px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     HERO
+     ═══════════════════════════════════ -->
+<div class="hero">
+  <div class="badge">🏡 Diagnóstico Digital &nbsp;·&nbsp; Aprile 2026</div>
+  <h1><span>Immoria</span></h1>
+  <p class="hero-sub">Agenzia Immobiliare &nbsp;·&nbsp; Costa Blanca, Spagna</p>
+  <div class="hero-stats">
+    <div class="hs">
+      <span class="val" style="color:var(--gold)">27</span>
+      <span class="lbl">Immobili sul sito beta</span>
+    </div>
+    <div class="hs">
+      <span class="val" style="color:var(--red)">1</span>
+      <span class="lbl">Pagine indicizzate Google</span>
+    </div>
+    <div class="hs">
+      <span class="val" style="color:var(--orange)">1</span>
+      <span class="lbl">Recensioni online</span>
+    </div>
+    <div class="hs">
+      <span class="val" style="color:var(--orange)">Beta</span>
+      <span class="lbl">Stato attività</span>
+    </div>
+  </div>
+  <div class="scroll-arrow">↓ &nbsp; Vai al diagnóstico completo</div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     SEZIONE 1: RIEPILOGO ESECUTIVO
+     ═══════════════════════════════════ -->
+<div class="wrap fade">
+  <div class="label">Riepilogo esecutivo</div>
+  <div class="title">La situazione attuale<br>in <span>30 secondi</span></div>
+
+  <!-- PUNTEGGIO GLOBALE -->
+  <div class="global-score">
+    <div class="gs-label">Punteggio presenza digitale globale (su 10)</div>
+    <div class="gs-score">1.5 <span style="font-size:28px;color:var(--muted);font-weight:400">/ 10</span></div>
+    <div class="gs-bar-wrap"><div class="gs-bar" id="gsBar"></div></div>
+    <div class="gs-sub">Immoria parte da zero — e questo è sia il problema che l'opportunità più grande.<br>Costruire subito le fondamenta giuste vale più che recuperare anni di errori dopo.</div>
+  </div>
+
+  <!-- SEMAFORO -->
+  <div class="traffic">
+    <div class="traf g">
+      <div class="traf-ico">✅</div>
+      <div class="traf-title">Cosa funziona</div>
+      <div class="traf-desc">Sito beta attivo con <strong>27 annunci</strong>. Attività avviata legalmente. Zona ad alta domanda: Orihuela Costa, Torrevieja, Dehesa Campoamor.</div>
+    </div>
+    <div class="traf r">
+      <div class="traf-ico">🚨</div>
+      <div class="traf-title">Cosa manca (critico)</div>
+      <div class="traf-desc">Zero Instagram. Zero Idealista/Fotocasa. Solo 1 recensione su Google. 1 sola pagina indicizzata da Google.</div>
+    </div>
+    <div class="traf o">
+      <div class="traf-ico">💡</div>
+      <div class="traf-title">La grande opportunità</div>
+      <div class="traf-desc">Partire da zero significa costruire tutto correttamente dal primo giorno. Il mercato expat della Costa Blanca genera <strong>15.000+ transazioni/anno</strong>.</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="summary-grid">
+    <!-- Forze -->
+    <div class="sum-col">
+      <div class="sum-header green">✅ &nbsp;Punti di partenza</div>
+
+      <div class="sum-item">
+        <div class="ico">🌐</div>
+        <div class="sum-item-body">
+          <div class="sum-item-title">Sito beta operativo</div>
+          <div class="sum-item-desc">Il sito immoria.es/beta è attivo con 27 immobili caricati. La base tecnica esiste e può essere ottimizzata.</div>
+          <div class="sum-item-val gold">27 annunci attivi</div>
+        </div>
+      </div>
+
+      <div class="sum-item">
+        <div class="ico">📍</div>
+        <div class="sum-item-body">
+          <div class="sum-item-title">Zona strategica</div>
+          <div class="sum-item-desc">Orihuela Costa, Torrevieja e Cabo Roig sono tra le zone immobiliari più attive della Spagna meridionale. Domanda costante tutto l'anno.</div>
+          <div class="sum-item-val gold">Mercato in crescita</div>
+        </div>
+      </div>
+
+      <div class="sum-item">
+        <div class="ico">🔄</div>
+        <div class="sum-item-body">
+          <div class="sum-item-title">Nessuna reputazione negativa</div>
+          <div class="sum-item-desc">Partire da zero significa poter costruire una reputazione impeccabile senza dover gestire recensioni negative ereditate.</div>
+          <div class="sum-item-val green">Lavagna pulita</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problemi -->
+    <div class="sum-col">
+      <div class="sum-header red">🚨 &nbsp;Problemi critici da risolvere</div>
+
+      <div class="sum-item">
+        <div class="ico">⭐</div>
+        <div class="sum-item-body">
+          <div class="sum-item-title">Solo 1 recensione su Google</div>
+          <div class="sum-item-desc">I competitor consolidati hanno decine o centinaia di recensioni. Con 1 sola, la credibilità percepita online è minima e il posizionamento locale ne risente direttamente.</div>
+          <div class="sum-item-val red">1 vs. decine dei competitor</div>
+        </div>
+      </div>
+
+      <div class="sum-item">
+        <div class="ico">🏠</div>
+        <div class="sum-item-body">
+          <div class="sum-item-title">Assenza dai portali immobiliari</div>
+          <div class="sum-item-desc">Idealista e Fotocasa generano il 60%+ del traffico qualificato in Spagna. Non esserci è come avere una vetrina chiusa nella strada principale.</div>
+          <div class="sum-item-val red">0 annunci sui portali</div>
+        </div>
+      </div>
+
+      <div class="sum-item">
+        <div class="ico">📱</div>
+        <div class="sum-item-body">
+          <div class="sum-item-title">Social media quasi inesistente</div>
+          <div class="sum-item-desc">1 post su Facebook, nessun Instagram, nessun LinkedIn. Il mercato expat nordeuropeo (40% degli acquirenti nella zona) usa Instagram come primo filtro.</div>
+          <div class="sum-item-val red">1 post · Nessun follower</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════
+     SEZIONE 2: OBIETTIVI STRATEGICI
+     ═══════════════════════════════════ -->
+<div class="wrap fade">
+  <div class="label">Obiettivi strategici</div>
+  <div class="title">Cosa possiamo<br><span>costruire insieme</span></div>
+  <div class="two-col">
+
+    <div style="background:linear-gradient(135deg,rgba(0,196,140,.08),var(--dark-2));border:1px solid rgba(0,196,140,.25);border-radius:20px;padding:36px">
+      <div style="font-size:36px;margin-bottom:16px">🌍</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:12px">Catturare il mercato<br>expat nordeuropeo</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px">
+        Svedesi, olandesi, britannici e tedeschi rappresentano il <strong style="color:var(--text)">40% degli acquirenti</strong> nella Costa Blanca. Cercano online in inglese. I competitor che comunicano multilingue dominano questo segmento — e Immoria può farlo dall'inizio.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--green);margin-top:2px">▸</span>Sito e annunci in inglese, spagnolo e svedese/olandese</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--green);margin-top:2px">▸</span>Instagram con contenuti bilingue (EN + ES)</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--green);margin-top:2px">▸</span>Guide pratiche per acquirenti stranieri: NIE, tasse, mutui in Spagna</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--green);margin-top:2px">▸</span>Servizi relocation come differenziatore: keyholding, gestione pratiche</div>
+      </div>
+      <div style="margin-top:24px;background:rgba(0,196,140,.1);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--green)">40%</div>
+        <div style="font-size:12px;color:var(--muted)">acquirenti stranieri nella zona<br>— mercato non ancora presidiato da Immoria</div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,rgba(232,184,75,.08),var(--dark-2));border:1px solid rgba(232,184,75,.25);border-radius:20px;padding:36px">
+      <div style="font-size:36px;margin-bottom:16px">🔍</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:12px">Dominare le ricerche<br>locali su Google</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px">
+        Keyword come <strong style="color:var(--text)">"inmobiliaria orihuela costa"</strong>, "apartamentos torrevieja" e "villas costa blanca" generano migliaia di ricerche mensili. Oggi Immoria non appare per nessuna di queste. Ogni giorno senza visibilità è traffico che va alla concorrenza.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--gold);margin-top:2px">▸</span>Google Business Profile verificato con foto, orari e descrizione</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--gold);margin-top:2px">▸</span>SEO on-page per zone prioritarie: Cabo Roig, Villamartín, La Zenia</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--gold);margin-top:2px">▸</span>Idealista + Fotocasa: ogni annuncio ottimizzato con foto professionali</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px"><span style="color:var(--gold);margin-top:2px">▸</span>Blog: guide acquisto casa in Spagna per stranieri — contenuto SEO evergreen</div>
+      </div>
+      <div style="margin-top:24px;background:rgba(232,184,75,.1);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--gold)">+3.000</div>
+        <div style="font-size:12px;color:var(--muted)">ricerche mensili per "inmobiliaria orihuela costa"<br>— oggi tutte ai competitor</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════
+     SEZIONE 3: ANALISI PER AREE
+     ═══════════════════════════════════ -->
+<div class="wrap fade">
+  <div class="label">Analisi tecnica per aree</div>
+  <div class="title">Il diagnóstico <span>nel dettaglio</span></div>
+  <div class="hbox">
+    <p>Analisi applicando i criteri di posizionamento digitale per agenzie immobiliari: <strong>Sito Web, SEO e Visibilità, Social Media, Reputazione e Portali</strong>. Il punteggio riflette la situazione reale al momento dell'analisi — non il potenziale futuro.</p>
+  </div>
+
+  <div class="score-grid">
+
+    <!-- SITO WEB -->
+    <div class="sc">
+      <div class="ring-w">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="#1e1e1e" stroke-width="9"/>
+          <circle cx="55" cy="55" r="46" fill="none" stroke="var(--orange)" stroke-width="9"
+            stroke-dasharray="57.8 231.2" stroke-linecap="round" class="arc"/>
+        </svg>
+        <div class="ring-c"><span class="n" style="color:var(--orange)">2</span><span class="d">/10</span></div>
+      </div>
+      <div class="sc-title">Sito Web</div>
+      <div class="pill warn">BETA · PARZIALE</div>
+      <div class="sc-items">
+        <div class="sc-item"><span class="dot dg"></span>Sito web attivo con 27 annunci</div>
+        <div class="sc-item"><span class="dot dr"></span>Solo 1 pagina indicizzata da Google</div>
+        <div class="sc-item"><span class="dot do"></span>Ampi margini di miglioramento SEO</div>
+        <div class="sc-item"><span class="dot dr"></span>Nessun blog / contenuto editoriale</div>
+        <div class="sc-item"><span class="dot do"></span>Design funzionale ma non ottimizzato</div>
+      </div>
+    </div>
+
+    <!-- SEO -->
+    <div class="sc">
+      <div class="ring-w">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="#1e1e1e" stroke-width="9"/>
+          <circle cx="55" cy="55" r="46" fill="none" stroke="var(--red)" stroke-width="9"
+            stroke-dasharray="28.9 260" stroke-linecap="round" class="arc"/>
+        </svg>
+        <div class="ring-c"><span class="n" style="color:var(--red)">1</span><span class="d">/10</span></div>
+      </div>
+      <div class="sc-title">SEO e Visibilità</div>
+      <div class="pill crit">INVISIBILE</div>
+      <div class="sc-items">
+        <div class="sc-item"><span class="dot dr"></span>0 posizionamenti per keyword locali</div>
+        <div class="sc-item"><span class="dot dr"></span>Competitor occupano tutte le prime pagine</div>
+        <div class="sc-item"><span class="dot do"></span>Comparsa in alcune directory di terze parti</div>
+        <div class="sc-item"><span class="dot dr"></span>Nessun backlink da portali immobiliari</div>
+      </div>
+    </div>
+
+    <!-- SOCIAL MEDIA -->
+    <div class="sc">
+      <div class="ring-w">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="#1e1e1e" stroke-width="9"/>
+          <circle cx="55" cy="55" r="46" fill="none" stroke="var(--red)" stroke-width="9"
+            stroke-dasharray="28.9 260" stroke-linecap="round" class="arc"/>
+        </svg>
+        <div class="ring-c"><span class="n" style="color:var(--red)">1</span><span class="d">/10</span></div>
+      </div>
+      <div class="sc-title">Social Media</div>
+      <div class="pill crit">ASSENTE</div>
+      <div class="sc-items">
+        <div class="sc-item"><span class="dot do"></span>Pagina Facebook esistente (1 post)</div>
+        <div class="sc-item"><span class="dot dr"></span>Nessun profilo Instagram</div>
+        <div class="sc-item"><span class="dot dr"></span>Nessun profilo LinkedIn</div>
+        <div class="sc-item"><span class="dot dr"></span>Nessun contenuto visivo degli immobili</div>
+        <div class="sc-item"><span class="dot dr"></span>0 follower / 0 engagement</div>
+      </div>
+    </div>
+
+    <!-- REPUTAZIONE -->
+    <div class="sc">
+      <div class="ring-w">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="#1e1e1e" stroke-width="9"/>
+          <circle cx="55" cy="55" r="46" fill="none" stroke="var(--gold)" stroke-width="9"
+            stroke-dasharray="57.8 231.2" stroke-linecap="round" class="arc"/>
+        </svg>
+        <div class="ring-c"><span class="n" style="color:var(--gold)">2</span><span class="d">/10</span></div>
+      </div>
+      <div class="sc-title">Reputazione e Portali</div>
+      <div class="pill warn">DA COSTRUIRE</div>
+      <div class="sc-items">
+        <div class="sc-item"><span class="dot dg"></span>Brand registrato e operativo</div>
+        <div class="sc-item"><span class="dot dg"></span>Nessuna recensione negativa (partenza pulita)</div>
+        <div class="sc-item"><span class="dot do"></span>Solo 1 recensione su Google</div>
+        <div class="sc-item"><span class="dot dr"></span>Non presente su Idealista né Fotocasa</div>
+        <div class="sc-item"><span class="dot do"></span>Confusione brand: Immoria GmbH (CH)</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════
+     SEZIONE 4: ANALISI COMPETITIVA
+     ═══════════════════════════════════ -->
+<div class="wrap fade">
+  <div class="label">Analisi della concorrenza</div>
+  <div class="title">Dove sono i competitor <span>oggi</span></div>
+  <div class="hbox">
+    <p>Il mercato immobiliare della Costa Blanca è <strong>consolidato e competitivo</strong>. I principali player hanno anni di autorità SEO, migliaia di recensioni e presenza su tutti i canali. Il vantaggio di Immoria è la possibilità di differenziarsi con un posizionamento moderno e multilingue dal giorno 1.</p>
+  </div>
+  <div class="tbl-w">
+    <table>
+      <thead>
+        <tr>
+          <th>Agenzia</th>
+          <th>Sito Web</th>
+          <th>Instagram</th>
+          <th>Google Maps</th>
+          <th>Idealista</th>
+          <th>Specializzazione</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Costa Invest</strong></td>
+          <td><span class="yes">✔ Ottimizzato</span></td>
+          <td><span class="yes">✔ Attivo</span></td>
+          <td><span class="yes">✔ Verificato</span></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td style="color:var(--muted)">Multilingue, Orihuela</td>
+        </tr>
+        <tr>
+          <td><strong>Moreno Schmidt</strong></td>
+          <td><span class="yes">✔ Ottimizzato</span></td>
+          <td><span class="yes">✔ Attivo</span></td>
+          <td><span class="yes">✔ 4.8★</span></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td style="color:var(--muted)">Campoamor / Villamartín</td>
+        </tr>
+        <tr>
+          <td><strong>Rosa Medit. Houses</strong></td>
+          <td><span class="yes">✔ Ottimizzato</span></td>
+          <td><span class="yes">✔ Attivo</span></td>
+          <td><span class="yes">✔ Verificato</span></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td style="color:var(--muted)">Orihuela + Torrevieja</td>
+        </tr>
+        <tr>
+          <td><strong>MäKLAR / ViveEsp</strong></td>
+          <td><span class="yes">✔ Ottimizzato</span></td>
+          <td><span class="yes">✔ Attivo</span></td>
+          <td><span class="yes">✔ Verificato</span></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td style="color:var(--muted)">Mercato scandinavo</td>
+        </tr>
+        <tr>
+          <td><strong>AMAY Properties</strong></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td><span class="warn-t">⚠ Parziale</span></td>
+          <td><span class="yes">✔ 4.2★</span></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td style="color:var(--muted)">30 anni esperienza</td>
+        </tr>
+        <tr>
+          <td><strong>Dayas Real Estates</strong></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td><span class="warn-t">⚠ Parziale</span></td>
+          <td><span class="yes">✔ Verificato</span></td>
+          <td><span class="yes">✔ Presente</span></td>
+          <td style="color:var(--muted)">Storica locale</td>
+        </tr>
+        <tr class="hl">
+          <td><strong>Immoria</strong> (oggi)</td>
+          <td><span class="warn-t">⚠ Solo beta</span></td>
+          <td><span class="no">✗ Assente</span></td>
+          <td><span class="no">✗ Assente</span></td>
+          <td><span class="no">✗ Assente</span></td>
+          <td style="color:var(--gold)">⟵ Punto di partenza</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════
+     SEZIONE 5: OPPORTUNITÀ IN NUMERI
+     ═══════════════════════════════════ -->
+<div class="wrap fade">
+  <div class="label">L'opportunità di mercato</div>
+  <div class="title">I numeri che <span>contano</span></div>
+  <div class="opp-grid">
+    <div class="opp accent">
+      <div class="opp-n">15.000+</div>
+      <div class="opp-d">Transazioni immobiliari/anno nella provincia di Alicante. Il mercato non si ferma.</div>
+      <div class="opp-s">Fonte: Notariato Spagna 2025</div>
+    </div>
+    <div class="opp">
+      <div class="opp-n">40%</div>
+      <div class="opp-d">Acquirenti stranieri nella Costa Blanca. Svedesi, olandesi, britannici, tedeschi.</div>
+      <div class="opp-s">Fonte: Colegio de Registradores</div>
+    </div>
+    <div class="opp">
+      <div class="opp-n">3.000</div>
+      <div class="opp-d">Ricerche mensili per "inmobiliaria orihuela costa" — oggi tutte captate dai competitor.</div>
+      <div class="opp-s">Stima Google Keyword Planner</div>
+    </div>
+    <div class="opp accent">
+      <div class="opp-n">60%</div>
+      <div class="opp-d">Del traffico qualificato in Spagna passa da Idealista e Fotocasa. Senza presenzA = invisibile.</div>
+      <div class="opp-s">Fonte: ComScore Spain 2025</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════
+     SEZIONE 6: PROSSIMI PASSI
+     ═══════════════════════════════════ -->
+<div class="wrap fade">
+  <div class="label">Piano d'azione</div>
+  <div class="title">Da dove <span>iniziare</span></div>
+  <div class="hbox">
+    <p>Cinque azioni ordinate per impatto. Le prime tre si possono attivare in <strong>meno di 2 settimane</strong> e generano visibilità immediata senza investimento pubblicitario.</p>
+  </div>
+
+  <div class="step-list">
+
+    <div class="step">
+      <div class="step-n">01</div>
+      <div class="step-body">
+        <div class="step-title">Google Business Profile — Ottimizzare il profilo</div>
+        <div class="step-desc">Il profilo esiste ed è un vantaggio concreto. Ora va ottimizzato: foto di qualità degli immobili, descrizione completa dei servizi, risposta sistematica alle recensioni e raccolta attiva di nuove. Ogni recensione in più migliora il posizionamento locale.</div>
+        <span class="step-tag now">Priorità assoluta</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">02</div>
+      <div class="step-body">
+        <div class="step-title">Idealista + Fotocasa — Pubblicazione annunci</div>
+        <div class="step-desc">I due portali immobiliari leader in Spagna. Ogni annuncio caricato con foto professionali e descrizione bilingue (ES + EN) genera contatti qualificati senza bisogno di traffico organico.</div>
+        <span class="step-tag now">Priorità assoluta</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">03</div>
+      <div class="step-body">
+        <div class="step-title">Instagram Business — Contenuto visivo degli immobili</div>
+        <div class="step-desc">Apertura profilo + prime 12 pubblicazioni con gli immobili più attrattivi. Il mercato expat usa Instagram come vetrina prima di contattare l'agenzia. Contenuto bilingue EN/ES.</div>
+        <span class="step-tag soon">Entro 2 settimane</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">04</div>
+      <div class="step-body">
+        <div class="step-title">SEO — Ottimizzazione e contenuto editoriale</div>
+        <div class="step-desc">Il sito attuale ha ampi margini di miglioramento SEO. Con ottimizzazione on-page per le zone prioritarie (Cabo Roig, Villamartín, La Zenia) e un blog con contenuti evergreen (guida all'acquisto in Spagna, NIE, tasse...) si conquistano posizioni organiche stabili nel tempo.</div>
+        <span class="step-tag soon">Entro 30-60 giorni</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-n">05</div>
+      <div class="step-body">
+        <div class="step-title">Sistema di raccolta recensioni — Reputazione da zero</div>
+        <div class="step-desc">Ogni cliente soddisfatto è un'opportunità di recensione. Un processo automatizzato post-vendita/affitto trasforma ogni transazione in credibilità pubblica su Google e Idealista.</div>
+        <span class="step-tag growth">Fondamenta lungo termine</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════
+     CTA
+     ═══════════════════════════════════ -->
+<div class="cta fade">
+  <div class="cta-inner">
+    <h2>Costruiamo<br><span>Immoria</span><br>dal giorno uno</h2>
+    <p>Il mercato è attivo, la zona è strategica e la lavagna è pulita. Ogni settimana senza visibilità è traffico regalato alla concorrenza.</p>
+    <div class="btns">
+      <a href="#" class="btn-p">Iniziamo adesso</a>
+      <a href="#" class="btn-s">Domande sul diagnóstico</a>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  Diagnóstico Digital · Immoria · Aprile 2026 · Elaborato da BAI Agency
+</div>
+
+<script>
+// Animazioni fade
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
+
+// Animazione barra score
+setTimeout(()=>{const b=document.getElementById('gsBar');if(b)b.style.width='15%'},400);
+
+// Animazione archi SVG
+const arcs=document.querySelectorAll('.arc');
+arcs.forEach(arc=>{
+  const target=arc.getAttribute('stroke-dasharray');
+  arc.setAttribute('stroke-dasharray','0 289');
+  setTimeout(()=>{
+    arc.style.transition='stroke-dasharray 1.2s ease';
+    arc.setAttribute('stroke-dasharray',target);
+  },600);
+});
+</script>
+</body>
+</html>
