@@ -252,7 +252,7 @@
 
   <!-- KPI -->
   <p class="section-h">📊 Obiettivi Chiave</p>
-  <div class="grid-3">
+  <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:16px; margin-bottom:16px;">
     <div class="card" style="text-align:center">
       <div class="stat">
         <div class="num">1/die</div>
@@ -262,13 +262,19 @@
     <div class="card" style="text-align:center">
       <div class="stat">
         <div class="num">30gg</div>
-        <div class="lbl">Promessa di consegna servizio</div>
+        <div class="lbl">Promessa consegna servizio</div>
       </div>
     </div>
     <div class="card" style="text-align:center">
       <div class="stat">
         <div class="num">500€</div>
         <div class="lbl">Budget iniziale campagna</div>
+      </div>
+    </div>
+    <div class="card" style="text-align:center; border: 2px solid var(--danger); background: rgba(231,76,60,.07);">
+      <div class="stat">
+        <div class="num" style="color:var(--danger); font-size:22px;">Ven 17/04</div>
+        <div class="lbl" style="color:var(--danger);">⚠️ Deadline consegna</div>
       </div>
     </div>
   </div>
