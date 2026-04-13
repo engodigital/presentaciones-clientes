@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hispano Tiempo — Brief per Davide Agazzi</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --card: #161616;
+    --border: #2a2a2a;
+    --accent: #e8a020;
+    --accent2: #4f8ef7;
+    --accent3: #3ecf8e;
+    --text: #e8e8e8;
+    --muted: #888;
+    --danger: #e74c3c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 0 0 60px 0;
+  }
+
+  /* ── Toolbar ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: #111;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+  }
+  #toolbar h1 {
+    font-size: 13px; font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .tb-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    padding: 5px 13px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background .15s;
+  }
+  .tb-btn:hover { background: #252525; }
+  #zoom-level { font-size: 12px; color: var(--muted); min-width: 38px; text-align: center; }
+
+  /* ── Container ── */
+  #wrap { max-width: 960px; margin: 0 auto; padding: 80px 24px 0; }
+  #wrap.zoomed-out { font-size: 12px; }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #1a1200 0%, #1a0800 50%, #0d0d0d 100%);
+    border: 1px solid #3a2800;
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 32px;
+  }
+  .hero-icon {
+    font-size: 56px; flex-shrink: 0;
+  }
+  .hero h2 { font-size: 28px; color: var(--accent); font-weight: 700; }
+  .hero p { color: #bbb; margin-top: 6px; font-size: 14px; }
+  .hero .meta { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+  .badge {
+    background: rgba(232,160,32,.15);
+    border: 1px solid rgba(232,160,32,.3);
+    color: var(--accent);
+    padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  }
+  .badge.blue { background: rgba(79,142,247,.12); border-color: rgba(79,142,247,.3); color: var(--accent2); }
+  .badge.green { background: rgba(62,207,142,.12); border-color: rgba(62,207,142,.3); color: var(--accent3); }
+
+  /* ── Grid ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  @media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .card h3 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--muted);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h3 span { font-size: 16px; }
+  .card-accent { border-left: 3px solid var(--accent); }
+  .card-blue { border-left: 3px solid var(--accent2); }
+  .card-green { border-left: 3px solid var(--accent3); }
+
+  /* ── Stat pills ── */
+  .stat { text-align: center; padding: 16px 8px; }
+  .stat .num { font-size: 32px; font-weight: 800; color: var(--accent); }
+  .stat .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  /* ── Personas ── */
+  .persona {
+    background: #1a1a1a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .persona .ava { font-size: 36px; margin-bottom: 8px; }
+  .persona .name { font-size: 15px; font-weight: 700; color: var(--accent); }
+  .persona .role { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .persona ul { list-style: none; font-size: 13px; }
+  .persona ul li::before { content: "→ "; color: var(--accent); }
+
+  /* ── Funnel ── */
+  .funnel-wrap { position: relative; }
+  .funnel-stage {
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin: 0 auto 6px;
+    text-align: center;
+    position: relative;
+  }
+  .f1 { background: rgba(232,160,32,.18); border: 1px solid rgba(232,160,32,.3); width: 100%; }
+  .f2 { background: rgba(79,142,247,.15); border: 1px solid rgba(79,142,247,.3); width: 75%; }
+  .f3 { background: rgba(62,207,142,.15); border: 1px solid rgba(62,207,142,.3); width: 50%; }
+  .funnel-stage .stage-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .funnel-stage .stage-title { font-weight: 700; font-size: 15px; }
+  .funnel-stage .stage-desc { font-size: 12px; color: #aaa; margin-top: 2px; }
+  .funnel-arrow { text-align: center; color: var(--muted); font-size: 18px; margin: -2px 0; }
+
+  /* ── Value Ladder ── */
+  .ladder { display: flex; flex-direction: column; gap: 6px; }
+  .rung {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #1a1a1a;
+  }
+  .rung .level {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; flex-shrink: 0;
+  }
+  .rung .rung-name { font-weight: 600; font-size: 14px; flex: 1; }
+  .rung .rung-price { font-size: 13px; font-weight: 700; color: var(--accent3); }
+  .rung .rung-desc { font-size: 11px; color: var(--muted); }
+
+  /* ── Tasks ── */
+  .task-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #1a1a1a;
+    margin-bottom: 8px;
+  }
+  .task-num {
+    background: var(--accent);
+    color: #000;
+    font-size: 11px; font-weight: 800;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .task-body .task-title { font-weight: 700; font-size: 14px; }
+  .task-body .task-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  /* ── Section header ── */
+  .section-h {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--accent);
+    margin: 28px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #2a2000;
+  }
+
+  /* ── Channel pills ── */
+  .channels { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .ch {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    border: 1px solid;
+  }
+  .ch.meta { background: rgba(79,142,247,.1); border-color: rgba(79,142,247,.3); color: #7aabff; }
+  .ch.li   { background: rgba(62,207,142,.1); border-color: rgba(62,207,142,.3); color: var(--accent3); }
+  .ch.wa   { background: rgba(37,211,102,.1); border-color: rgba(37,211,102,.3); color: #3dd475; }
+  .ch.email{ background: rgba(232,160,32,.1);  border-color: rgba(232,160,32,.3);  color: var(--accent); }
+  .ch.seo  { background: rgba(200,80,80,.1);   border-color: rgba(200,80,80,.3);   color: #e88; }
+
+  /* ── Warning box ── */
+  .warn {
+    background: rgba(232,160,32,.08);
+    border: 1px solid rgba(232,160,32,.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #d4a000;
+    margin-bottom: 16px;
+  }
+  .warn strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
+  /* ── Fullscreen ── */
+  #wrap:fullscreen, #wrap:-webkit-full-screen { max-width: 100%; padding: 20px 40px; background: var(--bg); }
+</style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div id="toolbar">
+  <h1>📋 Hispano Tiempo — Brief Operativo</h1>
+  <button class="tb-btn" onclick="zoom(-1)">− Zoom</button>
+  <span id="zoom-level">100%</span>
+  <button class="tb-btn" onclick="zoom(1)">+ Zoom</button>
+  <button class="tb-btn" onclick="goFullscreen()">⛶ Schermo Intero</button>
+</div>
+
+<div id="wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-icon">🇪🇸</div>
+    <div>
+      <h2>Hispano Tiempo</h2>
+      <p>Servizi di relocation OneStop 360° per famiglie dell'Est Europa verso la Spagna</p>
+      <div class="meta">
+        <span class="badge">🌐 hispatem.com</span>
+        <span class="badge blue">📍 Spagna (Costa del Sol / Alicante)</span>
+        <span class="badge green">🎯 Target: famiglie benestanti UE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <strong>👋 Ciao Davide — questo è il tuo brief completo.</strong>
+    Usa questo documento come riferimento per tutte le attività su questo cliente. Ogni sezione corrisponde a una task ClickUp già creata con il prompt da usare su Gemini.
+  </div>
+
+  <!-- KPI -->
+  <p class="section-h">📊 Obiettivi Chiave</p>
+  <div class="grid-3">
+    <div class="card" style="text-align:center">
+      <div class="stat">
+        <div class="num">1/die</div>
+        <div class="lbl">Lead obiettivo (mese 2)</div>
+      </div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="stat">
+        <div class="num">30gg</div>
+        <div class="lbl">Promessa di consegna servizio</div>
+      </div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div class="stat">
+        <div class="num">1.000€</div>
+        <div class="lbl">Budget iniziale campagna</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chi sono -->
+  <p class="section-h">🏢 Chi è Hispano Tiempo</p>
+  <div class="card card-accent">
+    <h3><span>ℹ️</span> Descrizione</h3>
+    <p style="font-size:14px">Team specializzato in <strong>amministrazione pubblica e politica comunitaria</strong>. Offrono un servizio di relocation completo ("OneStop 360°") per famiglie e imprenditori dei <strong>Paesi UE limitrofi alla Russia</strong> (Polonia, Paesi Baltici, Ucraina) che vogliono trasferirsi in Spagna.</p>
+    <br>
+    <p style="font-size:13px; color: var(--muted)"><strong style="color:#bbb">Servizio:</strong> Il cliente contrata da casa → Hispano Tiempo gestisce TUTTO (NIE, Empadronamiento, casa, scuola, sanità, fisco) → il cliente arriva in Spagna con tutto già fatto.</p>
+    <br>
+    <p style="font-size:13px; color: var(--muted)"><strong style="color:#bbb">Vantaggio competitivo:</strong> Nessun concorrente offre il servizio completo. "Precisione nordeuropea" nel caos burocratico spagnolo.</p>
+    <div class="channels" style="margin-top:14px">
+      <span class="ch meta">📸 Instagram: @hispanotemp</span>
+      <span class="ch meta">📘 Facebook: Hispa Temp</span>
+      <span class="ch seo">🌐 hispatem.com</span>
+    </div>
+  </div>
+
+  <!-- Buyer Personas -->
+  <p class="section-h">👥 Buyer Personas</p>
+  <div class="grid-3">
+    <div class="persona">
+      <div class="ava">👨‍💼</div>
+      <div class="name">Mateusz</div>
+      <div class="role">Imprenditore polacco, 44 anni, >250K€/anno</div>
+      <ul>
+        <li>Vuole sicurezza geopolitica</li>
+        <li>Ottimizzazione fiscale (Legge Beckham)</li>
+        <li>Cerca "Done for you" totale</li>
+        <li><strong>Trigger:</strong> risparmio tasse + sicurezza</li>
+      </ul>
+    </div>
+    <div class="persona">
+      <div class="ava">👩‍👧</div>
+      <div class="name">Elena</div>
+      <div class="role">Madre Est Europa, 35-45 anni</div>
+      <ul>
+        <li>Priorità: scuole internazionali</li>
+        <li>Protezione figli dal contesto geopolitico</li>
+        <li>Vuole trasparenza totale</li>
+        <li><strong>Trigger:</strong> sicurezza famiglia + scuole</li>
+      </ul>
+    </div>
+    <div class="persona">
+      <div class="ava">👴</div>
+      <div class="name">Jan</div>
+      <div class="role">Pensionato benestante, 60+ anni</div>
+      <ul>
+        <li>Cerca clima e qualità di vita</li>
+        <li>Vuole assistenza burocrazia completa</li>
+        <li>Golf, relax, estate tranquilla</li>
+        <li><strong>Trigger:</strong> pensione e stile di vita</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Funnel + Canali -->
+  <div class="grid-2">
+    <div class="card card-blue">
+      <h3><span>📐</span> Struttura del Funnel</h3>
+      <div class="funnel-wrap">
+        <div class="funnel-stage f1">
+          <div class="stage-label">TOFU — Attrazione</div>
+          <div class="stage-title">Lead Magnet</div>
+          <div class="stage-desc">Checklist / PDF / Video gratuito → cattura email+telefono</div>
+        </div>
+        <div class="funnel-arrow">▼</div>
+        <div class="funnel-stage f2">
+          <div class="stage-label">MOFU — Educazione</div>
+          <div class="stage-title">Email Soap Opera (7 email)</div>
+          <div class="stage-desc">Nurturing automatico → smonta obiezioni → costruisce fiducia</div>
+        </div>
+        <div class="funnel-arrow">▼</div>
+        <div class="funnel-stage f3">
+          <div class="stage-label">BOFU — Conversione</div>
+          <div class="stage-title">Consulenza Pre-Flight</div>
+          <div class="stage-desc">Call strategica 60min (150-250€, rimborsabili) → vendita pacchetto</div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-green">
+      <h3><span>📡</span> Canali di Marketing</h3>
+      <p style="font-size:13px; margin-bottom: 12px;">I canali lavorano in <strong>sincronia</strong> per raggiungere 1 lead/giorno:</p>
+      <div class="channels" style="flex-direction:column; gap:8px">
+        <span class="ch meta" style="width:fit-content">📸 Meta Ads — Elena (scuole/famiglia) e Jan (relax)</span>
+        <span class="ch li" style="width:fit-content">💼 LinkedIn Ads — Mateusz (Legge Beckham / fisco)</span>
+        <span class="ch wa" style="width:fit-content">💬 WhatsApp/Chatbot — qualifica lead automatica</span>
+        <span class="ch email" style="width:fit-content">✉️ Email Marketing — sequenza soap opera 7 email</span>
+        <span class="ch seo" style="width:fit-content">🔍 SEO — articoli su hispatem.com</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scala del Valore -->
+  <p class="section-h">💎 Scala del Valore (Value Ladder)</p>
+  <div class="card">
+    <div class="ladder">
+      <div class="rung">
+        <div class="level" style="background:#333; color:#aaa">L1</div>
+        <div>
+          <div class="rung-name">🎁 Prodotti Gratuiti (Esca)</div>
+          <div class="rung-desc">Video-tutorial "7 ostacoli burocrazia spagnola" · Checklist interattiva · Webinar Legge Beckham</div>
+        </div>
+        <div class="rung-price">€0</div>
+      </div>
+      <div class="rung">
+        <div class="level" style="background:#2a3a2a; color:var(--accent3)">L2</div>
+        <div>
+          <div class="rung-name">📞 Consulenza Strategica "Pre-Flight"</div>
+          <div class="rung-desc">60 min con esperto · Piano d'azione personalizzato · Rimborsabile sull'acquisto</div>
+        </div>
+        <div class="rung-price">150-250€</div>
+      </div>
+      <div class="rung">
+        <div class="level" style="background:#1a2a3a; color:var(--accent2)">L3</div>
+        <div>
+          <div class="rung-name">🧩 Moduli à la Carte</div>
+          <div class="rung-desc">Gold (NIE/burocrazia) · Family (scuole+sanità) · Business (Legge Beckham)</div>
+        </div>
+        <div class="rung-price">TBD</div>
+      </div>
+      <div class="rung" style="border-color: rgba(232,160,32,.3)">
+        <div class="level" style="background:#3a2800; color:var(--accent)">L4</div>
+        <div>
+          <div class="rung-name">⭐ Hispano 360° Full Relocation</div>
+          <div class="rung-desc">Casa + Scuola + Fisco + Documenti in 30 giorni · Servizio chiavi in mano</div>
+        </div>
+        <div class="rung-price" style="color:var(--accent)">Premium</div>
+      </div>
+      <div class="rung" style="border-color: rgba(232,160,32,.5)">
+        <div class="level" style="background:#4a3500; color:#ffd060">L5</div>
+        <div>
+          <div class="rung-name">👑 Golden Concierge</div>
+          <div class="rung-desc">6 mesi post-trasferimento · Staff domestico · Immobili di lusso · Club esclusivi</div>
+        </div>
+        <div class="rung-price" style="color:#ffd060">Luxury</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead Magnet -->
+  <p class="section-h">🧲 Lead Magnet Consigliato per il Lancio</p>
+  <div class="card card-accent">
+    <h3><span>📄</span> "Kit di Sopravvivenza Burocratica 2026"</h3>
+    <p style="font-size:14px"><strong>Titolo:</strong> <em>"Spagna 2026: La Guida Definitiva alla Relocation — Tutto quello che devi sapere su Visti, Legge Beckham e Scuole per evitare 12 mesi di attese inutili."</em></p>
+    <br>
+    <div class="grid-3" style="margin:0; gap:10px">
+      <div style="background:#1a1400; border:1px solid #3a2800; border-radius:8px; padding:12px; font-size:12px">
+        <div style="color:var(--accent); font-weight:700; margin-bottom:6px">📊 Contenuto</div>
+        Tabella comparativa visti · Checklist 12 documenti · 5 errori fatali per residenza negata
+      </div>
+      <div style="background:#1a1a14; border:1px solid #2a2800; border-radius:8px; padding:12px; font-size:12px">
+        <div style="color:#aaa; font-weight:700; margin-bottom:6px">📣 CTA Landing Page</div>
+        Email + Telefono per scaricare → Thank You Page con offerta consulenza gratuita 15min
+      </div>
+      <div style="background:#141a14; border:1px solid #283028; border-radius:8px; padding:12px; font-size:12px">
+        <div style="color:var(--accent3); font-weight:700; margin-bottom:6px">🚀 Promozione</div>
+        Meta Ads: "Stai pensando di trasferirti in Spagna? Leggi questa guida prima."
+      </div>
+    </div>
+  </div>
+
+  <!-- GHL Automazioni -->
+  <p class="section-h">⚙️ Automazioni GHL da Configurare</p>
+  <div class="card card-blue">
+    <h3><span>🔧</span> Setup Tecnico GoHighLevel</h3>
+    <div class="grid-2" style="margin:0; gap:10px">
+      <div style="background:#1a1a2a; border:1px solid #2a2a3a; border-radius:8px; padding:12px; font-size:13px">
+        <div style="color:var(--accent2); font-weight:700; margin-bottom:6px">🗂️ CRM & Pipeline</div>
+        <ul style="list-style:none; font-size:12px">
+          <li>→ Nuovo Lead (da form)</li>
+          <li>→ Nuovo Prospetto (qualificato)</li>
+          <li>→ Consulenza Prenotata</li>
+          <li>→ Offerta Inviata</li>
+          <li>→ Cliente Chiuso</li>
+        </ul>
+      </div>
+      <div style="background:#1a1a2a; border:1px solid #2a2a3a; border-radius:8px; padding:12px; font-size:13px">
+        <div style="color:var(--accent2); font-weight:700; margin-bottom:6px">📧 Email Soap Opera</div>
+        <ul style="list-style:none; font-size:12px">
+          <li>Email 1: Benvenuto + guida PDF</li>
+          <li>Email 2: "Perché la Spagna?"</li>
+          <li>Email 3: Caso studio famiglia</li>
+          <li>Email 4: Smonta obiezione "è lento"</li>
+          <li>Email 5: Prova sociale</li>
+          <li>Email 6: Urgenza / scarsità</li>
+          <li>Email 7: CTA prenotazione call</li>
+        </ul>
+      </div>
+      <div style="background:#1a1a2a; border:1px solid #2a2a3a; border-radius:8px; padding:12px; font-size:13px">
+        <div style="color:var(--accent2); font-weight:700; margin-bottom:6px">💬 WhatsApp Automation</div>
+        Invio automatico link guida PDF · Chatbot risposta iniziale · Qualifica lead
+      </div>
+      <div style="background:#1a1a2a; border:1px solid #2a2a3a; border-radius:8px; padding:12px; font-size:13px">
+        <div style="color:var(--accent2); font-weight:700; margin-bottom:6px">📅 Calendario</div>
+        Booking automatico consulenza Pre-Flight · 60 minuti · Link in ogni email
+      </div>
+    </div>
+  </div>
+
+  <!-- Task per Davide -->
+  <p class="section-h">✅ Le Tue Task (con Prompt Gemini)</p>
+
+  <div class="task-item">
+    <div class="task-num">1</div>
+    <div class="task-body">
+      <div class="task-title">Setup GHL — CRM, Pipeline e Automazioni Base</div>
+      <div class="task-sub">Configura pipeline 5 stadi + workflow email Soap Opera + WhatsApp + calendario booking. Vedi task ClickUp per il prompt completo.</div>
+    </div>
+  </div>
+
+  <div class="task-item">
+    <div class="task-num">2</div>
+    <div class="task-body">
+      <div class="task-title">Landing Page — Lead Magnet (Kit Sopravvivenza)</div>
+      <div class="task-sub">Pagina semplice: email + telefono → guida PDF. CTA unica. Mobile first. Collegata a workflow GHL.</div>
+    </div>
+  </div>
+
+  <div class="task-item">
+    <div class="task-num">3</div>
+    <div class="task-body">
+      <div class="task-title">Crea il PDF "Kit di Sopravvivenza Burocratica 2026"</div>
+      <div class="task-sub">Guida: tabella visti comparativa, checklist 12 documenti, 5 errori fatali residenza. Tono autorevole, design professionale.</div>
+    </div>
+  </div>
+
+  <div class="task-item">
+    <div class="task-num">4</div>
+    <div class="task-body">
+      <div class="task-title">Email Soap Opera — 7 Email di Nurturing</div>
+      <div class="task-sub">Scrivi le 7 email della sequenza automatica. Linguaggio spagnolo, tono professionale ma caldo. Ogni email smonta una obiezione.</div>
+    </div>
+  </div>
+
+  <div class="task-item">
+    <div class="task-num">5</div>
+    <div class="task-body">
+      <div class="task-title">Ads Creative — Meta e LinkedIn</div>
+      <div class="task-sub">3 creatività Meta Ads (per Elena e Jan) + 2 creatività LinkedIn (per Mateusz). Testi, angoli d'attacco, CTA. Da revisionare con Marco.</div>
+    </div>
+  </div>
+
+  <div class="task-item">
+    <div class="task-num">6</div>
+    <div class="task-body">
+      <div class="task-title">Landing Page — Consulenza Pre-Flight (BOFU)</div>
+      <div class="task-sub">Pagina di prenotazione call: copy persuasivo + calendario integrato GHL. Prezzo 150-250€ ben comunicato.</div>
+    </div>
+  </div>
+
+  <!-- Grafico distribuzione task -->
+  <p class="section-h">📈 Distribuzione Carico di Lavoro</p>
+  <div class="card">
+    <canvas id="taskChart" height="80"></canvas>
+  </div>
+
+  <!-- Grafico funnel conversione -->
+  <div class="card">
+    <h3><span>📉</span> Stima Conversioni Funnel (scenario conservativo)</h3>
+    <canvas id="funnelChart" height="100"></canvas>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Zoom ──────────────────────────────────────────────
+let z = 100;
+function zoom(dir) {
+  z = Math.max(60, Math.min(150, z + dir * 10));
+  document.getElementById('wrap').style.fontSize = (z/100 * 15) + 'px';
+  document.getElementById('zoom-level').textContent = z + '%';
+}
+
+// ── Fullscreen ────────────────────────────────────────
+function goFullscreen() {
+  const el = document.getElementById('wrap');
+  if (!document.fullscreenElement) {
+    el.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// ── Chart: Task Distribution ──────────────────────────
+new Chart(document.getElementById('taskChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['GHL Setup', 'Landing Pages', 'Contenuti/PDF', 'Email Sequence', 'Ads Creative'],
+    datasets: [{
+      data: [25, 20, 20, 20, 15],
+      backgroundColor: ['#e8a020','#4f8ef7','#3ecf8e','#9b59b6','#e74c3c'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { position: 'right', labels: { color: '#ccc', font: { size: 12 } } }
+    },
+    cutout: '65%'
+  }
+});
+
+// ── Chart: Funnel Conversion ──────────────────────────
+new Chart(document.getElementById('funnelChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Impression Ads', 'Click → LP', 'Lead acquisiti', 'Consulenza prenotata', 'Cliente chiuso'],
+    datasets: [{
+      label: 'Utenti stimati',
+      data: [10000, 500, 100, 20, 5],
+      backgroundColor: ['rgba(232,160,32,.6)','rgba(232,160,32,.5)','rgba(62,207,142,.6)','rgba(62,207,142,.5)','rgba(62,207,142,.8)'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#aaa', font: { size: 11 } }, grid: { color: '#222' } },
+      y: { ticks: { color: '#aaa' }, grid: { color: '#222' }, type: 'logarithmic' }
+    }
+  }
+});
+</script>
+</body>
+</html>
