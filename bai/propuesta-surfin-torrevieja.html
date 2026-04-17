@@ -568,6 +568,9 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
 const slides=Array.from(document.querySelectorAll('.slide'));
 const dots=Array.from(document.querySelectorAll('#progress .dot'));
 let si=0;
+let marketingUnlocked=false;
+const MARKETING_SLIDE=9; // s9 = plan marketing locked
+const MARKETING_PAY=10;  // s10 = plan pagos marketing
 function updateDots(){
   dots.forEach((d,i)=>d.classList.toggle('active',i===si));
   document.getElementById('btn-prev').style.opacity=si===0?'0.3':'1';
@@ -582,17 +585,27 @@ function showSlide(n){
 function next(){
   const p=slides[si].querySelectorAll('.r:not(.shown)');
   if(p.length>0){p[0].classList.add('shown');}
-  else if(si<slides.length-1){showSlide(si+1);}
+  else if(si<slides.length-1){
+    let target=si+1;
+    if(target===MARKETING_PAY&&!marketingUnlocked)target=MARKETING_PAY+1;
+    showSlide(target);
+  }
 }
 function prev(){
   const s=slides[si].querySelectorAll('.r.shown');
   if(s.length>0){s[s.length-1].classList.remove('shown');}
-  else if(si>0){showSlide(si-1);slides[si].querySelectorAll('.r').forEach(e=>e.classList.add('shown'));}
+  else if(si>0){
+    let target=si-1;
+    if(target===MARKETING_PAY&&!marketingUnlocked)target=MARKETING_SLIDE;
+    showSlide(target);
+    slides[target].querySelectorAll('.r').forEach(e=>e.classList.add('shown'));
+  }
 }
 function goTo(n){showSlide(n);slides[n].querySelectorAll('.r').forEach(e=>e.classList.add('shown'));}
 function unlockSlide(overlayId){
   event.stopPropagation();
   document.getElementById(overlayId).classList.add('hidden');
+  marketingUnlocked=true;
 }
 document.addEventListener('click',e=>{if(!e.target.closest('button')&&!e.target.closest('#progress'))next();});
 document.addEventListener('keydown',e=>{
