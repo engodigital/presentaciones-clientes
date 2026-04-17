@@ -24,15 +24,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--white);
 #s1::before{background:radial-gradient(ellipse 70% 55% at 30% 40%,rgba(239,68,68,0.08),transparent);}
 #s2::before{background:radial-gradient(ellipse 65% 55% at 25% 40%,rgba(249,188,17,0.06),transparent);}
 #s3::before{background:radial-gradient(ellipse 60% 55% at 70% 30%,rgba(239,68,68,0.07),transparent);}
-#s4::before{background:radial-gradient(ellipse 70% 55% at 30% 50%,rgba(249,188,17,0.07),transparent);}
-#s5::before{background:radial-gradient(ellipse 75% 55% at 50% 50%,rgba(52,211,153,0.07),transparent);}
-#s6::before{background:radial-gradient(ellipse 80% 55% at 50% 50%,rgba(249,188,17,0.06),transparent);}
-#s7::before{background:radial-gradient(ellipse 60% 55% at 60% 50%,rgba(249,188,17,0.07),transparent);}
-#s8::before{background:radial-gradient(ellipse 70% 60% at 40% 50%,rgba(52,211,153,0.08),transparent);}
-#s9::before{background:radial-gradient(ellipse 65% 55% at 50% 45%,rgba(249,188,17,0.09),transparent);}
-#s10::before{background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(251,191,36,0.06),transparent);}
-#s11::before{background:radial-gradient(ellipse 65% 60% at 50% 50%,rgba(249,188,17,0.07),transparent);}
-#s12::before{background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(52,211,153,0.11),transparent);}
+#s4::before{background:radial-gradient(ellipse 70% 55% at 30% 50%,rgba(52,211,153,0.07),transparent);}
+#s5::before{background:radial-gradient(ellipse 75% 55% at 50% 50%,rgba(249,188,17,0.07),transparent);}
+#s6::before{background:radial-gradient(ellipse 80% 55% at 50% 50%,rgba(52,211,153,0.08),transparent);}
+#s7::before{background:radial-gradient(ellipse 65% 55% at 50% 45%,rgba(249,188,17,0.09),transparent);}
+#s8::before{background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(249,188,17,0.07),transparent);}
+#s9::before{background:radial-gradient(ellipse 65% 60% at 50% 50%,rgba(96,165,250,0.08),transparent);}
+#s10::before{background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(52,211,153,0.08),transparent);}
+#s11::before{background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(249,188,17,0.09),transparent);}
 
 #progress{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:100;}
 .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .3s;cursor:pointer;}
@@ -50,6 +49,7 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
 .lead{font-size:18px;color:var(--dim);line-height:1.7;margin-top:16px;}
 .g-gold{background:linear-gradient(130deg,#F9BC11,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .g-green{background:linear-gradient(130deg,#34d399,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.g-blue{background:linear-gradient(130deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
 .quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
 .quote{padding:18px 20px;border-radius:14px;background:rgba(255,255,255,0.04);border-left:3px solid rgba(249,188,17,0.5);}
@@ -62,34 +62,11 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
 .pain-title{font-size:18px;font-weight:700;color:var(--white);line-height:1.4;}
 .pain-sub{font-size:15px;color:var(--dim);margin-top:5px;line-height:1.5;}
 
-.box-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;}
+.box-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:22px;}
 .sbox{padding:24px;border-radius:16px;border:1px solid;}
 .sbox-icon{font-size:32px;margin-bottom:12px;}
 .sbox-title{font-size:18px;font-weight:800;color:var(--white);margin-bottom:8px;line-height:1.3;}
-.sbox-text{font-size:16px;color:var(--dim);line-height:1.65;}
-
-.target-flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;margin-top:28px;}
-.t-card{text-align:center;padding:20px 18px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.04);min-width:130px;}
-.t-card.on{border-color:rgba(249,188,17,0.5);background:rgba(249,188,17,0.06);}
-.t-icon{font-size:28px;margin-bottom:8px;}
-.t-label{font-size:14px;font-weight:700;color:var(--white);}
-.t-sub{font-size:12px;color:var(--dim);margin-top:4px;}
-.t-arr{font-size:20px;color:var(--faint);padding:0 8px;margin-bottom:20px;}
-
-.flow{display:flex;align-items:center;justify-content:center;margin-top:24px;flex-wrap:wrap;}
-.f-box{background:rgba(255,255,255,0.04);border-radius:14px;padding:22px 16px;
-  width:175px;text-align:center;border:1.5px solid;}
-.f-box-t{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
-.f-box-body{font-size:14px;color:var(--dim);line-height:1.8;}
-.f-b1{border-color:rgba(249,188,17,0.5);} .f-b1 .f-box-t{color:#fcd34d;}
-.f-b2{border-color:rgba(96,165,250,0.5);} .f-b2 .f-box-t{color:#93c5fd;}
-.f-b3{border-color:rgba(52,211,153,0.5);} .f-b3 .f-box-t{color:#6ee7b7;}
-.f-b4{border-color:rgba(167,139,250,0.4);} .f-b4 .f-box-t{color:#c4b5fd;}
-.f-arr{display:flex;align-items:center;padding-bottom:24px;margin:0 6px;}
-.f-arr::before{content:'';display:block;width:26px;height:1.5px;background:rgba(255,255,255,0.12);}
-.f-arr::after{content:'';display:block;border-top:5px solid transparent;
-  border-bottom:5px solid transparent;border-left:7px solid rgba(255,255,255,0.12);}
+.sbox-text{font-size:15px;color:var(--dim);line-height:1.65;}
 
 .inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;}
 .inc-item{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-radius:12px;
@@ -121,29 +98,12 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
 .bigpc{max-width:520px;margin:24px auto 0;padding:36px 40px;border-radius:24px;
   background:rgba(249,188,17,0.07);border:2px solid rgba(249,188,17,0.4);text-align:center;}
 .bigpc-label{font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
-.bigpc-name{font-size:22px;font-weight:800;color:var(--white);margin-bottom:24px;line-height:1.3;}
+.bigpc-name{font-size:20px;font-weight:800;color:var(--white);margin-bottom:24px;line-height:1.3;}
 .bigpc-row{display:flex;justify-content:space-around;gap:20px;flex-wrap:wrap;}
 .bigpc-col{text-align:center;}
 .bigpc-col-label{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
 .bigpc-price{font-size:58px;font-weight:900;color:var(--white);line-height:1;}
 .bigpc-per{font-size:16px;color:var(--dim);margin-top:4px;}
-.bigpc-strike{font-size:28px;text-decoration:line-through;opacity:0.35;color:var(--white);}
-.promo{display:inline-block;background:rgba(251,191,36,0.12);color:#fbbf24;
-  border:1px solid rgba(251,191,36,0.3);padding:4px 12px;border-radius:5px;
-  font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-left:8px;}
-
-.alt-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;}
-.alt-card{padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);}
-.alt-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
-.alt-name{font-size:18px;font-weight:800;color:var(--white);margin-bottom:14px;line-height:1.3;}
-.alt-price{font-size:40px;font-weight:900;color:var(--white);line-height:1;}
-.alt-per{font-size:16px;color:var(--dim);margin-top:4px;}
-.alt-setup{font-size:15px;color:var(--dim);margin-top:8px;}
-.mgmt-warn{margin-top:20px;padding:20px 24px;border-radius:16px;
-  background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.28);}
-.mgmt-warn-title{font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#fbbf24;margin-bottom:10px;}
-.mgmt-warn-text{font-size:17px;font-weight:600;color:var(--white);line-height:1.65;}
-.mgmt-warn-note{font-size:15px;color:var(--dim);margin-top:8px;line-height:1.6;}
 
 .pay-timeline{display:flex;flex-direction:column;gap:10px;margin-top:22px;}
 .pay-row{display:flex;align-items:center;gap:20px;padding:16px 20px;border-radius:12px;}
@@ -169,8 +129,30 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
 .note-amber{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.22);color:#fbbf24;}
 .note-info{background:rgba(249,188,17,0.06);border:1px solid rgba(249,188,17,0.2);color:#fcd34d;}
 .note-green{background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.25);color:#6ee7b7;}
+.note-blue{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.25);color:#93c5fd;}
 
-.mt3{margin-top:14px;}.mt4{margin-top:20px;}
+/* Locked slide overlay */
+.locked-overlay{
+  position:absolute;inset:0;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(9,9,10,0.78);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:20;transition:opacity .5s ease;
+}
+.locked-overlay.hidden{opacity:0;pointer-events:none;}
+.lock-icon{font-size:52px;margin-bottom:16px;}
+.lock-title{font-size:clamp(24px,3.5vw,42px);font-weight:900;color:var(--white);margin-bottom:8px;
+  letter-spacing:-1.5px;text-align:center;}
+.lock-sub{font-size:17px;color:var(--dim);margin-bottom:32px;text-align:center;
+  max-width:420px;line-height:1.6;}
+.unlock-btn{
+  padding:18px 40px;border-radius:14px;font-size:18px;font-weight:700;
+  background:linear-gradient(135deg,#F9BC11,#f97316);
+  color:#09090a;border:none;cursor:pointer;font-family:inherit;
+  transition:transform .2s,box-shadow .2s;
+  box-shadow:0 4px 24px rgba(249,188,17,0.35);
+}
+.unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(249,188,17,0.45);}
 
 @media print{
   html,body{height:auto;overflow:visible !important;background:#09090a !important;
@@ -179,14 +161,14 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
   .slide{position:relative !important;display:flex !important;height:100vh;page-break-after:always;break-after:page;}
   .r{opacity:1 !important;transform:none !important;transition:none !important;}
   #progress,#btn-prev,#btn-next{display:none !important;}
+  .locked-overlay{display:none !important;}
 }
 @media(max-width:760px){
   .slide{padding:44px 24px;}
   h1{font-size:52px;letter-spacing:-3px;}h2{font-size:34px;}
-  .quote-grid,.box-grid,.inc-grid,.alt-grid{grid-template-columns:1fr;}
-  .flow,.roi-formula{flex-direction:column;}
-  .f-arr,.roi-arrow{transform:rotate(90deg);}
-  .target-flow{gap:6px;}.t-arr{display:none;}
+  .quote-grid,.box-grid,.inc-grid{grid-template-columns:1fr;}
+  .roi-formula{flex-direction:column;}
+  .roi-arrow{transform:rotate(90deg);}
   .steps,.bigpc-row{flex-direction:column;}
 }
 </style>
@@ -232,16 +214,16 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
         </div>
       </div>
       <div class="pain">
-        <span class="pain-icon">🛶</span>
+        <span class="pain-icon">🗂️</span>
         <div>
-          <div class="pain-title">El paddle tiene <strong>margen ilimitado y sin restricción de aforo</strong> — y casi no se está vendiendo</div>
-          <div class="pain-sub">Es tu servicio más escalable. Un funnel bien hecho lo convierte en tu mayor fuente de ingresos constantes.</div>
+          <div class="pain-title">Sin CRM ni procesos definidos, <strong>los leads se pierden y el negocio depende solo de ti</strong></div>
+          <div class="pain-sub">Si estás en Suecia, el negocio para. No hay sistema que trabaje cuando tú no puedes.</div>
         </div>
       </div>
     </div>
     <div class="note note-green" style="margin-top:16px;">
       <span>✅</span>
-      <span>Este problema tiene solución. Se puede implementar en <strong>menos de 20 días</strong>. Sigue viendo →</span>
+      <span>Este problema tiene solución. Se puede implementar en <strong>menos de 10 días</strong>. Sigue viendo →</span>
     </div>
   </div>
 </div>
@@ -270,137 +252,80 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
 <div class="inner">
   <div class="r">
     <div class="eyebrow">El diagnóstico</div>
-    <h2>Tres frenos.<br><span style="color:var(--dim);">Uno mismo los resuelve.</span></h2>
+    <h2>Tres frenos.<br><span style="color:var(--dim);">Una misma solución.</span></h2>
   </div>
   <div class="r">
     <div class="pain-list">
       <div class="pain"><span class="pain-icon">🌊</span><div><div class="pain-title">Tienes tráfico pero <strong>no tienes sistema</strong> — el 80% se va sin reservar</div></div></div>
       <div class="pain"><span class="pain-icon">❄️</span><div><div class="pain-title">En invierno la <strong>demanda local es insuficiente</strong> y te obliga a volver a Suecia</div></div></div>
-      <div class="pain"><span class="pain-icon">📵</span><div><div class="pain-title">El negocio <strong>depende de que tú estés disponible</strong> — si paras, para todo</div></div></div>
+      <div class="pain"><span class="pain-icon">🗂️</span><div><div class="pain-title">El negocio <strong>depende de que tú estés disponible</strong> — si paras, para todo</div></div></div>
+    </div>
+    <div class="note note-green" style="margin-top:16px;">
+      <span>💡</span>
+      <span>Empezamos por poner <strong>orden</strong> — plataforma, visibilidad Google y posicionamiento web. Después, si quieres, aceleramos con marketing activo.</span>
     </div>
   </div>
 </div>
 </section>
 
-<!-- ══ S4 — ESTRATEGIA ══ -->
+<!-- ══ S4 — LA SOLUCIÓN ══ -->
 <section class="slide" id="s4">
 <div class="inner">
   <div class="r">
-    <div class="eyebrow">La estrategia</div>
-    <h2>Empezamos con paddle.<br><span class="g-green">Después construimos el resto.</span></h2>
+    <div class="eyebrow">La solución</div>
+    <h2>Orden, visibilidad<br><span class="g-green">y sistema.</span></h2>
   </div>
   <div class="r">
     <div class="box-grid">
       <div class="sbox" style="border-color:rgba(249,188,17,0.35);background:rgba(249,188,17,0.05);">
-        <div class="sbox-icon">🎣</div>
-        <div class="sbox-title">Guía gratuita de paddle como anzuelo</div>
-        <div class="sbox-text">Un PDF descargable — <strong>"Aprende paddle en 1 día en Torrevieja"</strong> — como primer contacto. El cliente lo descarga, deja su email y <span style="color:#34d399;font-weight:600;">entra al sistema de forma natural</span>. Sin vender directamente desde el anuncio.</div>
+        <div class="sbox-icon">🖥️</div>
+        <div class="sbox-title">Plataforma BAI</div>
+        <div class="sbox-text">CRM con pipeline de reservas, chatbot 24/7 y automatizaciones WhatsApp. El negocio <strong>funciona aunque estés en Suecia</strong>.</div>
       </div>
       <div class="sbox" style="border-color:rgba(52,211,153,0.35);background:rgba(52,211,153,0.05);">
-        <div class="sbox-icon">🤖</div>
-        <div class="sbox-title">Sistema de captación de clientes</div>
-        <div class="sbox-text">Una página con <strong>todos los servicios + formulario de contacto</strong> con varios campos para filtrar el interés + chatbot 24h + Telegram. <span style="color:#34d399;font-weight:600;">El sistema trabaja aunque estés en Suecia.</span></div>
+        <div class="sbox-icon">📍</div>
+        <div class="sbox-title">Google Business Profile</div>
+        <div class="sbox-text">Tu ficha de Google <strong>optimizada como el 5% de los mejores negocios</strong> del sector. Fotos, reseñas, categorías, preguntas frecuentes.</div>
+      </div>
+      <div class="sbox" style="border-color:rgba(96,165,250,0.35);background:rgba(96,165,250,0.05);">
+        <div class="sbox-icon">🔍</div>
+        <div class="sbox-title">SEO en tu web actual</div>
+        <div class="sbox-text">Optimizamos tu sitio para aparecer en <strong>Google, ChatGPT y Gemini</strong>. Sin rediseñar, sin gastar en nueva web.</div>
       </div>
     </div>
-    <div class="note note-info">
-      <span>📅</span><span>Google Ads activo <strong>abr–oct</strong> · Sistema Telegram activo <strong>12 meses</strong> · Surf camps a partir del <strong>mes 4</strong> · Meta Ads incluidas cuando estén disponibles</span>
+    <div class="note note-green" style="margin-top:18px;">
+      <span>⚡</span>
+      <span>Entregamos todo en <strong>~10 días</strong> una vez recibimos tu información. Tú gestionas la plataforma — nosotros la montamos y te formamos.</span>
     </div>
   </div>
 </div>
 </section>
 
-<!-- ══ S5 — PLAN DE CRECIMIENTO ══ -->
+<!-- ══ S5 — QUÉ INCLUYE ══ -->
 <section class="slide" id="s5">
-<div class="inner" style="text-align:center;">
-  <div class="r">
-    <div class="eyebrow">Plan de crecimiento</div>
-    <h2>Empezamos con 1.<br><span class="g-green">Después escalamos.</span></h2>
-    <p class="lead" style="max-width:540px;margin:0 auto;">Cada segmento se activa cuando el anterior funciona. <strong>Sin diluir el presupuesto</strong>, sin apostar a todo a la vez.</p>
-  </div>
-  <div class="r">
-    <div class="target-flow">
-      <div class="t-card on"><div class="t-icon">🛶</div><div class="t-label">Paddle surf</div><div class="t-sub">🎯 Empezamos aquí</div></div>
-      <div class="t-arr">→</div>
-      <div class="t-card"><div class="t-icon">🏄</div><div class="t-label">Surf learners</div><div class="t-sub">Mes 2+</div></div>
-      <div class="t-arr">→</div>
-      <div class="t-card"><div class="t-icon">👨‍👩‍👧</div><div class="t-label">Familias</div><div class="t-sub">Temporada alta</div></div>
-      <div class="t-arr">→</div>
-      <div class="t-card"><div class="t-icon">🏕️</div><div class="t-label">Surf camps</div><div class="t-sub">Mes 4 · todo el año</div></div>
-      <div class="t-arr">→</div>
-      <div class="t-card"><div class="t-icon">👶</div><div class="t-label">Niños</div><div class="t-sub">Verano</div></div>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- ══ S6 — EL SISTEMA ══ -->
-<section class="slide" id="s6">
-<div class="inner" style="text-align:center;">
-  <div class="r">
-    <div class="eyebrow">El sistema en acción</div>
-    <h2>De interés a<br><span class="g-gold">reserva confirmada.</span></h2>
-  </div>
-  <div class="r">
-    <div class="flow">
-      <div class="f-box f-b1">
-        <div class="f-box-t">Captación</div>
-        <div class="f-box-body">Google Ads<br>"Guía Gratis<br>Paddle" PDF<br>(optin)</div>
-      </div>
-      <div class="f-arr"></div>
-      <div class="f-box f-b2">
-        <div class="f-box-t">Nutrición</div>
-        <div class="f-box-body">Email 5 días<br>Paddle tips<br>→ Servicios<br>→ Oferta</div>
-      </div>
-      <div class="f-arr"></div>
-      <div class="f-box f-b3">
-        <div class="f-box-t">Conversión</div>
-        <div class="f-box-body">Sistema captación<br>Todos servicios<br>Formulario<br>+ chatbot</div>
-      </div>
-      <div class="f-arr"></div>
-      <div class="f-box f-b4">
-        <div class="f-box-t">Automatización</div>
-        <div class="f-box-body">Bot Telegram<br>Confirma reserva<br>CRM BAI</div>
-      </div>
-    </div>
-    <div class="note note-warn" style="max-width:680px;margin:16px auto 0;">
-      <span>⚠️</span><span>Meta Ads no disponibles actualmente — se activan e incluyen <strong>sin coste extra</strong> cuando estén disponibles</span>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- ══ S7 — QUÉ INCLUYE ══ -->
-<section class="slide" id="s7">
 <div class="inner">
   <div class="r">
-    <div class="eyebrow">Opción A — incluye</div>
-    <h2>Todo lo que necesitas<br><span class="g-green">para crecer.</span></h2>
+    <div class="eyebrow">Qué incluye el setup</div>
+    <h2>Todo lo que necesitas<br><span class="g-green">para funcionar.</span></h2>
   </div>
   <div class="r">
     <div class="inc-grid">
-      <div class="inc-item"><span class="inc-icon">🎣</span><div><div class="inc-title">2 funnels de captación de clientes</div><div class="inc-note">Guía paddle (optin) + sistema captación con todos los servicios</div></div></div>
-      <div class="inc-item"><span class="inc-icon">📢</span><div><div class="inc-title">Campañas digitales gestionadas</div><div class="inc-note">Google Ads activo abr–oct · Meta Ads incluidas cuando disponibles</div></div></div>
-      <div class="inc-item"><span class="inc-icon">📧</span><div><div class="inc-title">Secuencia email automática</div><div class="inc-note">5 emails de nurturing con contenido real y útil</div></div></div>
-      <div class="inc-item"><span class="inc-icon">🤖</span><div><div class="inc-title">Bot Telegram 24/7 + chatbot web</div><div class="inc-note">Responde, filtra y confirma reservas mientras duermes</div></div></div>
-      <div class="inc-item"><span class="inc-icon">📊</span><div><div class="inc-title">CRM BAI · pipeline completo</div><div class="inc-note">Ves cada lead, su estado y el próximo paso</div></div></div>
-      <div class="inc-item"><span class="inc-icon">📈</span><div><div class="inc-title">Informe KPI mensual</div><div class="inc-note">Sabes exactamente qué funciona y qué ajustar</div></div></div>
-      <div class="inc-item" style="grid-column:span 2;border-color:rgba(249,188,17,0.3);background:rgba(249,188,17,0.05);">
-        <span class="inc-icon">🧠</span>
-        <div><div class="inc-title">1 consultoría estratégica mensual con Marco</div>
-        <div class="inc-note">Análisis de resultados + ajuste de estrategia · <span style="color:#34d399;font-weight:600;">Incluido en Opción A</span></div></div>
-      </div>
+      <div class="inc-item"><span class="inc-icon">🖥️</span><div><div class="inc-title">Configuración plataforma BAI</div><div class="inc-note">Pipeline de reservas · Chatbot web · Automatización WhatsApp · CRM completo</div></div></div>
+      <div class="inc-item"><span class="inc-icon">📍</span><div><div class="inc-title">Google Business Profile completo</div><div class="inc-note">Descripción profesional · Categorías · Fotos · FAQs · Gestión de reseñas</div></div></div>
+      <div class="inc-item"><span class="inc-icon">🔍</span><div><div class="inc-title">SEO on-page en tu sitio actual</div><div class="inc-note">Keywords locales · Meta tags · Schema markup · Optimización IA (ChatGPT, Gemini)</div></div></div>
+      <div class="inc-item"><span class="inc-icon">🎓</span><div><div class="inc-title">Formación y onboarding</div><div class="inc-note">1 sesión de uso de la plataforma · Gestión autónoma desde el primer día</div></div></div>
     </div>
     <div class="value-callout">
       <div class="vc-label">⭐ Incluido en el setup</div>
-      <div class="vc-text">Análisis de mercado + estrategia escrita</div>
-      <div class="vc-note">Valor: <strong>€2.000</strong> · Tu hoja de ruta completa, por escrito — explicada paso a paso como una lección de marketing real adaptada a tu negocio</div>
+      <div class="vc-text">Auditoría inicial de visibilidad digital</div>
+      <div class="vc-note">Analizamos tu presencia actual en Google, mapas y buscadores IA — y te entregamos el diagnóstico completo por escrito</div>
     </div>
   </div>
 </div>
 </section>
 
-<!-- ══ S8 — ROI CASO PRÁCTICO ══ -->
-<section class="slide" id="s8">
+<!-- ══ S6 — ROI EJEMPLO ADS ══ -->
+<section class="slide" id="s6">
 <div class="inner">
   <div class="r">
     <div class="eyebrow">¿Vale la pena la inversión?</div>
@@ -439,18 +364,98 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
 </div>
 </section>
 
-<!-- ══ S9 — OPCIÓN A · PRECIO ══ -->
-<section class="slide" id="s9">
+<!-- ══ S7 — LA INVERSIÓN · OFERTA BASE ══ -->
+<section class="slide" id="s7">
 <div class="inner" style="text-align:center;">
   <div class="r">
-    <div class="eyebrow">La inversión · Opción A</div>
-    <h2>Sistema Completo<br><span class="g-gold">+ Plataforma BAI</span></h2>
+    <div class="eyebrow">La inversión · Oferta Base</div>
+    <h2>BAI + GBP + SEO<br><span class="g-gold">Todo montado en ~10 días.</span></h2>
   </div>
   <div class="r">
     <div class="bigpc">
-      <div class="bigpc-label">Opción A · Recomendada</div>
-      <div class="bigpc-name">Sistema Completo + Plataforma BAI<br>2 funnels · Ads · Bot · CRM · Estrategia</div>
+      <div class="bigpc-label">Oferta Base · Setup único</div>
+      <div class="bigpc-name">Plataforma BAI · Google Business Profile · SEO web actual</div>
       <div class="bigpc-row">
+        <div class="bigpc-col">
+          <div class="bigpc-col-label">Setup único</div>
+          <div class="bigpc-price">€1.000</div>
+          <div class="bigpc-per">+ IVA</div>
+        </div>
+        <div class="bigpc-col">
+          <div class="bigpc-col-label">Plataforma BAI</div>
+          <div class="bigpc-price" style="font-size:48px;color:#F9BC11;">€50</div>
+          <div class="bigpc-per">/mes + IVA</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:18px;font-size:16px;color:var(--dim);line-height:1.8;">
+      Tú gestionas la plataforma de forma autónoma · Formación incluida<br>
+      <strong style="color:var(--white);">Entrega en ~10 días con toda la información del cliente</strong>
+    </div>
+    <div class="note note-green" style="max-width:600px;margin:14px auto 0;text-align:left;">
+      <span>✅</span>
+      <span>Sin permanencia obligatoria. <strong>Renovación mensual</strong> de la plataforma con 30 días de preaviso.</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S8 — PLAN DE PAGOS · OFERTA BASE ══ -->
+<section class="slide" id="s8">
+<div class="inner">
+  <div class="r">
+    <div class="eyebrow">Plan de pagos · Oferta Base</div>
+    <h2>Sin sorpresas.<br><span class="g-green">Todo claro.</span></h2>
+  </div>
+  <div class="r">
+    <div class="pay-timeline">
+      <div class="pay-row today">
+        <div class="pay-day" style="color:#F9BC11;">Hoy · Firma</div>
+        <div class="pay-desc">50% del setup · Inicio inmediato del trabajo</div>
+        <div class="pay-amt" style="color:#F9BC11;">€500 + IVA</div>
+      </div>
+      <div class="pay-row d20">
+        <div class="pay-day" style="color:#93c5fd;">Entrega · ~día 10</div>
+        <div class="pay-desc">Saldo del setup · <span style="color:#34d399;font-weight:700;">Sistema activo ✅</span></div>
+        <div class="pay-amt" style="color:#93c5fd;">€500 + IVA</div>
+      </div>
+      <div class="pay-row monthly">
+        <div class="pay-day" style="color:var(--dim);">Mes 2+</div>
+        <div class="pay-desc">Plataforma BAI · Gestión autónoma · Sin permanencia</div>
+        <div class="pay-amt">€50 + IVA/mes</div>
+      </div>
+      <div class="pay-row total">
+        <div class="pay-day" style="color:#34d399;">Total setup</div>
+        <div class="pay-desc" style="font-weight:700;">BAI + GBP + SEO · Completo y en marcha</div>
+        <div class="pay-amt" style="color:#34d399;font-size:24px;">€1.000 + IVA</div>
+      </div>
+    </div>
+    <div class="note note-info" style="margin-top:12px;">
+      <span>💡</span>
+      <span>La plataforma BAI (€50/mes) se puede cancelar en cualquier momento con <strong>30 días de preaviso</strong></span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ S9 — PLAN DE MARKETING (LOCKED) ══ -->
+<section class="slide" id="s9">
+<!-- Contenido visible detrás del overlay -->
+<div class="inner" style="text-align:center;">
+  <div class="r shown">
+    <div class="eyebrow">Oferta 2 · Plan de Marketing Digital</div>
+    <h2>Funnel + Google Ads<br><span class="g-blue">+ KPI</span></h2>
+  </div>
+  <div class="r shown">
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+      <div style="padding:12px 22px;border-radius:12px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);font-size:15px;font-weight:700;color:#93c5fd;">🎣 Funnel de captación</div>
+      <div style="padding:12px 22px;border-radius:12px;background:rgba(249,188,17,0.1);border:1px solid rgba(249,188,17,0.3);font-size:15px;font-weight:700;color:#fcd34d;">📢 Google Ads gestionado</div>
+      <div style="padding:12px 22px;border-radius:12px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);font-size:15px;font-weight:700;color:#6ee7b7;">📊 Dashboard KPI mensual</div>
+      <div style="padding:12px 22px;border-radius:12px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);font-size:15px;font-weight:700;color:#c4b5fd;">🤖 Bot Telegram 24/7</div>
+    </div>
+    <div class="bigpc" style="margin-top:22px;max-width:500px;">
+      <div class="bigpc-label">Plan de Marketing · Precio especial hasta 31/8</div>
+      <div class="bigpc-row" style="justify-content:center;gap:40px;">
         <div class="bigpc-col">
           <div class="bigpc-col-label">Setup único</div>
           <div class="bigpc-price">€1.500</div>
@@ -458,86 +463,71 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
         </div>
         <div class="bigpc-col">
           <div class="bigpc-col-label">Gestión mensual</div>
-          <div class="bigpc-strike">€500</div>
           <div class="bigpc-price" style="color:#F9BC11;">€300</div>
-          <div class="bigpc-per">/mes + IVA <span class="promo">PROMO</span></div>
+          <div class="bigpc-per">/mes + IVA</div>
         </div>
       </div>
     </div>
-    <div style="margin-top:18px;font-size:16px;color:var(--dim);line-height:1.8;">
-      Mínimo 90 días · Revisión de cuota al mes 4 · Renovación mensual<br>
-      <strong style="color:var(--white);">Análisis de mercado + estrategia escrita incluidos — valor €2.000</strong>
-    </div>
-    <div style="margin-top:14px;padding:14px 20px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;gap:20px;justify-content:center;flex-wrap:wrap;align-items:center;">
-      <div style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dim);">Budget publicitario recomendado (va directo a tu cuenta)</div>
-      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
-        <div><span style="font-size:20px;font-weight:900;color:#F9BC11;">€150–250</span><span style="font-size:14px;color:var(--dim);margin-left:6px;">Google Ads/mes</span></div>
-        <div><span style="font-size:20px;font-weight:900;color:#c4b5fd;">€100–150</span><span style="font-size:14px;color:var(--dim);margin-left:6px;">Meta Ads/mes</span></div>
-      </div>
+    <div class="note note-amber" style="max-width:580px;margin:14px auto 0;text-align:left;">
+      <span>⏰</span>
+      <span>Precio especial válido <strong>hasta el 31/8</strong> — después revisamos la gestión según resultados · + Budget Google Ads directo a tu cuenta</span>
     </div>
   </div>
 </div>
+<!-- Locked overlay -->
+<div class="locked-overlay" id="lock-marketing">
+  <div class="lock-icon">🔒</div>
+  <div class="lock-title">Plan de Marketing Digital</div>
+  <div class="lock-sub">Captación activa · Funnel · Google Ads · KPI</div>
+  <button class="unlock-btn" onclick="unlockSlide('lock-marketing')">Ver Plan de Marketing →</button>
+</div>
 </section>
 
-<!-- ══ S10 — OTRAS OPCIONES ══ -->
+<!-- ══ S10 — PLAN DE PAGOS · MARKETING ══ -->
 <section class="slide" id="s10">
 <div class="inner">
   <div class="r">
-    <div class="eyebrow">Otras opciones</div>
-    <h2>Si prefieres<br><span style="color:var(--dim);">gestionar tú la plataforma.</span></h2>
-  </div>
-  <div class="r">
-    <div class="alt-grid">
-      <div class="alt-card">
-        <div class="alt-label">Opción B</div>
-        <div class="alt-name">Configuración BAI<br>+ Gestión Autónoma</div>
-        <div class="alt-price">€50</div>
-        <div class="alt-per">/mes + IVA</div>
-        <div class="alt-setup">Setup: desde <strong style="color:var(--white);">€750</strong> + IVA · Formación incluida · Tú gestionas el día a día</div>
-      </div>
-      <div class="alt-card">
-        <div class="alt-label">Opción C</div>
-        <div class="alt-name">Solo Plataforma<br>BAI</div>
-        <div class="alt-price">€50</div>
-        <div class="alt-per">/mes + IVA</div>
-        <div class="alt-setup" style="color:var(--dim);">Sin setup obligatorio · Acceso directo a la plataforma</div>
-      </div>
-    </div>
-    <div class="mgmt-warn">
-      <div class="mgmt-warn-title">⚠️ Lo que hace la diferencia</div>
-      <div class="mgmt-warn-text">El sistema es el motor. <strong>La gestión es el piloto.</strong><br>Sin una buena configuración y sin optimización mensual, los anuncios traen tráfico que no convierte — y los leads se pierden.</div>
-      <div class="mgmt-warn-note">Sin un buen sistema de captación bien montado, es muy difícil obtener resultados reales. La Opción A garantiza que todo funcione desde el primer día — y <span style="color:#34d399;font-weight:600;">mejore cada mes</span>.</div>
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- ══ S11 — PLAN DE PAGOS ══ -->
-<section class="slide" id="s11">
-<div class="inner">
-  <div class="r">
-    <div class="eyebrow">Plan de pagos · Opción A</div>
-    <h2>Sin sorpresas.<br><span class="g-green">Todo claro.</span></h2>
-    <p class="lead">Mínimo 90 días · Después renovación mensual con <strong>30 días de preaviso</strong></p>
+    <div class="eyebrow">Plan de pagos · Marketing Digital</div>
+    <h2>Sin sorpresas.<br><span class="g-blue">Todo claro.</span></h2>
   </div>
   <div class="r">
     <div class="pay-timeline">
-      <div class="pay-row today"><div class="pay-day" style="color:#F9BC11;">Hoy · Día 0</div><div class="pay-desc">50% setup + Mes 1</div><div class="pay-amt" style="color:#F9BC11;">€1.050 + IVA</div></div>
-      <div class="pay-row d20"><div class="pay-day" style="color:#93c5fd;">Día 20</div><div class="pay-desc">Saldo setup · Sistema activo · <span style="color:#34d399;font-weight:700;">Anuncios encendidos 🟢</span></div><div class="pay-amt" style="color:#93c5fd;">€750 + IVA</div></div>
-      <div class="pay-row monthly"><div class="pay-day" style="color:var(--dim);">Día 30 · Mes 2</div><div class="pay-desc">Gestión mensual</div><div class="pay-amt">€300 + IVA</div></div>
-      <div class="pay-row monthly"><div class="pay-day" style="color:var(--dim);">Día 60 · Mes 3</div><div class="pay-desc">Gestión mensual</div><div class="pay-amt">€300 + IVA</div></div>
-      <div class="pay-row review"><div class="pay-day" style="color:#fbbf24;">Día 90 · Mes 4</div><div class="pay-desc" style="font-weight:700;">Revisión de objetivos · Ajuste de cuota según resultados</div><div class="pay-amt" style="color:#fbbf24;">€300–500</div></div>
-      <div class="pay-row total"><div class="pay-day" style="color:#34d399;">Total 90 días</div><div class="pay-desc" style="font-weight:700;">Setup completo + 3 meses de gestión</div><div class="pay-amt" style="color:#34d399;font-size:24px;">€2.400 + IVA</div></div>
+      <div class="pay-row today">
+        <div class="pay-day" style="color:#F9BC11;">Hoy · Firma</div>
+        <div class="pay-desc">50% del setup · Inicio inmediato</div>
+        <div class="pay-amt" style="color:#F9BC11;">€750 + IVA</div>
+      </div>
+      <div class="pay-row d20">
+        <div class="pay-day" style="color:#93c5fd;">Entrega</div>
+        <div class="pay-desc">Saldo del setup · <span style="color:#34d399;font-weight:700;">Sistema activo · Anuncios encendidos 🟢</span></div>
+        <div class="pay-amt" style="color:#93c5fd;">€750 + IVA</div>
+      </div>
+      <div class="pay-row monthly">
+        <div class="pay-day" style="color:var(--dim);">Mes 2 → 31/8</div>
+        <div class="pay-desc">Gestión mensual · Optimización continua · Informe KPI</div>
+        <div class="pay-amt">€300 + IVA/mes</div>
+      </div>
+      <div class="pay-row review">
+        <div class="pay-day" style="color:#fbbf24;">Después 31/8</div>
+        <div class="pay-desc" style="font-weight:600;">Revisamos juntos según los resultados obtenidos</div>
+        <div class="pay-amt" style="color:#fbbf24;">A definir</div>
+      </div>
+      <div class="pay-row total">
+        <div class="pay-day" style="color:#34d399;">Total setup</div>
+        <div class="pay-desc" style="font-weight:700;">Funnel + Ads + KPI · Completo y en marcha</div>
+        <div class="pay-amt" style="color:#34d399;font-size:24px;">€1.500 + IVA</div>
+      </div>
     </div>
-    <div class="note note-info" style="margin-top:12px;">
-      <span>💡</span><span>Los anuncios (<strong>€150–250 Google/mes</strong>) van directos a tu cuenta — tú controlas el gasto publicitario</span>
+    <div class="note note-blue" style="margin-top:12px;">
+      <span>📢</span>
+      <span>Budget Google Ads (recomendado <strong>€150–250/mes</strong>) va <strong>directo a tu cuenta</strong> — tú controlas el gasto publicitario</span>
     </div>
   </div>
 </div>
 </section>
 
-<!-- ══ S12 — CTA ══ -->
-<section class="slide" id="s12">
+<!-- ══ S11 — CTA ══ -->
+<section class="slide" id="s11">
 <div class="inner" style="text-align:center;">
   <div class="r">
     <div class="eyebrow">Próximos pasos</div>
@@ -548,8 +538,8 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
     <div class="steps">
       <div class="step"><div class="step-n">1</div><div class="step-t">Hoy mismo</div><div class="step-s">Email + IBAN · Esta tarde o mañana recibirás el contrato 📄</div></div>
       <div class="step"><div class="step-n">2</div><div class="step-t">Tras la firma</div><div class="step-s">Cuestionario de onboarding + cita de briefing completo 📋</div></div>
-      <div class="step"><div class="step-n">3</div><div class="step-t">Semana 1</div><div class="step-s">€1.050 + IVA anticipo · Setup inicia · Estrategia entregada 🚀</div></div>
-      <div class="step"><div class="step-n">20</div><div class="step-t">Go Live</div><div class="step-s">€750 saldo · Sistema activo · <span style="color:#34d399;font-weight:700;">Anuncios encendidos ✅</span></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Inicio</div><div class="step-s">€500 + IVA anticipo · Setup inicia · Auditoría entregada 🚀</div></div>
+      <div class="step"><div class="step-n">~10</div><div class="step-t">Go Live</div><div class="step-s">€500 saldo · <span style="color:#34d399;font-weight:700;">Plataforma activa ✅</span></div></div>
     </div>
   </div>
 </div>
@@ -570,7 +560,6 @@ h2{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:.95;letter-spaci
   <div class="dot" onclick="goTo(9)"></div>
   <div class="dot" onclick="goTo(10)"></div>
   <div class="dot" onclick="goTo(11)"></div>
-  <div class="dot" onclick="goTo(12)"></div>
 </div>
 <button class="nav-btn" id="btn-prev" onclick="prev()">← Atrás</button>
 <button class="nav-btn" id="btn-next" onclick="next()">Siguiente →</button>
@@ -601,6 +590,10 @@ function prev(){
   else if(si>0){showSlide(si-1);slides[si].querySelectorAll('.r').forEach(e=>e.classList.add('shown'));}
 }
 function goTo(n){showSlide(n);slides[n].querySelectorAll('.r').forEach(e=>e.classList.add('shown'));}
+function unlockSlide(overlayId){
+  event.stopPropagation();
+  document.getElementById(overlayId).classList.add('hidden');
+}
 document.addEventListener('click',e=>{if(!e.target.closest('button')&&!e.target.closest('#progress'))next();});
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();next();}
