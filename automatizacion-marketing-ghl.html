@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Automatización GHL — Marco Marengo</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd166;
+    --text: #e8e8f0;
+    --muted: #7a7a9a;
+    --hot: #ff6b6b;
+    --warm: #ffd166;
+    --cold: #6c8fff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 4rem 2rem;
+    background: radial-gradient(ellipse at 50% 0%, rgba(108,99,255,0.15) 0%, transparent 70%);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236c63ff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3);
+    color: var(--accent); padding: .4rem 1.2rem; border-radius: 2rem;
+    font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    margin-bottom: 2rem; display: inline-block;
+  }
+  .hero h1 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
+  .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: clamp(1rem, 2.5vw, 1.3rem); color: var(--muted); max-width: 600px; margin-bottom: 3rem; }
+  .hero-stats {
+    display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; margin-bottom: 3rem;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .scroll-hint { color: var(--muted); font-size: .85rem; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+  /* SECTION */
+  section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-label { color: var(--accent); font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .8rem; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; margin-bottom: 1rem; }
+  .subtitle { color: var(--muted); font-size: 1.05rem; margin-bottom: 3rem; max-width: 600px; }
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 5rem auto; max-width: 1100px; }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center;
+    margin: 3rem 0;
+  }
+  .flow-node {
+    background: var(--card); border: 1px solid var(--border); border-radius: 1rem;
+    padding: 1.5rem 1.8rem; text-align: center; min-width: 140px; position: relative;
+    transition: transform .2s, border-color .2s;
+  }
+  .flow-node:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .flow-node .icon { font-size: 2rem; margin-bottom: .5rem; display: block; }
+  .flow-node .name { font-weight: 700; font-size: .95rem; }
+  .flow-node .sub { color: var(--muted); font-size: .75rem; margin-top: .2rem; }
+  .flow-arrow {
+    width: 50px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    position: relative; flex-shrink: 0;
+  }
+  .flow-arrow::after {
+    content: ''; position: absolute; right: -1px; top: -4px;
+    border: 5px solid transparent; border-left-color: var(--accent2);
+  }
+  .flow-node.trigger { border-color: var(--accent); background: rgba(108,99,255,0.08); }
+  .flow-node.action { border-color: var(--accent2); background: rgba(0,212,170,0.05); }
+  .flow-node.output { border-color: var(--accent4); background: rgba(255,209,102,0.05); }
+
+  /* PIPELINE VISUAL */
+  .pipeline-row {
+    display: flex; gap: 1px; margin-bottom: 2.5rem; overflow-x: auto; padding-bottom: .5rem;
+  }
+  .pipeline-label { font-size: .75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .8rem; }
+  .stage {
+    flex: 1; min-width: 90px; padding: .8rem .6rem; text-align: center;
+    border-radius: .5rem; position: relative; cursor: default;
+    transition: transform .2s;
+  }
+  .stage:hover { transform: translateY(-3px); z-index: 1; }
+  .stage .stage-name { font-size: .7rem; font-weight: 600; margin-bottom: .4rem; }
+  .stage .stage-status { font-size: .6rem; padding: .15rem .5rem; border-radius: 1rem; display: inline-block; }
+  .stage.df { background: rgba(108,99,255,0.12); }
+  .stage.df .stage-status { background: rgba(108,99,255,0.2); color: var(--accent); }
+  .stage.ic { background: rgba(0,212,170,0.1); }
+  .stage.ic .stage-status { background: rgba(0,212,170,0.2); color: var(--accent2); }
+  .stage.fe { background: rgba(255,107,107,0.1); }
+  .stage.fe .stage-status { background: rgba(255,107,107,0.2); color: var(--hot); }
+  .stage.ir { background: rgba(255,209,102,0.1); }
+  .stage.ir .stage-status { background: rgba(255,209,102,0.2); color: var(--accent4); }
+  .stage.co { background: rgba(0,212,170,0.15); border: 1px solid rgba(0,212,170,0.3); }
+  .stage.co .stage-status { background: rgba(0,212,170,0.25); color: var(--accent2); }
+  .stage.cl { background: rgba(100,100,120,0.1); }
+  .stage.cl .stage-status { background: rgba(100,100,120,0.15); color: var(--muted); }
+
+  .clickup-badge {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: var(--card); border: 1px solid var(--border); border-radius: .5rem;
+    padding: .3rem .7rem; font-size: .7rem; color: var(--muted); margin-top: .4rem;
+  }
+  .clickup-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before { content: ''; position: absolute; left: .5rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--accent), var(--accent2), transparent); }
+  .tl-item { position: relative; margin-bottom: 1.8rem; }
+  .tl-dot {
+    position: absolute; left: -1.65rem; top: .3rem;
+    width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tl-dot.email { background: var(--accent); }
+  .tl-dot.sms { background: var(--accent2); }
+  .tl-dot.branch { background: var(--accent4); }
+  .tl-content { background: var(--card); border: 1px solid var(--border); border-radius: .8rem; padding: 1rem 1.2rem; }
+  .tl-day { font-size: .7rem; color: var(--muted); margin-bottom: .3rem; }
+  .tl-title { font-weight: 700; font-size: .9rem; margin-bottom: .2rem; }
+  .tl-sub { font-size: .8rem; color: var(--muted); }
+  .tl-type { display: inline-block; font-size: .65rem; font-weight: 700; padding: .1rem .5rem; border-radius: 1rem; margin-bottom: .4rem; }
+  .tl-type.email { background: rgba(108,99,255,0.2); color: var(--accent); }
+  .tl-type.sms { background: rgba(0,212,170,0.2); color: var(--accent2); }
+  .tl-type.branch { background: rgba(255,209,102,0.2); color: var(--accent4); }
+
+  /* SCORING */
+  .score-chain { display: flex; flex-direction: column; gap: 1rem; }
+  .score-row {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--card); border: 1px solid var(--border); border-radius: .8rem; padding: 1rem 1.2rem;
+  }
+  .score-pts {
+    min-width: 56px; text-align: center; font-size: 1.3rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .score-info .score-cond { font-weight: 600; font-size: .9rem; }
+  .score-info .score-desc { color: var(--muted); font-size: .8rem; }
+  .score-outcomes { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+  .outcome {
+    flex: 1; min-width: 160px; padding: 1.2rem 1.5rem; border-radius: 1rem; text-align: center;
+  }
+  .outcome.hot { background: rgba(255,107,107,0.12); border: 1px solid rgba(255,107,107,0.3); }
+  .outcome.warm { background: rgba(255,209,102,0.10); border: 1px solid rgba(255,209,102,0.3); }
+  .outcome.cold { background: rgba(108,143,255,0.10); border: 1px solid rgba(108,143,255,0.3); }
+  .outcome .temp { font-size: 1.8rem; font-weight: 800; }
+  .outcome.hot .temp { color: var(--hot); }
+  .outcome.warm .temp { color: var(--accent4); }
+  .outcome.cold .temp { color: var(--cold); }
+  .outcome .range { font-size: .75rem; color: var(--muted); margin: .2rem 0; }
+  .outcome .action { font-size: .75rem; font-weight: 600; }
+
+  /* AUTO-TAG CARDS */
+  .tag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .tag-card { background: var(--card); border: 1px solid var(--border); border-radius: 1.2rem; padding: 1.5rem; }
+  .tag-card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+  .tag-icon { width: 48px; height: 48px; border-radius: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+  .tag-icon.opened { background: rgba(108,99,255,0.15); }
+  .tag-icon.hot { background: rgba(255,107,107,0.15); }
+  .tag-icon.dormant { background: rgba(100,100,120,0.15); }
+  .tag-card h3 { font-size: .95rem; font-weight: 700; }
+  .tag-card .trigger-pill { display: inline-block; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: .4rem; padding: .15rem .6rem; font-size: .7rem; color: var(--muted); margin-bottom: .8rem; }
+  .tag-steps { display: flex; flex-direction: column; gap: .5rem; }
+  .tag-step { display: flex; gap: .7rem; align-items: flex-start; font-size: .8rem; }
+  .step-num { min-width: 20px; height: 20px; border-radius: 50%; background: rgba(108,99,255,0.2); color: var(--accent); font-size: .65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: .05rem; }
+  .tag-step .step-text { color: var(--muted); }
+  .tag-step .step-text strong { color: var(--text); }
+
+  /* CRON TABLE */
+  .cron-table { width: 100%; border-collapse: collapse; }
+  .cron-table th { text-align: left; padding: .6rem 1rem; font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border); }
+  .cron-table td { padding: .8rem 1rem; font-size: .85rem; border-bottom: 1px solid rgba(42,42,58,0.5); vertical-align: middle; }
+  .cron-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .cron-badge { display: inline-block; padding: .15rem .6rem; border-radius: .4rem; font-size: .7rem; font-weight: 600; }
+  .cron-badge.daily { background: rgba(108,99,255,0.15); color: var(--accent); }
+  .cron-badge.weekly { background: rgba(0,212,170,0.15); color: var(--accent2); }
+  .cron-badge.monthly { background: rgba(255,209,102,0.15); color: var(--accent4); }
+  code { background: rgba(255,255,255,0.06); border: 1px solid var(--border); padding: .15rem .5rem; border-radius: .35rem; font-size: .8rem; font-family: 'JetBrains Mono', 'Fira Code', monospace; color: var(--accent2); }
+
+  /* SCREEN MOCKUP */
+  .mockup-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 1.2rem; overflow: hidden; margin: 2rem 0; }
+  .mockup-bar { background: var(--surface); padding: .7rem 1rem; display: flex; align-items: center; gap: .5rem; border-bottom: 1px solid var(--border); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  .mockup-bar-url { background: rgba(255,255,255,0.05); border-radius: .4rem; padding: .2rem .8rem; font-size: .7rem; color: var(--muted); margin-left: auto; flex: 1; max-width: 300px; }
+  .mockup-body { padding: 1.5rem; }
+
+  /* GHL UI PREVIEW */
+  .ghl-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .ghl-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #7c3aed, #4f46e5); border-radius: .5rem; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .8rem; }
+  .ghl-nav { display: flex; gap: .5rem; font-size: .75rem; color: var(--muted); }
+  .ghl-nav span.active { color: var(--text); font-weight: 600; }
+  .ghl-nav span.sep { opacity: 0.4; }
+  .wf-container { display: flex; flex-direction: column; gap: .8rem; }
+  .wf-step {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: .7rem; padding: .8rem 1.2rem;
+    position: relative;
+  }
+  .wf-step::after {
+    content: '↓'; position: absolute; bottom: -1rem; left: 50%; transform: translateX(-50%);
+    color: var(--muted); font-size: .8rem; z-index: 1;
+  }
+  .wf-step:last-child::after { display: none; }
+  .wf-step-icon { width: 32px; height: 32px; border-radius: .5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .wf-step-icon.trigger { background: rgba(108,99,255,0.2); }
+  .wf-step-icon.wait { background: rgba(100,100,120,0.2); }
+  .wf-step-icon.email { background: rgba(108,99,255,0.15); }
+  .wf-step-icon.sms { background: rgba(0,212,170,0.15); }
+  .wf-step-icon.branch { background: rgba(255,209,102,0.15); }
+  .wf-step-info .wf-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .wf-step-info .wf-title { font-size: .85rem; font-weight: 600; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 4rem 2rem; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .flow { gap: .5rem; }
+    .flow-arrow { width: 24px; }
+    .pipeline-row { gap: 2px; }
+    .stage { min-width: 70px; }
+    .hero-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-badge">Sistema Automatizado · Marco Marengo ES</span>
+  <h1>Tu CRM trabaja<br><span>mientras duermes</span></h1>
+  <p>GHL + ClickUp + Gmail conectados en un sistema automático que sincroniza leads, puntúa contactos y envía reportes sin tocar nada.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Pipelines GHL</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Rutinas activas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Clics manuales</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Funcionando</div>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ Ver cómo funciona</div>
+</div>
+
+<!-- FLUJO GENERAL -->
+<section>
+  <div class="section-label">Arquitectura</div>
+  <h2>El flujo completo en un vistazo</h2>
+  <p class="subtitle">Desde que un contacto entra en GHL hasta que el reporte llega a tu inbox, todo automático.</p>
+
+  <div class="flow">
+    <div class="flow-node trigger">
+      <span class="icon">🎯</span>
+      <div class="name">GHL</div>
+      <div class="sub">Marco Marengo ES<br>3 Pipelines</div>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node action">
+      <span class="icon">🐍</span>
+      <div class="name">Python</div>
+      <div class="sub">sync.py · cada día<br>vía cron</div>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node output">
+      <span class="icon">✅</span>
+      <div class="name">ClickUp</div>
+      <div class="sub">Marco Marengo 🇪🇸<br>tareas auto</div>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node action">
+      <span class="icon">📊</span>
+      <div class="name">Reportes</div>
+      <div class="sub">KPI semanal<br>Dashboard mensual</div>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node output">
+      <span class="icon">📧</span>
+      <div class="name">Gmail</div>
+      <div class="sub">Email auto<br>lunes + día 1</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:.8rem;padding:1.2rem;">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">🔄</div>
+      <div style="font-weight:700;font-size:.9rem;margin-bottom:.3rem;">Sincronización diaria</div>
+      <div style="color:var(--muted);font-size:.8rem;">GHL → ClickUp a las 9:00 AM. Crea tareas nuevas y actualiza status automáticamente.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:.8rem;padding:1.2rem;">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">🔍</div>
+      <div style="font-weight:700;font-size:.9rem;margin-bottom:.3rem;">Anti-duplicados</div>
+      <div style="color:var(--muted);font-size:.8rem;">Detecta contactos repetidos por email o teléfono. Alerta en ClickUp con tag "duplicado".</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:.8rem;padding:1.2rem;">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">📬</div>
+      <div style="font-weight:700;font-size:.9rem;margin-bottom:.3rem;">Reportes automáticos</div>
+      <div style="color:var(--muted);font-size:.8rem;">KPI cada lunes. Dashboard el día 1 de cada mes. Llegan solos a tu inbox.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:.8rem;padding:1.2rem;">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">⚡</div>
+      <div style="font-weight:700;font-size:.9rem;margin-bottom:.3rem;">Workflows GHL</div>
+      <div style="color:var(--muted);font-size:.8rem;">Follow-up, lead scoring y auto-tagging nativos en GHL. Sin código extra.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PIPELINE MAPPING -->
+<section>
+  <div class="section-label">Rutina #1 — Sync GHL → ClickUp</div>
+  <h2>Las etapas se convierten en tareas</h2>
+  <p class="subtitle">Cada oportunidad en GHL aparece como tarea en ClickUp. El status refleja la etapa en tiempo real.</p>
+
+  <div style="margin-bottom:2rem;">
+    <div class="pipeline-label">Pipeline ADS</div>
+    <div class="pipeline-row">
+      <div class="stage df"><div class="stage-name">Optin</div><div class="stage-status">da fare</div></div>
+      <div class="stage df"><div class="stage-name">Contactar</div><div class="stage-status">da fare</div></div>
+      <div class="stage fe"><div class="stage-name">No Contest.</div><div class="stage-status">ferma</div></div>
+      <div class="stage ic"><div class="stage-name">Msg. Enviado</div><div class="stage-status">in corso</div></div>
+      <div class="stage ic"><div class="stage-name">1ª Llamada</div><div class="stage-status">in corso</div></div>
+      <div class="stage fe"><div class="stage-name">No Present.</div><div class="stage-status">ferma</div></div>
+      <div class="stage ic"><div class="stage-name">2ª Llamada</div><div class="stage-status">in corso</div></div>
+      <div class="stage ir"><div class="stage-name">Contrato</div><div class="stage-status">in revisione</div></div>
+      <div class="stage co"><div class="stage-name">Cliente ✓</div><div class="stage-status">completato</div></div>
+      <div class="stage cl"><div class="stage-name">Descartado</div><div class="stage-status">cerrado</div></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:2rem;">
+    <div class="pipeline-label">Pipeline BAI</div>
+    <div class="pipeline-row">
+      <div class="stage df"><div class="stage-name">Nuevo Lead</div><div class="stage-status">da fare</div></div>
+      <div class="stage ic"><div class="stage-name">En Lavorac.</div><div class="stage-status">in corso</div></div>
+      <div class="stage ic"><div class="stage-name">1 Cita</div><div class="stage-status">in corso</div></div>
+      <div class="stage ic"><div class="stage-name">2 Cita</div><div class="stage-status">in corso</div></div>
+      <div class="stage ir"><div class="stage-name">Contracto</div><div class="stage-status">in revisione</div></div>
+      <div class="stage ir"><div class="stage-name">Negociación</div><div class="stage-status">in revisione</div></div>
+      <div class="stage co"><div class="stage-name">Cliente ✓</div><div class="stage-status">completato</div></div>
+      <div class="stage ic"><div class="stage-name">Desarrollo</div><div class="stage-status">in corso</div></div>
+      <div class="stage co"><div class="stage-name">Activo ✓</div><div class="stage-status">completato</div></div>
+      <div class="stage fe"><div class="stage-name">No/Lo Pienso</div><div class="stage-status">ferma</div></div>
+    </div>
+  </div>
+
+  <!-- Leyenda -->
+  <div style="display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.5rem;">
+    <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;">
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(108,99,255,0.3)"></div> <span style="color:var(--muted)">da fare — pendiente</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;">
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(0,212,170,0.3)"></div> <span style="color:var(--muted)">in corso — en proceso</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;">
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(255,107,107,0.3)"></div> <span style="color:var(--muted)">ferma — bloqueado</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;">
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(255,209,102,0.3)"></div> <span style="color:var(--muted)">in revisione — pendiente firma</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;">
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(0,212,170,0.4);border:1px solid rgba(0,212,170,0.5)"></div> <span style="color:var(--muted)">completato — ganado</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WORKFLOW #8 — FOLLOW-UP -->
+<section>
+  <div class="section-label">Workflow GHL #8</div>
+  <h2>Follow-up automático de 7 días</h2>
+  <p class="subtitle">Se activa cuando una oportunidad llega a etapa <strong>Contrato</strong>. La secuencia corre sola durante 7 días.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;">
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot email"></div>
+        <div class="tl-content">
+          <div class="tl-day">Día 0 — Inmediato</div>
+          <span class="tl-type email">EMAIL</span>
+          <div class="tl-title">📋 Tu propuesta está lista</div>
+          <div class="tl-sub">Resumen de la propuesta + CTA responder email</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot sms"></div>
+        <div class="tl-content">
+          <div class="tl-day">Día 1</div>
+          <span class="tl-type sms">SMS</span>
+          <div class="tl-title">📲 Recordatorio WhatsApp</div>
+          <div class="tl-sub">"¿Tienes dudas? Escríbeme aquí 👋"</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot email"></div>
+        <div class="tl-content">
+          <div class="tl-day">Día 3</div>
+          <span class="tl-type email">EMAIL</span>
+          <div class="tl-title">✅ ¿Cómo funciona exactamente el servicio?</div>
+          <div class="tl-sub">Proceso de trabajo + caso de éxito + link calendario</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot email"></div>
+        <div class="tl-content">
+          <div class="tl-day">Día 5</div>
+          <span class="tl-type email">EMAIL</span>
+          <div class="tl-title">🎯 Resultados de un cliente similar a ti</div>
+          <div class="tl-sub">Screenshot + números reales + CTA "¿Empezamos?"</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot email"></div>
+        <div class="tl-content">
+          <div class="tl-day">Día 7</div>
+          <span class="tl-type email">EMAIL</span>
+          <div class="tl-title">⏰ Última oportunidad esta semana</div>
+          <div class="tl-sub">Urgencia suave + precio final + CTA urgente</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot branch"></div>
+        <div class="tl-content">
+          <div class="tl-day">Fin de secuencia</div>
+          <span class="tl-type branch">IF/ELSE</span>
+          <div class="tl-title">¿Respondió el contacto?</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem;">
+            <div style="background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.2);border-radius:.5rem;padding:.5rem;font-size:.75rem;">
+              <strong style="color:var(--accent2)">SÍ →</strong><br>
+              Tag: propuesta-respondida<br>
+              Stage: Negociación
+            </div>
+            <div style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);border-radius:.5rem;padding:.5rem;font-size:.75rem;">
+              <strong style="color:var(--hot)">NO →</strong><br>
+              Tag: propuesta-expirada<br>
+              Stage: Descartado
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mockup GHL -->
+    <div>
+      <div class="mockup-wrap">
+        <div class="mockup-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div class="mockup-bar-url">app.leadconnectorhq.com · Automation</div>
+        </div>
+        <div class="mockup-body">
+          <div class="ghl-header">
+            <div class="ghl-logo">GHL</div>
+            <div class="ghl-nav">
+              <span>Automation</span><span class="sep">›</span>
+              <span>Workflows</span><span class="sep">›</span>
+              <span class="active">Follow-up Propuesta</span>
+            </div>
+          </div>
+          <div class="wf-container">
+            <div class="wf-step">
+              <div class="wf-step-icon trigger">⚡</div>
+              <div class="wf-step-info">
+                <div class="wf-label">Trigger</div>
+                <div class="wf-title">Pipeline Stage Changed → Contrato</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-step-icon email">📧</div>
+              <div class="wf-step-info">
+                <div class="wf-label">Action</div>
+                <div class="wf-title">Send Email — Propuesta lista</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-step-icon wait">⏱</div>
+              <div class="wf-step-info">
+                <div class="wf-label">Wait</div>
+                <div class="wf-title">1 día</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-step-icon sms">💬</div>
+              <div class="wf-step-info">
+                <div class="wf-label">Action</div>
+                <div class="wf-title">Send SMS — Recordatorio</div>
+              </div>
+            </div>
+            <div class="wf-step" style="border-style:dashed;opacity:.6;">
+              <div class="wf-step-icon wait">⏱</div>
+              <div class="wf-step-info">
+                <div class="wf-label">Wait · Email día 3 · Email día 5 · Email día 7</div>
+                <div class="wf-title">… 4 pasos más</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-step-icon branch">🔀</div>
+              <div class="wf-step-info">
+                <div class="wf-label">If/Else</div>
+                <div class="wf-title">¿Contact replied to email?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="text-align:center;color:var(--muted);font-size:.75rem;margin-top:.8rem;">Vista real del workflow en GHL Automation</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WORKFLOW #5 — AUTO-TAG -->
+<section>
+  <div class="section-label">Workflow GHL #5</div>
+  <h2>Auto-tagging por comportamiento</h2>
+  <p class="subtitle">3 workflows que clasifican solos a tus contactos según lo que hacen: abren emails, hacen clic, o desaparecen.</p>
+
+  <div class="tag-grid">
+    <div class="tag-card">
+      <div class="tag-card-header">
+        <div class="tag-icon opened">📨</div>
+        <div>
+          <div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Workflow 5a</div>
+          <h3>Email Opened Tracker</h3>
+        </div>
+      </div>
+      <div class="trigger-pill">⚡ Trigger: Email Opened</div>
+      <div class="tag-steps">
+        <div class="tag-step"><div class="step-num">1</div><div class="step-text">If tag <strong>"cold-lead"</strong> → Remove tag</div></div>
+        <div class="tag-step"><div class="step-num">2</div><div class="step-text">Add tag <strong>"email-opened"</strong></div></div>
+        <div class="tag-step"><div class="step-num">3</div><div class="step-text">If <strong>email_open_count ≥ 3</strong> → Add "engaged" + sales_temperature = <span style="color:var(--accent4)">Warm</span></div></div>
+      </div>
+    </div>
+
+    <div class="tag-card">
+      <div class="tag-card-header">
+        <div class="tag-icon hot">🔥</div>
+        <div>
+          <div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Workflow 5b</div>
+          <h3>Hot Lead Detector</h3>
+        </div>
+      </div>
+      <div class="trigger-pill">⚡ Trigger: Link Clicked (email)</div>
+      <div class="tag-steps">
+        <div class="tag-step"><div class="step-num">1</div><div class="step-text">Add tag <strong>"link-clicked"</strong></div></div>
+        <div class="tag-step"><div class="step-num">2</div><div class="step-text">sales_temperature = <span style="color:var(--hot)">Hot</span></div></div>
+        <div class="tag-step"><div class="step-num">3</div><div class="step-text">Add tag <strong>"hot-lead"</strong></div></div>
+        <div class="tag-step"><div class="step-num">4</div><div class="step-text">🔔 Notificación interna: <em>"{{contact.name}} hizo clic en el link"</em></div></div>
+      </div>
+    </div>
+
+    <div class="tag-card">
+      <div class="tag-card-header">
+        <div class="tag-icon dormant">😴</div>
+        <div>
+          <div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Workflow 5c</div>
+          <h3>Dormant Cleaner</h3>
+        </div>
+      </div>
+      <div class="trigger-pill">⚡ Trigger: Date/Time (semanal)</div>
+      <div class="tag-steps">
+        <div class="tag-step"><div class="step-num">1</div><div class="step-text">Condición: <strong>última actividad &gt; 14 días</strong> + NO tag "cliente"</div></div>
+        <div class="tag-step"><div class="step-num">2</div><div class="step-text">Add tag <strong>"dormant"</strong></div></div>
+        <div class="tag-step"><div class="step-num">3</div><div class="step-text">Remove tag "engaged"</div></div>
+        <div class="tag-step"><div class="step-num">4</div><div class="step-text">sales_temperature = <span style="color:var(--cold)">Cold</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WORKFLOW #6 — LEAD SCORING -->
+<section>
+  <div class="section-label">Workflow GHL #6</div>
+  <h2>Lead scoring automático</h2>
+  <p class="subtitle">Cada nuevo contacto recibe una puntuación en segundos. Nunca más perder tiempo con leads fríos.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;">
+    <div class="score-chain">
+      <div class="score-row">
+        <div class="score-pts">+20</div>
+        <div class="score-info">
+          <div class="score-cond">Base — siempre</div>
+          <div class="score-desc">Todo contacto nuevo parte desde 20 puntos</div>
+        </div>
+      </div>
+      <div class="score-row">
+        <div class="score-pts">+20</div>
+        <div class="score-info">
+          <div class="score-cond">Email corporativo</div>
+          <div class="score-desc">No contiene gmail / hotmail / yahoo</div>
+        </div>
+      </div>
+      <div class="score-row">
+        <div class="score-pts">+10</div>
+        <div class="score-info">
+          <div class="score-cond">Tiene teléfono</div>
+          <div class="score-desc">Campo Phone no está vacío</div>
+        </div>
+      </div>
+      <div class="score-row">
+        <div class="score-pts">+15</div>
+        <div class="score-info">
+          <div class="score-cond">Tiene empresa</div>
+          <div class="score-desc">Campo Company Name no está vacío</div>
+        </div>
+      </div>
+      <div class="score-row">
+        <div class="score-pts">+10</div>
+        <div class="score-info">
+          <div class="score-cond">Fuente: Facebook o Google</div>
+          <div class="score-desc">Lead de pago — intención más alta</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="score-outcomes">
+        <div class="outcome hot">
+          <div class="temp">🔥 Hot</div>
+          <div class="range">Score ≥ 55 puntos</div>
+          <div class="action">Tag "hot-lead"<br>🔔 Notif. inmediata</div>
+        </div>
+        <div class="outcome warm">
+          <div class="temp">🌤 Warm</div>
+          <div class="range">Score 35–54 puntos</div>
+          <div class="action">Tag "warm-lead"<br>Nurturing activo</div>
+        </div>
+        <div class="outcome cold">
+          <div class="temp">❄️ Cold</div>
+          <div class="range">Score &lt; 35 puntos</div>
+          <div class="action">Tag "cold-lead"<br>Secuencia larga</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:.8rem;padding:1.2rem;margin-top:1.5rem;">
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Ejemplo real</div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;font-size:.8rem;">
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Base</span><span style="color:var(--accent)">+20</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Email: empresa@empresa.com</span><span style="color:var(--accent)">+20</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Teléfono: ✓</span><span style="color:var(--accent)">+10</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Empresa: Acme SL</span><span style="color:var(--accent)">+15</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Fuente: Google Ads</span><span style="color:var(--accent)">+10</span></div>
+          <div style="height:1px;background:var(--border);margin:.3rem 0;"></div>
+          <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Total</span><span style="color:var(--hot)">75 → 🔥 HOT</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SCHEDULE -->
+<section>
+  <div class="section-label">Automatización completa</div>
+  <h2>Lo que corre sin que lo toques</h2>
+  <p class="subtitle">6 tareas programadas vía cron. Se ejecutan solas en el servidor local.</p>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:1.2rem;overflow:hidden;">
+    <table class="cron-table">
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Frecuencia</th>
+          <th>Tarea</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>09:00</code></td>
+          <td><span class="cron-badge daily">Diario</span></td>
+          <td>Sync GHL → ClickUp</td>
+          <td style="color:var(--muted);font-size:.8rem;">Tareas creadas/actualizadas en ClickUp</td>
+        </tr>
+        <tr>
+          <td><code>06:00</code></td>
+          <td><span class="cron-badge daily">Diario</span></td>
+          <td>Detección duplicados</td>
+          <td style="color:var(--muted);font-size:.8rem;">Alerta en ClickUp con tag "duplicado"</td>
+        </tr>
+        <tr>
+          <td><code>09:05 lun</code></td>
+          <td><span class="cron-badge weekly">Semanal</span></td>
+          <td>Genera KPI report HTML</td>
+          <td style="color:var(--muted);font-size:.8rem;">kpi-YYYY-MM-DD.html en /reports</td>
+        </tr>
+        <tr>
+          <td><code>09:10 lun</code></td>
+          <td><span class="cron-badge weekly">Semanal</span></td>
+          <td>Envía KPI por email</td>
+          <td style="color:var(--muted);font-size:.8rem;">HTML en inbox marketing.engoagency</td>
+        </tr>
+        <tr>
+          <td><code>02:00 día 1</code></td>
+          <td><span class="cron-badge monthly">Mensual</span></td>
+          <td>Genera dashboard mensual</td>
+          <td style="color:var(--muted);font-size:.8rem;">dashboard-YYYY-MM.html en /reports</td>
+        </tr>
+        <tr>
+          <td><code>02:10 día 1</code></td>
+          <td><span class="cron-badge monthly">Mensual</span></td>
+          <td>Envía dashboard por email</td>
+          <td style="color:var(--muted);font-size:.8rem;">HTML en inbox marketing.engoagency</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CTA / FOOTER -->
+<section style="text-align:center;padding:4rem 2rem;">
+  <div class="section-label" style="justify-content:center;display:block;">¿Lo quieres para tu negocio?</div>
+  <h2 style="margin-bottom:1rem;">Este sistema, en tu cuenta GHL</h2>
+  <p style="color:var(--muted);max-width:500px;margin:0 auto 2.5rem;">Conectamos tus pipelines, automatizamos el seguimiento y recibes los reportes solos. Sin código, sin complicaciones.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="https://marcomarengo.es" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;padding:.8rem 2rem;border-radius:.6rem;font-weight:700;font-size:.95rem;">
+      Hablar con Marco →
+    </a>
+    <a href="https://marcomarengo.es" style="background:transparent;border:1px solid var(--border);color:var(--text);text-decoration:none;padding:.8rem 2rem;border-radius:.6rem;font-weight:600;font-size:.95rem;">
+      Ver casos de éxito
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>Sistema diseñado e implementado por <a href="https://marcomarengo.es">Marco Marengo</a> · Tenerife, España</p>
+  <p style="margin-top:.4rem;font-size:.75rem;">GHL · ClickUp · Google Workspace · Python · Claude AI</p>
+</footer>
+
+</body>
+</html>
