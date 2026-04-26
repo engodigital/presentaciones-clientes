@@ -378,6 +378,27 @@
     .bridge-grid { grid-template-columns: 1fr 1fr; }
     .footer-stats { grid-template-columns: 1fr; }
   }
+
+  /* INTRO */
+  .intro {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    background: #1a1d20;
+    border: 1.5px solid #3c4047;
+    border-radius: 14px;
+    padding: 18px 24px;
+    font-size: 13px;
+    color: #b0b8c1;
+    line-height: 1.7;
+  }
+  .intro strong { color: #e8eaed; }
+
+  /* MENU BOX — variante Masamia (verde) */
+  .menu-box.masamia-menu { background: #0d1a0f; border-color: #0B804340; }
+  .menu-box.masamia-menu .menu-box-title { color: #4CAF87; }
+  .menu-box.masamia-menu .menu-item-price { color: #4CAF87; }
+  .menu-box.masamia-menu .menu-link { color: #4CAF87; }
+  .menu-box.masamia-menu .menu-row { border-bottom-color: #1a2c1a; }
 </style>
 </head>
 <body>
@@ -387,6 +408,12 @@
   <div class="eyebrow">Engo Agency · Guida operativa per Steeno</div>
   <h1>Strategia Masamia &amp; Aquanama</h1>
   <p>Due locali, stessa zona, strategia integrata · Puerto de la Cruz</p>
+</div>
+
+<!-- INTRO -->
+<div class="intro">
+  Stai seguendo due clienti nella stessa zona di Puerto de la Cruz: <strong>Masamia</strong> (pizzeria, cliente attivo da mesi con Google Ads, Meta, GHL e fidelizzazione Wix) e <strong>Aquanama</strong> (cocktail bar, nuovo cliente in fase di lancio). Kyrylo gestisce entrambi i locali — tutte le comunicazioni passano sempre per Marco.<br><br>
+  Su Aquanama stai costruendo tutto da zero. <strong>L'ordine è preciso:</strong> prima le landing page su Wix, poi — e solo dopo che le landing sono online — il QR code su GHL (che raccoglie contatti e porta la gente alla landing). Se il QR esce prima della landing, non ha dove mandare le persone. Scadenza fissa: <strong>4 maggio</strong>.
 </div>
 
 <!-- RECAP -->
@@ -403,7 +430,7 @@
     <div class="recap-item">
       <div class="recap-num recap-num-2">2</div>
       <div>
-        <div class="recap-text">QR code GHL + landing Wix</div>
+        <div class="recap-text">Landing Wix → poi QR code GHL</div>
         <div class="recap-sub">Aquanama ↔ Masamia · scad. 4 maggio</div>
       </div>
     </div>
@@ -465,6 +492,38 @@
         <div class="task-name">Comunica agli iscritti Wix</div>
         <div class="task-detail">Appena il menu è pronto → email + push agli iscritti Masamia</div>
       </div>
+    </div>
+
+    <!-- MENU DEL GIORNO -->
+    <div class="sec-title">🍽️ Menu del giorno — Lun–Ven pranzo</div>
+    <div class="menu-box masamia-menu">
+      <div class="menu-box-title">Almuerzo Tapas a la Italiana</div>
+      <div class="menu-box-price">€17 <span style="font-size:12px; color:#9aa0a6; font-weight:400;">tutto compreso</span></div>
+      <div class="menu-row">
+        <span class="menu-item-name">🥗 Caprese con burrata</span>
+        <span class="menu-item-price">incluso</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-item-name">🍚 Risotto del giorno</span>
+        <span class="menu-item-price">incluso</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-item-name">🥩 Guance brasate e patate al forno</span>
+        <span class="menu-item-price">incluso</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-item-name menu-upsell">🍮 Dolce (upsell)</span>
+        <span class="menu-item-price menu-upsell">+€3</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-item-name menu-upsell">🥂 Copa de cava</span>
+        <span class="menu-item-price menu-upsell">+€2</span>
+      </div>
+      <div class="menu-row">
+        <span class="menu-item-name">💧 Acqua</span>
+        <span class="menu-item-price">€2</span>
+      </div>
+      <div class="menu-note">Menu attuale: <a class="menu-link" href="https://aquanama-cocktail-bar.menufyy.com/" target="_blank">aquanama-cocktail-bar.menufyy.com</a></div>
     </div>
 
     <div class="sec-title">📋 Routine settimanale</div>
@@ -540,72 +599,40 @@
       <span class="pill pill-red">⚠️ Scad. 4 maggio</span>
     </div>
 
-    <!-- MENU -->
-    <div class="sec-title">🍽️ Menu confermato</div>
-    <div class="menu-box">
-      <div class="menu-box-title">Almuerzo Tapas a la Italiana</div>
-      <div class="menu-box-price">€17 <span style="font-size:12px; color:#9aa0a6; font-weight:400;">tutto compreso</span></div>
-      <div class="menu-row">
-        <span class="menu-item-name">🥗 Caprese con burrata</span>
-        <span class="menu-item-price">incluso</span>
-      </div>
-      <div class="menu-row">
-        <span class="menu-item-name">🍚 Risotto del giorno</span>
-        <span class="menu-item-price">incluso</span>
-      </div>
-      <div class="menu-row">
-        <span class="menu-item-name">🥩 Guance brasate e patate al forno</span>
-        <span class="menu-item-price">incluso</span>
-      </div>
-      <div class="menu-row">
-        <span class="menu-item-name menu-upsell">🍮 Dolce (upsell)</span>
-        <span class="menu-item-price menu-upsell">+€3</span>
-      </div>
-      <div class="menu-row">
-        <span class="menu-item-name menu-upsell">🥂 Copa de cava</span>
-        <span class="menu-item-price menu-upsell">+€2</span>
-      </div>
-      <div class="menu-row">
-        <span class="menu-item-name">💧 Acqua</span>
-        <span class="menu-item-price">€2</span>
-      </div>
-      <div class="menu-note">Menu attuale: <a class="menu-link" href="https://aquanama-cocktail-bar.menufyy.com/" target="_blank">aquanama-cocktail-bar.menufyy.com</a></div>
-    </div>
-
     <!-- SCADENZA -->
     <div class="task-block deadline">
       <div class="task-icon">⏰</div>
       <div class="task-body">
         <div class="task-name">Scadenza <span class="dl-badge">4 MAGGIO</span></div>
-        <div class="task-detail">Menu definitivo attivo + QR code funzionanti</div>
+        <div class="task-detail">Landing online + QR code attivi e funzionanti</div>
       </div>
     </div>
 
     <div class="sec-title">🔵 Task — in ordine di priorità</div>
 
-    <!-- 1. QR CODE GHL -->
-    <div class="task-block urgent">
-      <div class="task-icon">📲</div>
-      <div class="task-body">
-        <div class="task-name">1 · QR code su GHL — lead generation</div>
-        <div class="task-detail">Raccoglie contatto → copa de cava. Da posizionare sui tavoli Masamia e in giro.</div>
-        <div class="task-footer">
-          <span class="dl-badge">4 MAGGIO</span>
-          <a href="https://app.clickup.com/t/86c9dc1fg" target="_blank" class="cu-link">↗ ClickUp</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. LANDING WIX -->
+    <!-- 1. LANDING WIX -->
     <div class="task-block urgent">
       <div class="task-icon">🏠</div>
       <div class="task-body">
-        <div class="task-name">2 · Landing page su Wix</div>
-        <div class="task-detail">Landing per Aquanama (e poi anche Masamia) — su Wix, non GHL</div>
+        <div class="task-name">1 · Landing page su Wix</div>
+        <div class="task-detail">Landing per Aquanama (e poi anche Masamia) — su Wix, non GHL. Il QR non può andare online senza questa.</div>
         <div class="task-footer">
           <span class="dl-badge">4 MAGGIO</span>
           <a href="https://app.clickup.com/t/86c9dc1g9" target="_blank" class="cu-link">↗ ClickUp</a>
           <a href="https://app.clickup.com/t/86c9gy37b" target="_blank" class="cu-link">↗ Cross-referral</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. QR CODE GHL -->
+    <div class="task-block urgent">
+      <div class="task-icon">📲</div>
+      <div class="task-body">
+        <div class="task-name">2 · QR code su GHL — lead generation</div>
+        <div class="task-detail">Raccoglie contatto → copa de cava. Da posizionare sui tavoli Masamia e in giro. <strong style="color:#EF9A9A;">Fare solo quando la landing è pronta.</strong></div>
+        <div class="task-footer">
+          <span class="dl-badge">4 MAGGIO</span>
+          <a href="https://app.clickup.com/t/86c9dc1fg" target="_blank" class="cu-link">↗ ClickUp</a>
         </div>
       </div>
     </div>
