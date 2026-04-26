@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheda Palestra — 30 min</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111;
+    color: #f0f0f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    padding: 24px 0 32px;
+    border-bottom: 1px solid #222;
+    margin-bottom: 28px;
+  }
+
+  header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  header .sub {
+    font-size: 14px;
+    color: #666;
+    margin-top: 6px;
+  }
+
+  .total-time {
+    display: inline-block;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    color: #888;
+    margin-top: 12px;
+  }
+
+  /* PHASE BLOCK */
+  .phase {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .phase-header {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .phase-header .phase-name {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .phase-header .phase-time {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.8;
+  }
+
+  /* RISCALDAMENTO */
+  .warm { background: #1a2e1a; }
+  .warm .phase-header { background: #0B8043; }
+
+  /* ESERCIZI */
+  .work { background: #1a1a2e; }
+  .work .phase-header { background: #1a237e; }
+
+  /* STRETCHING */
+  .cool { background: #1e1a2a; }
+  .cool .phase-header { background: #4a148c; }
+
+  .exercise-list {
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exercise {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .ex-number {
+    font-size: 20px;
+    font-weight: 800;
+    color: #444;
+    min-width: 28px;
+    line-height: 1.2;
+  }
+
+  .ex-content {}
+
+  .ex-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+
+  .ex-target {
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .ex-sets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .set-badge {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ccc;
+  }
+
+  .set-badge.highlight {
+    background: #1a237e;
+    border-color: #283593;
+    color: #fff;
+  }
+
+  /* Esercizi speciali per lato */
+  .ex-note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  /* Stretch item */
+  .stretch-item {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .stretch-number {
+    font-size: 20px;
+    font-weight: 800;
+    color: #444;
+    min-width: 28px;
+  }
+
+  .stretch-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .stretch-time {
+    margin-left: auto;
+    background: #2a1a3a;
+    border: 1px solid #3a2a4a;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ce93d8;
+  }
+
+  /* Warm-up item */
+  .warmup-item {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .warmup-number {
+    font-size: 20px;
+    font-weight: 800;
+    color: #444;
+    min-width: 28px;
+  }
+
+  .warmup-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .warmup-time {
+    margin-left: auto;
+    background: #1a2e1a;
+    border: 1px solid #2a3e2a;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #a5d6a7;
+  }
+
+  /* Rest indicator */
+  .rest-note {
+    font-size: 12px;
+    color: #555;
+    padding: 8px 18px 0;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #222;
+    text-align: center;
+  }
+
+  .done-btn {
+    display: inline-block;
+    background: #0B8043;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 14px 40px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+
+  .done-btn:active {
+    background: #096a36;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: #555;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Palestra</h1>
+  <div class="sub">Scheda in casa — lun / mer / gio</div>
+  <div class="total-time">30 minuti totali</div>
+</header>
+
+<!-- RISCALDAMENTO -->
+<div class="phase warm">
+  <div class="phase-header">
+    <div class="phase-name">Riscaldamento</div>
+    <div class="phase-time">5 min</div>
+  </div>
+  <div class="exercise-list">
+    <div class="warmup-item">
+      <div class="warmup-number">1</div>
+      <div class="warmup-name">Rotazioni spalle</div>
+      <div class="warmup-time">30 sec</div>
+    </div>
+    <div class="warmup-item">
+      <div class="warmup-number">2</div>
+      <div class="warmup-name">Mobilità anche — cerchi in piedi</div>
+      <div class="warmup-time">30 sec/lato</div>
+    </div>
+    <div class="warmup-item">
+      <div class="warmup-number">3</div>
+      <div class="warmup-name">Salti sul posto + aperture braccia</div>
+      <div class="warmup-time">60 sec</div>
+    </div>
+  </div>
+</div>
+
+<!-- ESERCIZI -->
+<div class="phase work">
+  <div class="phase-header">
+    <div class="phase-name">Allenamento</div>
+    <div class="phase-time">20 min</div>
+  </div>
+  <div class="exercise-list">
+
+    <div class="exercise">
+      <div class="ex-number">A</div>
+      <div class="ex-content">
+        <div class="ex-name">Panca piana — manubri</div>
+        <div class="ex-target">Petto</div>
+        <div class="ex-sets">
+          <div class="set-badge highlight">3 serie</div>
+          <div class="set-badge">12 ripetizioni</div>
+          <div class="set-badge">60 sec riposo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div class="ex-number">B</div>
+      <div class="ex-content">
+        <div class="ex-name">Rematore — manubri</div>
+        <div class="ex-target">Schiena</div>
+        <div class="ex-sets">
+          <div class="set-badge highlight">3 serie</div>
+          <div class="set-badge">12 rip/lato</div>
+          <div class="set-badge">60 sec riposo</div>
+        </div>
+        <div class="ex-note">Appoggia il ginocchio sulla panca. Un braccio alla volta.</div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div class="ex-number">C</div>
+      <div class="ex-content">
+        <div class="ex-name">Affondi alternati — manubri</div>
+        <div class="ex-target">Gambe · Glutei</div>
+        <div class="ex-sets">
+          <div class="set-badge highlight">3 serie</div>
+          <div class="set-badge">10 rip/gamba</div>
+          <div class="set-badge">60 sec riposo</div>
+        </div>
+        <div class="ex-note">Passo lungo, ginocchio posteriore sfiora il pavimento.</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="rest-note">Riposo tra gli esercizi: ~90 sec. Tra le serie: 60 sec.</div>
+</div>
+
+<!-- STRETCHING -->
+<div class="phase cool">
+  <div class="phase-header">
+    <div class="phase-name">Stretching</div>
+    <div class="phase-time">5 min</div>
+  </div>
+  <div class="exercise-list">
+    <div class="stretch-item">
+      <div class="stretch-number">1</div>
+      <div class="stretch-name">Petto — mani dietro la schiena, apri il petto</div>
+      <div class="stretch-time">30 sec</div>
+    </div>
+    <div class="stretch-item">
+      <div class="stretch-number">2</div>
+      <div class="stretch-name">Quadricipiti — in piedi, tallone al gluteo</div>
+      <div class="stretch-time">30 sec/lato</div>
+    </div>
+    <div class="stretch-item">
+      <div class="stretch-number">3</div>
+      <div class="stretch-name">Schiena — cat-cow lento (in ginocchio)</div>
+      <div class="stretch-time">60 sec</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <button class="done-btn" onclick="this.textContent='Fatto ✓'; this.style.background='#555';">Fatto</button>
+  <div class="footer-note">30 min · in casa · nessun'altra attrezzatura necessaria</div>
+</footer>
+
+</body>
+</html>
