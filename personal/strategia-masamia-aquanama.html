@@ -18,7 +18,7 @@
   /* HEADER */
   .header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 28px;
   }
   .header .eyebrow {
     font-size: 11px;
@@ -27,17 +27,57 @@
     color: #5c6068;
     margin-bottom: 8px;
   }
-  .header h1 {
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 6px;
+  .header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .header p { font-size: 13px; color: #9aa0a6; }
+
+  /* RECAP BOX */
+  .recap {
+    max-width: 1180px;
+    margin: 0 auto 28px;
+    background: #1a1d20;
+    border: 1.5px solid #3c4047;
+    border-radius: 16px;
+    padding: 22px 28px;
   }
-  .header p {
-    font-size: 13px;
+  .recap-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
     color: #9aa0a6;
-    letter-spacing: 0.3px;
+    margin-bottom: 14px;
   }
+  .recap-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .recap-item {
+    background: #22262b;
+    border-radius: 10px;
+    padding: 13px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .recap-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .recap-num-1 { background: #D50000; color: #fff; }
+  .recap-num-2 { background: #F4511E; color: #fff; }
+  .recap-num-3 { background: #039BE5; color: #fff; }
+  .recap-num-4 { background: #8E24AA; color: #fff; }
+  .recap-text { font-size: 12px; font-weight: 600; line-height: 1.4; }
+  .recap-sub { font-size: 11px; color: #9aa0a6; margin-top: 2px; font-weight: 400; }
 
   /* MAIN GRID */
   .main-grid {
@@ -62,8 +102,8 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 15px;
     border-bottom: 1px solid #2c2f33;
   }
   .card-icon {
@@ -79,40 +119,32 @@
   }
   .icon-m { background: #0B804322; color: #0B8043; border: 1.5px solid #0B804366; }
   .icon-a { background: #039BE522; color: #039BE5; border: 1.5px solid #039BE566; }
-
   .card-title { font-size: 20px; font-weight: 700; }
   .card-sub { font-size: 12px; color: #9aa0a6; margin-top: 2px; }
 
   /* PILLS */
-  .pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 18px;
-  }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
   .pill {
     font-size: 11px;
     font-weight: 600;
     padding: 3px 9px;
     border-radius: 20px;
-    letter-spacing: 0.2px;
   }
   .pill-green  { background: #0B804322; color: #4CAF87; border: 1px solid #0B804355; }
   .pill-blue   { background: #039BE522; color: #4FC3F7; border: 1px solid #039BE555; }
   .pill-orange { background: #F4511E22; color: #FF8A65; border: 1px solid #F4511E55; }
-  .pill-yellow { background: #F6BF2622; color: #FFD54F; border: 1px solid #F6BF2655; }
   .pill-red    { background: #D5000022; color: #EF9A9A; border: 1px solid #D5000055; }
   .pill-grey   { background: #33373c; color: #9aa0a6; border: 1px solid #44484e; }
 
-  /* SECTION TITLES */
+  /* SECTION TITLE */
   .sec-title {
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.2px;
     color: #9aa0a6;
-    margin-bottom: 9px;
-    margin-top: 18px;
+    margin-bottom: 8px;
+    margin-top: 16px;
   }
 
   /* TASK BLOCKS */
@@ -131,11 +163,49 @@
   .task-block.normal  { border-left-color: #5c6068; }
   .task-block.future  { border-left-color: #8E24AA; }
   .task-block.waiting { border-left-color: #F6BF26; }
+  .task-block.standby { border-left-color: #5c6068; opacity: 0.7; }
   .task-block.deadline { border-left-color: #D50000; background: #1f1515; }
 
   .task-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  .task-body { flex: 1; min-width: 0; }
   .task-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; line-height: 1.3; }
   .task-detail { font-size: 11px; color: #9aa0a6; line-height: 1.4; }
+  .task-footer { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+
+  /* CLICKUP LINK */
+  .cu-link {
+    font-size: 10px;
+    font-weight: 600;
+    color: #8B5CF6;
+    background: #8B5CF615;
+    border: 1px solid #8B5CF630;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .cu-link:hover { background: #8B5CF625; }
+
+  /* DEADLINE BADGE */
+  .dl-badge {
+    font-size: 10px;
+    font-weight: 700;
+    background: #D50000;
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  /* STANDBY BADGE */
+  .sb-badge {
+    font-size: 10px;
+    font-weight: 700;
+    background: #33373c;
+    color: #9aa0a6;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
 
   /* MENU BOX */
   .menu-box {
@@ -143,21 +213,10 @@
     border: 1.5px solid #039BE540;
     border-radius: 12px;
     padding: 14px 16px;
-    margin-top: 6px;
-    margin-bottom: 7px;
+    margin: 6px 0 8px;
   }
-  .menu-box-title {
-    font-size: 13px;
-    font-weight: 800;
-    color: #4FC3F7;
-    margin-bottom: 2px;
-  }
-  .menu-box-price {
-    font-size: 20px;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 10px;
-  }
+  .menu-box-title { font-size: 13px; font-weight: 800; color: #4FC3F7; margin-bottom: 2px; }
+  .menu-box-price { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 10px; }
   .menu-row {
     display: flex;
     justify-content: space-between;
@@ -171,33 +230,20 @@
   .menu-item-price { color: #4FC3F7; font-weight: 600; white-space: nowrap; }
   .menu-upsell { color: #FFD54F; }
   .menu-note { font-size: 11px; color: #9aa0a6; margin-top: 8px; }
-  .menu-link { font-size: 11px; color: #4FC3F7; margin-top: 4px; text-decoration: none; }
+  .menu-link { font-size: 11px; color: #4FC3F7; text-decoration: none; }
   .menu-link:hover { text-decoration: underline; }
 
-  /* DEADLINE BADGE */
-  .deadline-badge {
-    display: inline-block;
-    background: #D50000;
-    color: #fff;
+  /* NOTE BOX */
+  .note-box {
+    background: #1e1a10;
+    border: 1px solid #F6BF2630;
+    border-radius: 9px;
+    padding: 10px 13px;
     font-size: 11px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 5px;
-    letter-spacing: 0.5px;
-  }
-
-  /* BUDGET BOX */
-  .budget-box {
-    background: #22262b;
-    border-radius: 10px;
-    padding: 12px 14px;
+    color: #FFD54F;
     margin-top: 6px;
-    display: flex;
-    gap: 20px;
+    line-height: 1.5;
   }
-  .budget-item { text-align: center; flex: 1; }
-  .budget-num { font-size: 18px; font-weight: 800; color: #4FC3F7; }
-  .budget-label { font-size: 10px; color: #9aa0a6; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
   /* CONNECTOR */
   .connector {
@@ -205,7 +251,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 90px;
+    padding-top: 100px;
     gap: 10px;
   }
   .conn-dot { width: 8px; height: 8px; border-radius: 50%; background: #44484e; }
@@ -222,7 +268,7 @@
     margin: 6px 0;
   }
 
-  /* KYRYLO BOX */
+  /* KYRYLO */
   .kyrylo-box {
     max-width: 1180px;
     margin: 0 auto 24px;
@@ -249,7 +295,7 @@
     flex-shrink: 0;
   }
   .kyrylo-content { flex: 1; }
-  .kyrylo-name { font-size: 14px; font-weight: 700; color: #FFD54F; margin-bottom: 3px; }
+  .kyrylo-name { font-size: 14px; font-weight: 700; color: #FFD54F; margin-bottom: 4px; }
   .kyrylo-note { font-size: 12px; color: #9aa0a6; line-height: 1.5; }
   .kyrylo-badge {
     font-size: 11px;
@@ -276,7 +322,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     padding-bottom: 13px;
     border-bottom: 1px solid #2c2f33;
   }
@@ -292,11 +338,7 @@
     font-size: 15px;
   }
   .bridge-title { font-size: 15px; font-weight: 700; color: #CE93D8; }
-  .bridge-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-  }
+  .bridge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .bridge-item {
     background: #22262b;
     border-radius: 10px;
@@ -329,9 +371,10 @@
   .stat-yellow { color: #FFD54F; }
   .stat-blue { color: #4FC3F7; }
 
-  @media (max-width: 820px) {
+  @media (max-width: 900px) {
     .main-grid { grid-template-columns: 1fr; }
     .connector { display: none; }
+    .recap-grid { grid-template-columns: 1fr 1fr; }
     .bridge-grid { grid-template-columns: 1fr 1fr; }
     .footer-stats { grid-template-columns: 1fr; }
   }
@@ -344,6 +387,41 @@
   <div class="eyebrow">Engo Agency · Guida operativa per Steeno</div>
   <h1>Strategia Masamia &amp; Aquanama</h1>
   <p>Due locali, stessa zona, strategia integrata · Puerto de la Cruz</p>
+</div>
+
+<!-- RECAP -->
+<div class="recap">
+  <div class="recap-title">Cosa stiamo costruendo — scaletta priorità</div>
+  <div class="recap-grid">
+    <div class="recap-item">
+      <div class="recap-num recap-num-1">1</div>
+      <div>
+        <div class="recap-text">Grafica menù del giorno + Google Ads locale</div>
+        <div class="recap-sub">Masamia · pranzo Lun–Ven · subito</div>
+      </div>
+    </div>
+    <div class="recap-item">
+      <div class="recap-num recap-num-2">2</div>
+      <div>
+        <div class="recap-text">QR code GHL + landing Wix</div>
+        <div class="recap-sub">Aquanama ↔ Masamia · scad. 4 maggio</div>
+      </div>
+    </div>
+    <div class="recap-item">
+      <div class="recap-num recap-num-3">3</div>
+      <div>
+        <div class="recap-text">Sito Wix Aquanama</div>
+        <div class="recap-sub">Clone masamia.es · no prenotazioni</div>
+      </div>
+    </div>
+    <div class="recap-item">
+      <div class="recap-num recap-num-4">4</div>
+      <div>
+        <div class="recap-text">Strategia Aquanama</div>
+        <div class="recap-sub">SEO · GBP · in definizione</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MAIN GRID -->
@@ -367,13 +445,25 @@
       <span class="pill pill-green">✓ Fidelizzazione Wix</span>
     </div>
 
-    <div class="sec-title">🔴 Urgente questa settimana</div>
+    <div class="sec-title">🔴 Urgente</div>
 
     <div class="task-block urgent">
       <div class="task-icon">🎨</div>
-      <div>
+      <div class="task-body">
         <div class="task-name">Grafica menù del giorno</div>
-        <div class="task-detail">Tutti i formati: Meta post · Storie · Storie evidenza · Google Ads · Google Maps prodotto</div>
+        <div class="task-detail">Pranzo lunedì–venerdì · Tutti i formati: Meta post, storie, storie evidenza, Google Ads, Google Maps prodotto</div>
+        <div class="task-footer">
+          <span class="dl-badge">SUBITO</span>
+          <a href="https://app.clickup.com/t/86c9gy38e" target="_blank" class="cu-link">↗ ClickUp</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block high">
+      <div class="task-icon">📣</div>
+      <div class="task-body">
+        <div class="task-name">Comunica agli iscritti Wix</div>
+        <div class="task-detail">Appena il menu è pronto → email + push agli iscritti Masamia</div>
       </div>
     </div>
 
@@ -381,41 +471,44 @@
 
     <div class="task-block high">
       <div class="task-icon">📊</div>
-      <div>
-        <div class="task-name">KPI lunedì pomeriggio</div>
+      <div class="task-body">
+        <div class="task-name">KPI — ogni lunedì pomeriggio</div>
         <div class="task-detail">Numeri + commento breve → Telegram a Marco entro fine giornata</div>
       </div>
     </div>
 
     <div class="task-block high">
       <div class="task-icon">📍</div>
-      <div>
-        <div class="task-name">GBP + GHL — lunedì mattina</div>
-        <div class="task-detail">Post settimanale su GBP + programmazione GHL</div>
+      <div class="task-body">
+        <div class="task-name">GBP + GHL — ogni lunedì</div>
+        <div class="task-detail">Post settimanale GBP + programmazione GHL</div>
       </div>
     </div>
 
     <div class="task-block high">
       <div class="task-icon">🖼️</div>
-      <div>
-        <div class="task-name">ADS evergreen — mercoledì</div>
+      <div class="task-body">
+        <div class="task-name">ADS evergreen — ogni mercoledì</div>
         <div class="task-detail">Nuove grafiche per tenere le campagne fresche (anche Granocielo)</div>
       </div>
     </div>
 
-    <div class="sec-title">🔮 In arrivo (Marco coordina)</div>
+    <div class="sec-title">🔮 In arrivo</div>
 
     <div class="task-block future">
       <div class="task-icon">⭐</div>
-      <div>
+      <div class="task-body">
         <div class="task-name">Automazione recensioni</div>
-        <div class="task-detail">Messaggio automatico che filtra: recensione bassa → gestione privata · recensione alta → amplifica</div>
+        <div class="task-detail">Verificare su Wix: sistema tipo Platform — voto basso (&lt;3★) → email privata al ristorante · voto alto (≥3★) → link recensione Google</div>
+        <div class="task-footer">
+          <a href="https://app.clickup.com/t/86c9gy3c6" target="_blank" class="cu-link">↗ ClickUp</a>
+        </div>
       </div>
     </div>
 
     <div class="task-block future">
       <div class="task-icon">👥</div>
-      <div>
+      <div class="task-body">
         <div class="task-name">Segmentazione contatti</div>
         <div class="task-detail">Residenti vs non residenti → campagne separate</div>
       </div>
@@ -442,17 +535,16 @@
     </div>
 
     <div class="pills">
-      <span class="pill pill-blue">Pranzo Lun–Ven</span>
       <span class="pill pill-grey">No prenotazioni tavoli</span>
       <span class="pill pill-orange">Sito in sviluppo</span>
-      <span class="pill pill-red">⚠️ Scadenza 4 maggio</span>
+      <span class="pill pill-red">⚠️ Scad. 4 maggio</span>
     </div>
 
     <!-- MENU -->
-    <div class="sec-title">🍽️ Menu — confermato da Kyrylo</div>
+    <div class="sec-title">🍽️ Menu confermato</div>
     <div class="menu-box">
       <div class="menu-box-title">Almuerzo Tapas a la Italiana</div>
-      <div class="menu-box-price">€17 <span style="font-size:13px; color:#9aa0a6; font-weight:400;">tutto compreso</span></div>
+      <div class="menu-box-price">€17 <span style="font-size:12px; color:#9aa0a6; font-weight:400;">tutto compreso</span></div>
       <div class="menu-row">
         <span class="menu-item-name">🥗 Caprese con burrata</span>
         <span class="menu-item-price">incluso</span>
@@ -470,105 +562,124 @@
         <span class="menu-item-price menu-upsell">+€3</span>
       </div>
       <div class="menu-row">
-        <span class="menu-item-name menu-upsell">🥂 Copa de cava (upsell)</span>
-        <span class="menu-item-price menu-upsell">+€1,50–€2</span>
+        <span class="menu-item-name menu-upsell">🥂 Copa de cava</span>
+        <span class="menu-item-price menu-upsell">+€2</span>
       </div>
       <div class="menu-row">
         <span class="menu-item-name">💧 Acqua</span>
         <span class="menu-item-price">€2</span>
       </div>
-      <div class="menu-note">Menu attuale online:</div>
-      <a class="menu-link" href="https://aquanama-cocktail-bar.menufyy.com/" target="_blank">aquanama-cocktail-bar.menufyy.com</a>
+      <div class="menu-note">Menu attuale: <a class="menu-link" href="https://aquanama-cocktail-bar.menufyy.com/" target="_blank">aquanama-cocktail-bar.menufyy.com</a></div>
     </div>
 
     <!-- SCADENZA -->
     <div class="task-block deadline">
       <div class="task-icon">⏰</div>
-      <div>
-        <div class="task-name">Scadenza 4 maggio <span class="deadline-badge">4 MAGGIO</span></div>
-        <div class="task-detail">Menu definitivo + QR code cross-referral pronti e attivi</div>
+      <div class="task-body">
+        <div class="task-name">Scadenza <span class="dl-badge">4 MAGGIO</span></div>
+        <div class="task-detail">Menu definitivo attivo + QR code funzionanti</div>
       </div>
     </div>
 
-    <!-- TASK STEENO -->
-    <div class="sec-title">🔵 Il tuo compito (100% Steeno)</div>
+    <div class="sec-title">🔵 Task — in ordine di priorità</div>
 
+    <!-- 1. QR CODE GHL -->
+    <div class="task-block urgent">
+      <div class="task-icon">📲</div>
+      <div class="task-body">
+        <div class="task-name">1 · QR code su GHL — lead generation</div>
+        <div class="task-detail">Raccoglie contatto → copa de cava. Da posizionare sui tavoli Masamia e in giro.</div>
+        <div class="task-footer">
+          <span class="dl-badge">4 MAGGIO</span>
+          <a href="https://app.clickup.com/t/86c9dc1fg" target="_blank" class="cu-link">↗ ClickUp</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. LANDING WIX -->
+    <div class="task-block urgent">
+      <div class="task-icon">🏠</div>
+      <div class="task-body">
+        <div class="task-name">2 · Landing page su Wix</div>
+        <div class="task-detail">Landing per Aquanama (e poi anche Masamia) — su Wix, non GHL</div>
+        <div class="task-footer">
+          <span class="dl-badge">4 MAGGIO</span>
+          <a href="https://app.clickup.com/t/86c9dc1g9" target="_blank" class="cu-link">↗ ClickUp</a>
+          <a href="https://app.clickup.com/t/86c9gy37b" target="_blank" class="cu-link">↗ Cross-referral</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. SITO WIX -->
     <div class="task-block high">
       <div class="task-icon">🌐</div>
-      <div>
-        <div class="task-name">Sito Wix — clone masamiya.es</div>
-        <div class="task-detail">Home · Menu · Contatti · Fidelizzazione Wix inclusa nel piano base · No prenotazioni tavoli</div>
+      <div class="task-body">
+        <div class="task-name">3 · Sito Wix — clone masamia.es</div>
+        <div class="task-detail">Home · Menu · Contatti · Fidelizzazione Wix inclusa · No prenotazioni tavoli</div>
+        <div class="task-footer">
+          <a href="https://app.clickup.com/t/86c9gy371" target="_blank" class="cu-link">↗ ClickUp</a>
+        </div>
       </div>
     </div>
 
-    <div class="task-block high">
-      <div class="task-icon">📁</div>
-      <div>
-        <div class="task-name">Foto — sistema Drive</div>
-        <div class="task-detail">Cartella condivisa come Granocielo · Foto disponibili tra ~10 giorni</div>
-      </div>
-    </div>
-
-    <div class="task-block high">
+    <!-- 4. MENU COCKTAIL IN STANDBY -->
+    <div class="task-block standby">
       <div class="task-icon">🍸</div>
-      <div>
-        <div class="task-name">Menu cocktail aggiornabile</div>
-        <div class="task-detail">Soluzione semplice (Google Sheets embedded o Wix nativo) · Kyrylo aggiorna in autonomia</div>
+      <div class="task-body">
+        <div class="task-name">4 · Menu cocktail — crea pagina placeholder</div>
+        <div class="task-detail">Chi gestirà i contenuti è da definire. Nel frattempo crea la pagina vuota sul sito.</div>
+        <div class="task-footer">
+          <span class="sb-badge">STANDBY</span>
+          <a href="https://app.clickup.com/t/86c9gy3ch" target="_blank" class="cu-link">↗ ClickUp</a>
+        </div>
       </div>
     </div>
 
+    <!-- 5. FOTO -->
     <div class="task-block normal">
+      <div class="task-icon">📁</div>
+      <div class="task-body">
+        <div class="task-name">5 · Foto — sistema Drive</div>
+        <div class="task-detail">Cartella condivisa come Granocielo · Disponibili tra ~10 giorni</div>
+      </div>
+    </div>
+
+    <!-- 6. SEO + GBP -->
+    <div class="task-block normal">
+      <div class="task-icon">🔍</div>
+      <div class="task-body">
+        <div class="task-name">6 · SEO sito + Google Business Profile</div>
+        <div class="task-detail">Tu gestisci entrambi. Kyrylo deve invitare Marco alle mail agency.</div>
+        <div class="task-footer">
+          <span class="sb-badge">IN ATTESA INVITO</span>
+        </div>
+      </div>
+    </div>
+    <div class="note-box">
+      ⚠️ Marco deve ricevere invito da Kyrylo a:<br>
+      marketing.engoagency@gmail.com · marketing.lengosteeno@gmail.com
+    </div>
+
+    <!-- TIKTOK -->
+    <div class="task-block normal" style="margin-top:8px;">
       <div class="task-icon">📱</div>
-      <div>
-        <div class="task-name">Lista influencer TikTok</div>
-        <div class="task-detail">Prepara lista influencer locali da proporre a Marco per campagna TikTok</div>
+      <div class="task-body">
+        <div class="task-name">Lista influencer TikTok locali</div>
+        <div class="task-detail">Prepara lista da proporre a Marco per campagna TikTok Aquanama</div>
       </div>
     </div>
 
-    <!-- TASK MARCO -->
-    <div class="sec-title">🔹 Task di Marco (non tuoi)</div>
-
-    <div class="task-block normal" style="opacity:0.8;">
-      <div class="task-icon">💻</div>
-      <div>
-        <div class="task-name">Sito web SEO + landing</div>
-        <div class="task-detail">Marco fa la versione per indicizzazione · QR code · raccolta dati</div>
-      </div>
-    </div>
-
-    <div class="task-block normal" style="opacity:0.8;">
-      <div class="task-icon">📍</div>
-      <div>
-        <div class="task-name">GBP + Google Ads</div>
-        <div class="task-detail">Obiettivo: indicazioni stradali · Budget: €500 setup + €450/mese · Accesso Maps da richiedere a Kyrylo</div>
-      </div>
-    </div>
-
-    <!-- BUDGET -->
-    <div class="sec-title">💰 Budget Aquanama</div>
-    <div class="budget-box">
-      <div class="budget-item">
-        <div class="budget-num">€500</div>
-        <div class="budget-label">Setup</div>
-      </div>
-      <div style="width:1px; background:#2c2f33; align-self:stretch;"></div>
-      <div class="budget-item">
-        <div class="budget-num">€450</div>
-        <div class="budget-label">/ mese</div>
-      </div>
-    </div>
-
-    <div class="sec-title">📌 Briefing Q2 — mercoledì 29/04 · 15:30–16:30</div>
+    <div class="sec-title">📌 Briefing Q2 — mer 29/04 · 15:30–16:30 · Discord</div>
     <div class="task-block normal">
       <div class="task-icon">💬</div>
-      <div>
-        <div class="task-name">Call con Marco su Discord</div>
-        <div class="task-detail">Struttura sito · sistema foto Drive · soluzione menu · QR code</div>
+      <div class="task-body">
+        <div class="task-name">Call con Marco</div>
+        <div class="task-detail">Struttura sito · sistema foto Drive · QR code · landing</div>
       </div>
     </div>
   </div>
 
-</div><!-- /main-grid -->
+</div>
 
 <!-- KYRYLO -->
 <div class="kyrylo-box">
@@ -576,9 +687,8 @@
   <div class="kyrylo-content">
     <div class="kyrylo-name">Kyrylo — Referente entrambi i locali</div>
     <div class="kyrylo-note">
-      Gestisce Masamia e Aquanama. Ha confermato i dettagli del menu e del progetto.
-      <strong style="color: #e8eaed;">Non contattare direttamente</strong> — tutte le comunicazioni passano per Marco.
-      Risponde a Marco via WhatsApp.
+      Gestisce Masamia e Aquanama. Info menu e progetto già confermati in call.
+      <strong style="color:#e8eaed;">Non contattare direttamente</strong> — tutte le comunicazioni passano per Marco via WhatsApp.
     </div>
   </div>
   <div class="kyrylo-badge">⚠️ Solo via Marco</div>
@@ -592,24 +702,24 @@
   </div>
   <div class="bridge-grid">
     <div class="bridge-item">
-      <div class="bridge-item-icon">📱</div>
-      <div class="bridge-item-title">Invito cross-referral</div>
-      <div class="bridge-item-text">Doppio canale: QR code sui tavoli Masamia + email automatica dopo prenotazione → copa de cava ad Aquanama.</div>
+      <div class="bridge-item-icon">📧</div>
+      <div class="bridge-item-title">Email post-prenotazione</div>
+      <div class="bridge-item-text">Chi prenota a Masamia riceve email automatica → invito ad Aquanama con copa de cava <strong style="color:#CE93D8;">gratis</strong>.</div>
     </div>
     <div class="bridge-item">
-      <div class="bridge-item-icon">🎁</div>
-      <div class="bridge-item-title">Fidelizzazione integrata</div>
-      <div class="bridge-item-text">Sistema Wix incluso in Aquanama. Data di nascita → auguri automatici + buono sconto. Stessa logica di Masamia.</div>
+      <div class="bridge-item-icon">📲</div>
+      <div class="bridge-item-title">QR code — lead gen</div>
+      <div class="bridge-item-text">QR sui tavoli Masamia (e in giro) → form GHL → raccoglie contatto → copa de cava in omaggio.</div>
     </div>
     <div class="bridge-item">
       <div class="bridge-item-icon">📍</div>
       <div class="bridge-item-title">Stesso pubblico</div>
-      <div class="bridge-item-text">Turisti e residenti di Puerto de la Cruz. Le campagne si supportano — un cliente Masamia è potenziale cliente Aquanama.</div>
+      <div class="bridge-item-text">Turisti e residenti Puerto de la Cruz. Un cliente Masamia è potenziale cliente Aquanama e viceversa.</div>
     </div>
     <div class="bridge-item">
       <div class="bridge-item-icon">🎯</div>
       <div class="bridge-item-title">Pubblici Meta TBD</div>
-      <div class="bridge-item-text">Marco valuta se condividere pubblici e pixel da Masamia ad Aquanama. Stesso account Meta = dati più ricchi. Decisione in settimana.</div>
+      <div class="bridge-item-text">Marco valuta se condividere pixel e pubblici da Masamia ad Aquanama. Decisione in settimana → ti aggiorno.</div>
     </div>
   </div>
 </div>
@@ -619,7 +729,7 @@
   <div class="stat-card">
     <div class="stat-label">Masamia</div>
     <div class="stat-value stat-green">Operativo</div>
-    <div class="stat-sub">Google + Meta + GHL + GBP + Fidelizzazione</div>
+    <div class="stat-sub">Google · Meta · GHL · GBP · Fidelizzazione</div>
   </div>
   <div class="stat-card">
     <div class="stat-label">Kyrylo</div>
@@ -629,7 +739,7 @@
   <div class="stat-card">
     <div class="stat-label">Aquanama</div>
     <div class="stat-value stat-blue">In sviluppo</div>
-    <div class="stat-sub">Sito Steeno · €500+€450/mese · scad. 4 mag</div>
+    <div class="stat-sub">Sito Steeno · scad. 4 maggio · QR + landing</div>
   </div>
 </div>
 
