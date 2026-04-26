@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategia Masamia & Aquanama — Per Steeno</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111214;
+    color: #e8eaed;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 14px;
+    color: #9aa0a6;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* MAIN GRID */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto 32px;
+    align-items: start;
+  }
+
+  /* CARDS */
+  .card {
+    border-radius: 16px;
+    padding: 28px;
+    background: #1a1d20;
+  }
+  .card-masamia { border: 2px solid #0B8043; }
+  .card-aquanama { border: 2px solid #039BE5; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #2c2f33;
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .icon-m { background: #0B804322; color: #0B8043; border: 1.5px solid #0B804366; }
+  .icon-a { background: #039BE522; color: #039BE5; border: 1.5px solid #039BE566; }
+
+  .card-title { font-size: 20px; font-weight: 700; }
+  .card-sub { font-size: 12px; color: #9aa0a6; margin-top: 2px; }
+
+  /* STATUS PILLS */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .pill-green { background: #0B804322; color: #4CAF87; border: 1px solid #0B804355; }
+  .pill-blue  { background: #039BE522; color: #4FC3F7; border: 1px solid #039BE555; }
+  .pill-orange { background: #F4511E22; color: #FF8A65; border: 1px solid #F4511E55; }
+  .pill-yellow { background: #F6BF2622; color: #FFD54F; border: 1px solid #F6BF2655; }
+  .pill-grey  { background: #33373c; color: #9aa0a6; border: 1px solid #44484e; }
+
+  /* TASK BLOCKS */
+  .task-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9aa0a6;
+    margin-bottom: 10px;
+    margin-top: 18px;
+  }
+  .task-block {
+    background: #22262b;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-left: 3px solid transparent;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .task-block.urgent { border-left-color: #D50000; }
+  .task-block.high   { border-left-color: #F4511E; }
+  .task-block.normal { border-left-color: #5c6068; }
+  .task-block.future { border-left-color: #8E24AA; opacity: 0.75; }
+  .task-block.waiting { border-left-color: #F6BF26; opacity: 0.8; }
+
+  .task-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .task-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; line-height: 1.3; }
+  .task-detail { font-size: 11px; color: #9aa0a6; line-height: 1.4; }
+
+  /* CONNECTOR */
+  .connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 80px;
+    gap: 12px;
+  }
+  .connector-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #44484e;
+  }
+  .connector-line {
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, #44484e, #2c2f33);
+  }
+  .connector-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #5c6068;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    margin: 8px 0;
+  }
+
+  /* KYRYLO BOX */
+  .kyrylo-box {
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    background: #1a1d20;
+    border: 2px solid #F6BF2655;
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .kyrylo-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #F6BF2620;
+    border: 2px solid #F6BF2666;
+    color: #F6BF26;
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .kyrylo-content { flex: 1; }
+  .kyrylo-name { font-size: 15px; font-weight: 700; color: #FFD54F; margin-bottom: 4px; }
+  .kyrylo-note { font-size: 12px; color: #9aa0a6; line-height: 1.5; }
+  .kyrylo-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: #F6BF26;
+    background: #F6BF2615;
+    border: 1px solid #F6BF2640;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* BRIDGE SECTION */
+  .bridge {
+    max-width: 1100px;
+    margin: 0 auto 32px;
+    background: #1a1d20;
+    border: 2px solid #8E24AA55;
+    border-radius: 16px;
+    padding: 24px 28px;
+  }
+  .bridge-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #2c2f33;
+  }
+  .bridge-icon {
+    width: 36px;
+    height: 36px;
+    background: #8E24AA22;
+    border: 1.5px solid #8E24AA66;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .bridge-title { font-size: 16px; font-weight: 700; color: #CE93D8; }
+  .bridge-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .bridge-item {
+    background: #22262b;
+    border-radius: 10px;
+    padding: 14px;
+    border-top: 2px solid #8E24AA44;
+  }
+  .bridge-item-icon { font-size: 20px; margin-bottom: 8px; }
+  .bridge-item-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; color: #CE93D8; }
+  .bridge-item-text { font-size: 11px; color: #9aa0a6; line-height: 1.4; }
+
+  /* FOOTER STATS */
+  .footer-stats {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .stat-card {
+    background: #1a1d20;
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    border: 1px solid #2c2f33;
+  }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #9aa0a6; margin-bottom: 6px; }
+  .stat-value { font-size: 22px; font-weight: 800; }
+  .stat-sub { font-size: 11px; color: #9aa0a6; margin-top: 2px; }
+  .stat-green { color: #4CAF87; }
+  .stat-yellow { color: #FFD54F; }
+  .stat-blue { color: #4FC3F7; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>Strategia Masamia &amp; Aquanama</h1>
+  <p>Guida operativa per Steeno — Engo Agency</p>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main-grid">
+
+  <!-- MASAMIA -->
+  <div class="card card-masamia">
+    <div class="card-header">
+      <div class="card-icon icon-m">M</div>
+      <div>
+        <div class="card-title">Masamia</div>
+        <div class="card-sub">Pizzeria · Puerto de la Cruz · Cliente attivo</div>
+      </div>
+    </div>
+
+    <div class="pills">
+      <span class="pill pill-green">✓ Google Ads attivo</span>
+      <span class="pill pill-green">✓ Meta Ads attivo</span>
+      <span class="pill pill-green">✓ GBP attivo</span>
+      <span class="pill pill-green">✓ GHL attivo</span>
+    </div>
+
+    <div class="task-section-title">🔴 Urgente questa settimana</div>
+
+    <div class="task-block urgent">
+      <div class="task-icon">🎨</div>
+      <div>
+        <div class="task-name">Grafica menù del giorno</div>
+        <div class="task-detail">Tutti i formati: Meta post · Storie · Storie evidenza · Google Ads · Google Maps prodotto</div>
+      </div>
+    </div>
+
+    <div class="task-block high">
+      <div class="task-icon">📍</div>
+      <div>
+        <div class="task-name">GBP + GHL — lunedì</div>
+        <div class="task-detail">KPI settimana: raccolta dati · programmazione post</div>
+      </div>
+    </div>
+
+    <div class="task-section-title">📋 Alta priorità</div>
+
+    <div class="task-block high">
+      <div class="task-icon">📊</div>
+      <div>
+        <div class="task-name">KPI lunedì pomeriggio</div>
+        <div class="task-detail">Report a Marco via Telegram entro fine giornata</div>
+      </div>
+    </div>
+
+    <div class="task-block high">
+      <div class="task-icon">🖼️</div>
+      <div>
+        <div class="task-name">ADS evergreen — mercoledì</div>
+        <div class="task-detail">Aggiorna grafiche ADS per Masamia e Granocielo</div>
+      </div>
+    </div>
+
+    <div class="task-section-title">🔮 Prossimamente</div>
+
+    <div class="task-block future">
+      <div class="task-icon">🏆</div>
+      <div>
+        <div class="task-name">Fidelizzazione clienti</div>
+        <div class="task-detail">Sistema punti · Istruzioni Kyrylo + camerieri · Come vedono i punti i clienti</div>
+      </div>
+    </div>
+
+    <div class="task-block future">
+      <div class="task-icon">👥</div>
+      <div>
+        <div class="task-name">Segmentazione contatti</div>
+        <div class="task-detail">Residenti vs non residenti · Lista Wix da dividere</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTOR -->
+  <div class="connector">
+    <div class="connector-dot"></div>
+    <div class="connector-line"></div>
+    <div class="connector-label">stessa zona</div>
+    <div class="connector-line"></div>
+    <div class="connector-dot"></div>
+  </div>
+
+  <!-- AQUANAMA -->
+  <div class="card card-aquanama">
+    <div class="card-header">
+      <div class="card-icon icon-a">A</div>
+      <div>
+        <div class="card-title">Aquanama</div>
+        <div class="card-sub">Cocktail bar · Puerto de la Cruz · Nuovo cliente</div>
+      </div>
+    </div>
+
+    <div class="pills">
+      <span class="pill pill-orange">⚡ Sito in sviluppo</span>
+      <span class="pill pill-yellow">⏳ Attesa vocale Kyrylo</span>
+      <span class="pill pill-grey">Wix BASE</span>
+    </div>
+
+    <div class="task-section-title">🔵 Il tuo compito (100% Steeno)</div>
+
+    <div class="task-block high">
+      <div class="task-icon">🌐</div>
+      <div>
+        <div class="task-name">Sito — clone di masamiya.es</div>
+        <div class="task-detail">Struttura base su Wix · Home · Menu · Contatti · Senza prenotazioni</div>
+      </div>
+    </div>
+
+    <div class="task-block high">
+      <div class="task-icon">📁</div>
+      <div>
+        <div class="task-name">Foto — sistema Drive</div>
+        <div class="task-detail">Cartella condivisa Drive come Granocielo · Link nella descrizione task ClickUp</div>
+      </div>
+    </div>
+
+    <div class="task-block high">
+      <div class="task-icon">🍹</div>
+      <div>
+        <div class="task-name">Menu cocktail aggiornabile</div>
+        <div class="task-detail">Proponi soluzione semplice · Es. Google Sheet embedded · Kyrylo deve poter aggiornare in autonomia</div>
+      </div>
+    </div>
+
+    <div class="task-section-title">⏳ In attesa</div>
+
+    <div class="task-block waiting">
+      <div class="task-icon">🎙️</div>
+      <div>
+        <div class="task-name">Vocale Kyrylo</div>
+        <div class="task-detail">Testi definitivi + info cocktail · Non procedere con contenuti prima di riceverlo</div>
+      </div>
+    </div>
+
+    <div class="task-block future">
+      <div class="task-icon">🎯</div>
+      <div>
+        <div class="task-name">Retargeting Meta — da valutare</div>
+        <div class="task-detail">Stesso pixel e account Meta di Masamia? Stessa zona · Marco decide con dati</div>
+      </div>
+    </div>
+
+    <div class="task-section-title">📌 Briefing Q2 — mercoledì 29/04</div>
+    <div class="task-block normal">
+      <div class="task-icon">💬</div>
+      <div>
+        <div class="task-name">Call con Marco (Discord)</div>
+        <div class="task-detail">Struttura sito · Sistema foto Drive · Soluzione menu aggiornabile · 15:30–16:30</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-grid -->
+
+<!-- KYRYLO -->
+<div class="kyrylo-box">
+  <div class="kyrylo-avatar">K</div>
+  <div class="kyrylo-content">
+    <div class="kyrylo-name">Kyrylo — Referente entrambi i locali</div>
+    <div class="kyrylo-note">
+      Gestisce sia Masamia che Aquanama. Per Aquanama: aspetta il suo vocale con testi e info cocktail prima di procedere con i contenuti del sito.<br>
+      <strong style="color: #e8eaed;">Non contattare direttamente</strong> — tutte le comunicazioni passano per Marco.
+    </div>
+  </div>
+  <div class="kyrylo-badge">⚠️ Solo via Marco</div>
+</div>
+
+<!-- BRIDGE SECTION -->
+<div class="bridge">
+  <div class="bridge-header">
+    <div class="bridge-icon">🔗</div>
+    <div class="bridge-title">Sinergie — Stesso bacino di clienti</div>
+  </div>
+  <div class="bridge-grid">
+    <div class="bridge-item">
+      <div class="bridge-item-icon">📱</div>
+      <div class="bridge-item-title">Cross-referral QR</div>
+      <div class="bridge-item-text">QR code sui tavoli Masamia → Aquanama. Omaggio: copa de cava al primo accesso. Da costruire insieme.</div>
+    </div>
+    <div class="bridge-item">
+      <div class="bridge-item-icon">🎁</div>
+      <div class="bridge-item-title">Fidelizzazione integrata</div>
+      <div class="bridge-item-text">Chi è fedele a Masamia può diventare cliente Aquanama e viceversa. Data di nascita → auguri + buono.</div>
+    </div>
+    <div class="bridge-item">
+      <div class="bridge-item-icon">📍</div>
+      <div class="bridge-item-title">Stesso pubblico</div>
+      <div class="bridge-item-text">Stessa zona geografica, stessa tipologia di cliente. Le campagne si rafforzano a vicenda.</div>
+    </div>
+    <div class="bridge-item">
+      <div class="bridge-item-icon">🎯</div>
+      <div class="bridge-item-title">Retargeting TBD</div>
+      <div class="bridge-item-text">Valutare se usare stesso account Meta. Stesso pixel = dati più ricchi. Marco decide quando Aquanama è pronto.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER STATS -->
+<div class="footer-stats">
+  <div class="stat-card">
+    <div class="stat-label">Masamia</div>
+    <div class="stat-value stat-green">Operativo</div>
+    <div class="stat-sub">Google + Meta + GHL + GBP</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Kyrylo</div>
+    <div class="stat-value stat-yellow">Referente</div>
+    <div class="stat-sub">Entrambi i locali · Solo via Marco</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Aquanama</div>
+    <div class="stat-value stat-blue">In sviluppo</div>
+    <div class="stat-sub">100% delegato a Steeno</div>
+  </div>
+</div>
+
+</body>
+</html>
