@@ -41,26 +41,38 @@ section p,section li{font-size:max(1.0625rem,1em)}
 <style>
 /* === WOW ANIMATIONS === */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .anim-fade { opacity: 0; animation: fadeInUp 0.65s ease forwards; }
-.anim-delay-1 { animation-delay: 0.10s; }
-.anim-delay-2 { animation-delay: 0.25s; }
-.anim-delay-3 { animation-delay: 0.40s; }
-.anim-delay-4 { animation-delay: 0.55s; }
-.anim-delay-5 { animation-delay: 0.70s; }
-.trust-card { transition: transform 0.22s ease, box-shadow 0.22s ease; }
-.trust-card:hover { transform: translateY(-6px); box-shadow: 0 24px 52px rgba(0,0,0,0.13); }
-@keyframes pulse-border {
+.anim-d1 { animation-delay: 0.10s; }
+.anim-d2 { animation-delay: 0.25s; }
+.anim-d3 { animation-delay: 0.40s; }
+.anim-d4 { animation-delay: 0.55s; }
+.anim-d5 { animation-delay: 0.70s; }
+
+/* Trust cards hover */
+.trust-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.trust-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 52px rgba(0,0,0,0.13);
+}
+
+/* Scarcity pulse */
+@keyframes pulse-ring {
   0%, 100% { box-shadow: 0 0 0 0 hsl(18 72% 40% / 0.35); }
   50%       { box-shadow: 0 0 0 8px hsl(18 72% 40% / 0); }
 }
-.scarcity-badge { animation: pulse-border 2.5s ease infinite; }
+.scarcity-badge { animation: pulse-ring 2.5s ease infinite; }
+
+/* Card accent borders */
 .card-accent-orange { border-top: 4px solid hsl(18 72% 40%); }
 .card-accent-green  { border-top: 4px solid hsl(142 70% 35%); }
 .card-accent-teal   { border-top: 4px solid hsl(195 60% 40%); }
-/* === GLASS / LUXURY STEP INDICATOR === */
+
+/* Glass step indicator */
 .step-glass {
   background: rgba(255,255,255,0.72);
   backdrop-filter: blur(16px) saturate(160%);
@@ -70,146 +82,104 @@ section p,section li{font-size:max(1.0625rem,1em)}
   border-radius: 1rem;
   padding: 0.875rem 1.5rem;
 }
-.step-num-done {
-  background: linear-gradient(135deg,hsl(142 70% 38%),hsl(142 70% 30%));
-  box-shadow: 0 2px 10px hsl(142 70% 35% / 0.4);
+.step-badge-done {
+  background: linear-gradient(135deg, hsl(142 70% 38%), hsl(142 70% 30%));
+  box-shadow: 0 2px 10px hsl(142 70% 35% / 0.45);
+  width: 1.75rem; height: 1.75rem; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0;
 }
-.step-num-active {
-  background: linear-gradient(135deg,hsl(18 72% 44%),hsl(18 72% 34%));
-  box-shadow: 0 2px 10px hsl(18 72% 40% / 0.4);
+.step-badge-active {
+  background: linear-gradient(135deg, hsl(18 72% 46%), hsl(18 72% 34%));
+  box-shadow: 0 2px 10px hsl(18 72% 40% / 0.45);
+  width: 1.75rem; height: 1.75rem; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0;
 }
-
 </style>
 
 <main>
 <section class="section-padding relative overflow-hidden" style="background:linear-gradient(160deg,hsl(35 40% 99%) 0%,hsl(35 35% 96%) 100%);">
   <div class="container mx-auto px-6 md:px-8 max-w-3xl">
 
-    <!-- Step indicator -->
-    <div class="step-glass flex items-center gap-3 mb-8 anim-fade anim-delay-1">
+    <!-- Step indicator — glass luxury -->
+    <div class="step-glass flex items-center gap-3 mb-8 anim-fade anim-d1">
       <div class="flex items-center gap-2 text-sm text-muted-foreground">
-        <span class="step-num-done w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white">&#10003;</span>
+        <span class="step-badge-done">&#10003;</span>
         <span class="line-through opacity-50">Paso 1: Solicitud</span>
       </div>
       <div class="flex-1 h-px mx-3" style="background:linear-gradient(90deg,hsl(142 70% 35% / 0.4),hsl(18 72% 40% / 0.4))"></div>
-      <div class="flex items-center gap-2 text-sm font-semibold text-primary">
-        <span class="step-num-active w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white">2</span>
+      <div class="flex items-center gap-2 text-sm font-semibold" style="color:hsl(var(--primary))">
+        <span class="step-badge-active">2</span>
         <span>Paso 2: Tu sesi&#243;n estrat&#233;gica</span>
       </div>
     </div>
 
-    <div class="text-center mb-8">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Casi listo</p>
-      <h1 class="font-headline italic font-bold text-3xl sm:text-4xl leading-tight text-foreground mb-4">
-        Fija tu Sesión Estratégica Gratuita
+    <!-- Hero text -->
+    <div class="text-center mb-8 anim-fade anim-d2">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] mb-3" style="color:hsl(var(--primary))">Casi listo</p>
+      <h1 class="font-headline italic font-bold text-3xl sm:text-4xl leading-tight mb-4" style="color:hsl(var(--foreground))">
+        Fija tu Sesi&#243;n Estrat&#233;gica Gratuita
       </h1>
-      <p class="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-        60 minutos con un consultor especializado. Diseñamos juntos tu protocolo de reubicación a España.
+      <p class="text-lg leading-relaxed max-w-xl mx-auto" style="color:hsl(var(--muted-foreground))">
+        <strong>15 minutos</strong> con un consultor especializado. Dise&#241;amos juntos tu protocolo de reubicaci&#243;n a Espa&#241;a.
       </p>
     </div>
 
     <!-- Scarcity -->
-    <div class="rounded-2xl p-4 mb-6 border text-center" style="border-color:hsl(var(--primary));background:hsl(18 72% 40% / 0.06)">
-      <p class="text-sm font-semibold text-primary">Solo 4 nuevas familias este mes · Plazas limitadas</p>
+    <div class="scarcity-badge rounded-2xl p-4 mb-8 border text-center anim-fade anim-d3" style="border-color:hsl(var(--primary));background:hsl(18 72% 40% / 0.06)">
+      <p class="text-base font-semibold" style="color:hsl(var(--primary))">&#128274; Solo 4 nuevas familias este mes &middot; Plazas limitadas</p>
     </div>
 
     <!-- GHL Booking iframe -->
-    <div class="rounded-3xl overflow-hidden border border-[hsl(var(--sand-dark))]/40 shadow-xl bg-white">
+    <div class="rounded-3xl overflow-hidden shadow-xl bg-white mb-10 anim-fade anim-d4" style="border:1px solid hsl(var(--sand-dark)/.4)">
       <iframe
         src="https://api.leadconnectorhq.com/widget/booking/5QXh3Uv1xgU3XPjUq9Ww"
-        style="width:100%;min-height:700px;border:none;overflow:hidden;display:block"
+        style="width:100%;min-height:750px;border:none;overflow:hidden;display:block"
         scrolling="no"
         id="5QXh3Uv1xgU3XPjUq9Ww_1777152186200"
-        title="Reserva tu sesión estratégica con Hispano Tempo">
+        title="Reserva tu sesi&#243;n estrat&#233;gica con Hispano Tempo">
       </iframe>
     </div>
     <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
 
-    <!-- Trust signals below calendar -->
-    <div class="mt-10 grid sm:grid-cols-3 gap-5">
-      <!-- Card 1: 60 min -->
-      <div class="flex flex-col items-center text-center rounded-2xl p-6" style="background:hsl(var(--warm-white));border:1px solid hsl(var(--sand-dark)/.3);box-shadow:0 2px 12px rgba(0,0,0,0.05)">
-        <div class="flex items-center justify-center w-11 h-11 rounded-full mb-4" style="background:hsl(18 72% 40% / 0.1)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(18,72%,40%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <!-- Trust signals — 3 colonne verticali stile pricing -->
+    <div class="grid sm:grid-cols-3 gap-6 anim-fade anim-d5">
+
+      <!-- Col 1: 15 min -->
+      <div class="trust-card card-accent-orange flex flex-col items-center text-center rounded-2xl p-7" style="background:hsl(var(--warm-white));border:1px solid hsl(var(--sand-dark)/.3);box-shadow:0 4px 16px rgba(0,0,0,0.06)">
+        <div class="flex items-center justify-center w-14 h-14 rounded-full mb-4" style="background:hsl(18 72% 40% / 0.1)">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="hsl(18,72%,40%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
-        <p class="font-headline italic font-bold text-3xl mb-1" style="color:hsl(var(--primary))">60 min</p>
-        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:hsl(var(--primary)/0.7)">Sesión completa</p>
-        <p class="text-xs leading-relaxed" style="color:hsl(var(--foreground)/0.6)">Sin prisas. Tiempo suficiente para analizar tu caso en profundidad.</p>
-      </div>
-      <!-- Card 2: 100% gratis -->
-      <div class="flex flex-col items-center text-center rounded-2xl p-6" style="background:hsl(var(--warm-white));border:1px solid hsl(var(--sand-dark)/.3);box-shadow:0 2px 12px rgba(0,0,0,0.05)">
-        <div class="flex items-center justify-center w-11 h-11 rounded-full mb-4" style="background:hsl(142 70% 40% / 0.1)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(142,70%,35%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <p class="font-headline italic font-bold text-3xl mb-1" style="color:hsl(142 70% 35%)">100% gratis</p>
-        <p class="text-xs font-semibold uppercase tracking-widest mb-2" style="color:hsl(142 70% 35% / 0.7)">Sin compromiso</p>
-        <p class="text-xs leading-relaxed" style="color:hsl(var(--foreground)/0.6)">Sin tarjeta de crédito. Sin obligación de contratación posterior.</p>
+        <p class="font-headline italic font-bold mb-1" style="color:hsl(var(--primary));font-size:2.8rem;line-height:1">15 min</p>
+        <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:hsl(var(--primary)/.7)">Sesi&#243;n gratuita</p>
+        <p class="text-base leading-relaxed" style="color:hsl(var(--foreground)/.7)"><strong>Sin presi&#243;n.</strong> 15 minutos para <strong>analizar tu caso</strong> y ver si podemos ayudarte.</p>
       </div>
 
-      <!-- Card 3: Confirmado al instante -->
-      <div class="trust-card card-accent-teal flex flex-col items-center text-center rounded-2xl p-8" style="background:hsl(var(--warm-white));border:1px solid hsl(var(--sand-dark)/.3);box-shadow:0 4px 16px rgba(0,0,0,0.06)">
-        <div class="flex items-center justify-center w-14 h-14 rounded-full mb-5" style="background:hsl(195 60% 45% / 0.1)">
+      <!-- Col 2: 100% gratis -->
+      <div class="trust-card card-accent-green flex flex-col items-center text-center rounded-2xl p-7" style="background:hsl(var(--warm-white));border:1px solid hsl(var(--sand-dark)/.3);box-shadow:0 4px 16px rgba(0,0,0,0.06)">
+        <div class="flex items-center justify-center w-14 h-14 rounded-full mb-4" style="background:hsl(142 70% 40% / 0.1)">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="hsl(142,70%,35%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <p class="font-headline italic font-bold mb-1" style="color:hsl(142 70% 35%);font-size:2.8rem;line-height:1">100% gratis</p>
+        <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:hsl(142 70% 35% / .7)">Sin compromiso</p>
+        <p class="text-base leading-relaxed" style="color:hsl(var(--foreground)/.7)"><strong>Sin tarjeta de cr&#233;dito.</strong> <strong>Sin obligaci&#243;n</strong> de contrataci&#243;n posterior.</p>
+      </div>
+
+      <!-- Col 3: Confirmado al instante -->
+      <div class="trust-card card-accent-teal flex flex-col items-center text-center rounded-2xl p-7" style="background:hsl(var(--warm-white));border:1px solid hsl(var(--sand-dark)/.3);box-shadow:0 4px 16px rgba(0,0,0,0.06)">
+        <div class="flex items-center justify-center w-14 h-14 rounded-full mb-4" style="background:hsl(195 60% 45% / 0.1)">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="hsl(195,60%,40%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
-        <p class="font-headline italic font-bold mb-1" style="color:hsl(195 60% 35%);font-size:2.6rem;line-height:1.05">Al instante</p>
-        <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:hsl(195 60% 35% / 0.7)">Confirmaci&#243;n inmediata</p>
-        <p class="text-base leading-relaxed" style="color:hsl(var(--foreground)/0.7)">Tu cita queda reservada en segundos. <strong>Confirmaci&#243;n por email</strong> y recordatorio autom&#225;tico.</p>
+        <p class="font-headline italic font-bold mb-1" style="color:hsl(195 60% 35%);font-size:2.5rem;line-height:1.05">Al instante</p>
+        <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:hsl(195 60% 35% / .7)">Confirmaci&#243;n inmediata</p>
+        <p class="text-base leading-relaxed" style="color:hsl(var(--foreground)/.7)">Tu cita queda reservada en segundos. <strong>Email de confirmaci&#243;n</strong> autom&#225;tico.</p>
       </div>
+
     </div>
 
   </div>
 </section>
 </main>
-<footer style="background:hsl(25 15% 8%);border-top:1px solid hsl(25 15% 16%);color:rgba(248,245,240,0.7)">
-  <div class="container mx-auto px-6 md:px-8 py-14">
-    <div class="grid md:grid-cols-3 gap-10 mb-10">
-      <!-- Col 1: Brand + legal identity -->
-      <div class="space-y-4">
-        <p class="font-headline italic font-bold text-2xl text-foreground">Hispano Tempo</p>
-        <p class="text-sm text-muted-foreground leading-relaxed">Servicios de consultoría de reubicación y gestión fiscal para familias extranjeras en España.</p>
-        <div class="text-xs text-muted-foreground space-y-1 pt-2 border-t border-[hsl(var(--sand-dark))]/40">
-          <p><span class="font-semibold text-foreground/70">Razón Social:</span> [PENDIENTE] S.L.</p>
-          <p><span class="font-semibold text-foreground/70">NIF / CIF:</span> [PENDIENTE]</p>
-          <p><span class="font-semibold text-foreground/70">Domicilio:</span> [PENDIENTE], España</p>
-          <p><span class="font-semibold text-foreground/70">Reg. Mercantil:</span> [PENDIENTE]</p>
-          <p><span class="font-semibold text-foreground/70">Fundada:</span> 2019</p>
-        </div>
-      </div>
-      <!-- Col 2: Contact + GDPR -->
-      <div class="space-y-4">
-        <p class="text-sm font-semibold uppercase tracking-widest text-foreground/60">Contacto y Privacidad</p>
-        <div class="text-xs text-muted-foreground space-y-1.5">
-          <p><span class="font-semibold text-foreground/70">Email:</span> <a href="mailto:info@hispanotempo.com" class="hover:text-primary transition-colors">info@hispanotempo.com</a></p>
-          <p><span class="font-semibold text-foreground/70">DPO / Privacidad:</span> <a href="mailto:privacidad@hispanotempo.com" class="hover:text-primary transition-colors">privacidad@hispanotempo.com</a></p>
-          <p><span class="font-semibold text-foreground/70">WhatsApp:</span> <a href="https://wa.me/34600000000" class="hover:text-primary transition-colors">+34 600 000 000</a></p>
-        </div>
-        <div class="text-xs text-muted-foreground pt-3 border-t border-[hsl(var(--sand-dark))]/40 space-y-1">
-          <p class="font-semibold text-foreground/70">Base legal del tratamiento (RGPD):</p>
-          <p>Art. 6.1.a — Consentimiento del interesado</p>
-          <p>Art. 6.1.b — Ejecución del contrato</p>
-          <p>Supervisión: <a href="https://www.aepd.es" target="_blank" rel="noopener" class="underline hover:text-primary">AEPD (www.aepd.es)</a></p>
-        </div>
-      </div>
-      <!-- Col 3: Legal links -->
-      <div class="space-y-4">
-        <p class="text-sm font-semibold uppercase tracking-widest text-foreground/60">Legal</p>
-        <nav class="flex flex-col gap-2" aria-label="Legal">
-          <a href="/privacy" class="text-xs font-medium text-muted-foreground hover:text-primary transition-colors">Política de Privacidad</a>
-          <a href="/legal" class="text-xs font-medium text-muted-foreground hover:text-primary transition-colors">Aviso Legal</a>
-          <a href="/cookies" class="text-xs font-medium text-muted-foreground hover:text-primary transition-colors">Política de Cookies</a>
-          <a href="/gdpr" class="text-xs font-medium text-muted-foreground hover:text-primary transition-colors">Derechos RGPD (Art. 15-22)</a>
-        </nav>
-        <div class="text-xs text-muted-foreground pt-3 border-t border-[hsl(var(--sand-dark))]/40">
-          <p>Hispano Tempo es una marca registrada. Todos los servicios se prestan conforme a la legislación española vigente (LOPDGDD, LSSICE, RGPD).</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="border-t border-[hsl(var(--sand-dark))]/40 py-5">
-    <div class="container mx-auto px-6 md:px-8 text-center text-xs text-muted-foreground">
-      © 2026 Hispano Tempo. Todos los derechos reservados.
-    </div>
-  </div>
-</footer>
 </body>
 </html>
