@@ -88,24 +88,47 @@ Nuevo
     </label>
   </div>
 
-  <!-- Step 3: Nombre (hidden) -->
+  <!-- Step 3: Plazo (hidden) -->
   <div class="ql-step ql-hidden" id="ql-s3">
     <label class="block">
-      <span class="block mb-2 text-sm font-semibold text-foreground">¿Cómo te llamamos?</span>
-      <input name="name" id="ql-name" type="text" required placeholder="Tu nombre" class="quick-field" autocomplete="given-name">
+      <span class="block mb-2 text-sm font-semibold text-foreground">¿Cuándo planeas mudarte?</span>
+      <select name="timeline" id="ql-timeline" class="quick-field" required>
+        <option value="">Selecciona tu plazo</option>
+        <option value="3m">Menos de 3 meses</option>
+        <option value="6m">3 – 6 meses</option>
+        <option value="12m">6 – 12 meses</option>
+        <option value="12m+">Más de 12 meses</option>
+      </select>
     </label>
   </div>
 
-  <!-- Step 4: Email (hidden) -->
+  <!-- Step 4: Familia (hidden) -->
   <div class="ql-step ql-hidden" id="ql-s4">
-    <label class="block">
+    <p class="block mb-4 text-sm font-semibold text-foreground">¿Vienes con familia o hijos?</p>
+    <label class="flex items-center justify-between p-4 rounded-xl cursor-pointer mb-6" style="background:hsl(var(--sand-light));border:1.5px solid hsl(var(--sand-dark))">
+      <span class="text-sm font-medium text-foreground">Sí, vengo con familia / hijos</span>
+      <span class="ql-toggle-wrap">
+        <input type="checkbox" name="family" id="ql-family" class="ql-toggle-input">
+        <span class="ql-toggle-track"></span>
+      </span>
+    </label>
+    <button type="button" id="ql-btn-next" class="w-full rounded-xl px-6 py-4 text-base font-semibold text-primary-foreground shadow-md transition-all hover:brightness-110 active:scale-[0.98]" style="background:hsl(var(--primary))">Continuar →</button>
+  </div>
+
+  <!-- Step 5: Datos de contacto + consents + submit (hidden) -->
+  <div class="ql-step ql-hidden" id="ql-s5">
+    <label class="block mb-4">
+      <span class="block mb-2 text-sm font-semibold text-foreground">Tu nombre</span>
+      <input name="firstName" id="ql-firstname" type="text" required placeholder="Nombre" class="quick-field" autocomplete="given-name">
+    </label>
+    <label class="block mb-4">
+      <span class="block mb-2 text-sm font-semibold text-foreground">Tu apellido</span>
+      <input name="lastName" id="ql-lastname" type="text" required placeholder="Apellido(s)" class="quick-field" autocomplete="family-name">
+    </label>
+    <label class="block mb-4">
       <span class="block mb-2 text-sm font-semibold text-foreground">¿A qué email te enviamos tu plan?</span>
       <input name="email" id="ql-email" type="email" required placeholder="tu@email.com" class="quick-field" autocomplete="email">
     </label>
-  </div>
-
-  <!-- Step 5: Teléfono + consents + submit (hidden) -->
-  <div class="ql-step ql-hidden" id="ql-s5">
     <label class="block mb-4">
       <span class="block mb-2 text-sm font-semibold text-foreground">¿Teléfono de contacto? <span class="font-normal text-muted-foreground">(opcional)</span></span>
       <input name="phone" id="ql-phone" type="tel" placeholder="+34 600 000 000" class="quick-field" autocomplete="tel">
@@ -138,6 +161,12 @@ Nuevo
 .ql-visible.ql-in { opacity:1; transform:translateY(0); }
 .quick-field { display:block; width:100%; padding:0.75rem 1rem; border-radius:0.75rem; border:1.5px solid hsl(var(--sand-dark)); background:hsl(var(--sand-light)); color:hsl(var(--foreground)); font-size:1rem; transition:border-color 0.2s; outline:none; }
 .quick-field:focus { border-color:hsl(var(--primary)); box-shadow:0 0 0 3px hsl(var(--primary)/0.15); }
+.ql-toggle-wrap{position:relative;display:inline-flex;align-items:center}
+.ql-toggle-input{position:absolute;opacity:0;width:0;height:0}
+.ql-toggle-track{display:block;width:2.75rem;height:1.5rem;border-radius:999px;background:hsl(var(--sand-dark));cursor:pointer;transition:background .25s;position:relative}
+.ql-toggle-track::after{content:'';position:absolute;top:.2rem;left:.2rem;width:1.1rem;height:1.1rem;border-radius:50%;background:white;transition:transform .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.ql-toggle-input:checked+.ql-toggle-track{background:hsl(var(--primary))}
+.ql-toggle-input:checked+.ql-toggle-track::after{transform:translateX(1.25rem)}
 </style>
 
 <script>
@@ -146,6 +175,7 @@ Nuevo
     var current=1,total=5;
     function pct(n){return Math.round(n/total*100);}
     function showStep(n){
+      document.querySelectorAll('.ql-step').forEach(function(el){el.className='ql-step ql-hidden';});
       var el=document.getElementById('ql-'+steps[n]);
       if(!el)return;
       el.className='ql-step ql-visible';
@@ -156,18 +186,16 @@ Nuevo
       if(lbl)lbl.textContent='Pregunta '+n+' de '+total;
       var pctlbl=document.getElementById('ql-pct-label');
       if(pctlbl)pctlbl.textContent=pct(n)+'%';
-      var inp=el.querySelector('select,input[type=text],input[type=email],input[type=tel]');
-      if(inp&&inp.tagName==='SELECT'){}else if(inp){setTimeout(function(){try{inp.focus();}catch(e){}},50);}
     }
     function advance(){current++;if(current<=total)showStep(current);}
     var cit=document.getElementById('ql-citizenship');
     if(cit)cit.addEventListener('change',function(){if(this.value)setTimeout(function(){advance();},250);});
     var city=document.getElementById('ql-city');
     if(city)city.addEventListener('change',function(){if(this.value)setTimeout(function(){advance();},250);});
-    var name=document.getElementById('ql-name');
-    if(name)name.addEventListener('blur',function(){if(this.value.trim().length>=2)advance();});
-    var email=document.getElementById('ql-email');
-    if(email)email.addEventListener('blur',function(){if(this.value.includes('@')&&this.value.includes('.'))advance();});
+    var timeline=document.getElementById('ql-timeline');
+    if(timeline)timeline.addEventListener('change',function(){if(this.value)setTimeout(function(){advance();},300);});
+    var btnNext=document.getElementById('ql-btn-next');
+    if(btnNext)btnNext.addEventListener('click',function(){advance();});
     var form=document.getElementById('ql-form');
     if(form)form.addEventListener('submit',function(e){
       e.preventDefault();
@@ -177,20 +205,26 @@ Nuevo
         if(err){err.textContent='Debes aceptar la Política de Privacidad.';err.classList.remove('hidden');}
         return;
       }
+      var hp=form.querySelector('input[name="_hp"]');
+      if(hp&&hp.value)return;
       var btn=document.getElementById('ql-submit');
       if(btn){btn.disabled=true;btn.textContent='Enviando...';}
-      var fd=new FormData(form);
-      var nameVal=(fd.get('name')||'').trim().split(' ');
       var payload={
-        firstName:nameVal[0]||'',lastName:nameVal.slice(1).join(' ')||'',
-        email:fd.get('email')||'',phone:fd.get('phone')||'',
-        city:fd.get('city')||'',tags:['quick-lead','landing-page'],
+        firstName:(document.getElementById('ql-firstname')||{}).value||'',
+        lastName:(document.getElementById('ql-lastname')||{}).value||'',
+        email:(document.getElementById('ql-email')||{}).value||'',
+        phone:(document.getElementById('ql-phone')||{}).value||'',
+        city:(document.getElementById('ql-city')||{}).value||'',
+        citizenship:(document.getElementById('ql-citizenship')||{}).value||'',
+        timeline:(document.getElementById('ql-timeline')||{}).value||'',
+        family:(document.getElementById('ql-family')||{}).checked?'si':'no',
+        tags:['quick-lead','landing-page'],
         customField:{
           source:'landing-quicklead',
-          is_eu_citizen:fd.get('citizenship')==='EU'?'true':'false',
-          consentimiento_privacidad:fd.get('privacy')?'true':'false',
-          consentimiento_comunicaciones:fd.get('commercial')?'true':'false',
-          consentimiento_whatsapp:fd.get('whatsapp')?'true':'false'
+          is_eu_citizen:(document.getElementById('ql-citizenship')||{}).value==='EU'?'true':'false',
+          consentimiento_privacidad:'true',
+          consentimiento_comunicaciones:(document.getElementById('ql-commercial')||{}).checked?'true':'false',
+          consentimiento_whatsapp:(document.getElementById('ql-whatsapp')||{}).checked?'true':'false'
         }
       };
       fetch('https://services.leadconnectorhq.com/hooks/FJTtz2TDgQIThJ87Ti0i/webhook-trigger/e517f3a9-c52c-4feb-a819-98520ef88a4a',{
@@ -202,6 +236,7 @@ Nuevo
         if(err){err.textContent='Algo salió mal. Inténtalo de nuevo.';err.classList.remove('hidden');}
       });
     });
+    showStep(1);
   })();
   </script> </div> </section>  <section id="process" class="section-padding relative overflow-hidden isolate"> <div class="absolute inset-0 -z-10"> <picture class="block w-full h-full"> <source srcset="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/process-journey.avif" type="image/avif"> <source srcset="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/process-journey.webp" type="image/webp"> <img src="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/process-journey.png" alt="" class="w-full h-full object-cover scale-110 blur-2xl" loading="lazy" width="1600" height="900" aria-hidden="true"> </picture> <div class="absolute inset-0 bg-[hsl(var(--sand-light))]/85"></div> <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 0%, hsl(var(--primary) / 0.08) 0%, transparent 55%);"></div> </div> <div class="container mx-auto px-6 md:px-8 relative"> <div class="max-w-3xl mx-auto text-center mb-14 md:mb-20 fade-up"> <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-4"> El único mecanismo con Arquitecto dedicado </p> <h2 class="font-headline italic font-bold text-3xl sm:text-4xl md:text-5xl leading-tight text-foreground"> Método OneStop 360° </h2> </div> <ol class="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto"> <li class="relative"> <article class="rounded-2xl bg-warm-white border border-[hsl(var(--sand-dark))]/40 shadow-sm overflow-hidden h-full flex flex-col"> <div class="aspect-[4/3] overflow-hidden"> <picture class="block w-full h-full"> <source srcset="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/service-legal.avif" type="image/avif"> <source srcset="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/service-legal.webp" type="image/webp"> <img src="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/service-legal.png" alt="Paso 1: Diagnóstico estratégico — proceso de reubicación Hispano Tempo" class="w-full h-full object-cover" width="600" height="450" loading="lazy" decoding="async"> </picture> </div> <div class="p-7 flex-1 flex flex-col"> <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3"> 01 / 03
 </p> <h3 class="font-headline italic font-bold text-xl md:text-2xl text-foreground mb-3"> Diagnóstico estratégico </h3> <p class="text-sm text-foreground/80 leading-relaxed"> <span class="rich-body"><strong>60 minutos</strong> con un experto sénior. Auditoría fiscal, familiar y logística. Sales con <strong>plan por escrito y plazo fijo</strong>.</span> </p> </div> </article> <span aria-hidden="true" class="hidden md:block absolute top-1/2 -right-4 w-8 h-px border-t-2 border-dashed border-primary/50"></span> </li><li class="relative"> <article class="rounded-2xl bg-warm-white border border-[hsl(var(--sand-dark))]/40 shadow-sm overflow-hidden h-full flex flex-col"> <div class="aspect-[4/3] overflow-hidden"> <picture class="block w-full h-full"> <source srcset="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/process-journey.avif" type="image/avif"> <source srcset="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/process-journey.webp" type="image/webp"> <img src="https://engodigital.github.io/presentaciones-clientes/hispano-tempo/images/process-journey.png" alt="Paso 2: Activación del protocolo 360° — proceso de reubicación Hispano Tempo" class="w-full h-full object-cover" width="600" height="450" loading="lazy" decoding="async"> </picture> </div> <div class="p-7 flex-1 flex flex-col"> <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3"> 02 / 03
