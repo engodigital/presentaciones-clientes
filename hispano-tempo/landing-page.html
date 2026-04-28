@@ -221,7 +221,10 @@ Nuevo
       customField: {
         source: 'landing-quicklead',
         is_eu_citizen: formData.get('citizenship') === 'EU' ? 'true' : 'false',
-        preferred_language: 'es'
+        preferred_language: 'es',
+        consentimiento_privacidad: formData.get('privacy') ? 'true' : 'false',
+        consentimiento_comunicaciones: formData.get('commercial') ? 'true' : 'false',
+        consentimiento_whatsapp: formData.get('whatsapp') ? 'true' : 'false'
       }
     };
 
@@ -594,7 +597,7 @@ details[open] .faq-icon { transform:rotate(45deg); }
         firstName: nameVal[0]||'', lastName: nameVal.slice(1).join(' ')||'',
         email: fd.get('email')||'', phone: fd.get('phone')||'',
         city: fd.get('city')||'', tags: ['contact-form','landing-page'],
-        customField: { source:'landing-contact', is_eu_citizen: fd.get('citizenship')==='EU'?'true':'false' }
+        customField: { source:'landing-contact', is_eu_citizen: fd.get('citizenship')==='EU'?'true':'false', consentimiento_privacidad: fd.get('privacy')?'true':'false', consentimiento_comunicaciones: fd.get('commercial')?'true':'false', consentimiento_whatsapp: fd.get('whatsapp')?'true':'false' }
       };
       fetch('https://services.leadconnectorhq.com/hooks/FJTtz2TDgQIThJ87Ti0i/webhook-trigger/aa80a715-a8a9-47bb-80e2-aca86861c667',{
         method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
