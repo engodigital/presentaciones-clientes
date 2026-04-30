@@ -564,7 +564,7 @@ tr:last-child td{border-bottom:none}
         <li><div><div class="step-text">Configura i tag base</div><div class="step-detail">Aggiungi almeno: fonte-lead (es. meta-ads, google-ads, organico, passaparola), lingua, stato-cliente. Standardizza i nomi — usa sempre minuscolo con trattini.</div></div></li>
         <li><div><div class="step-text">Verifica i workflow attivi</div><div class="step-detail">Apri ogni workflow, controlla che sia attivo e che i trigger siano corretti. Esegui un test manuale su un contatto di prova prima di lasciare tutto in produzione.</div></div></li>
         <li><div><div class="step-text">Collega il calendario</div><div class="step-detail">Il calendario GHL deve essere configurato con gli orari di disponibilità corretti del cliente. Ogni appuntamento prenotato via form deve apparire nel calendario GHL.</div></div></li>
-        <li><div><div class="step-text">Verifica i template email/SMS</div><div class="step-detail">Apri ogni template attivo, leggi il contenuto, verifica che non ci siano segnaposto vuoti o dati di un altro cliente.</div></div></li>
+        <li><div><div class="step-text">Verifica i template email/WhatsApp</div><div class="step-detail">Apri ogni template attivo, leggi il contenuto, verifica che non ci siano segnaposto vuoti o dati di un altro cliente.</div></div></li>
       </ol>
 
       <h2>Checklist Operative</h2>
@@ -662,13 +662,14 @@ Includi l'oggetto dell'email come prima riga.</pre>
       </div>
 
       <div class="prompt-block">
-        <div class="prompt-header"><span>Prompt — SMS Automazione</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
-        <pre>Scrivi un SMS di benvenuto per un nuovo lead che ha lasciato i dati su una landing page.
+        <div class="prompt-header"><span>Prompt — WhatsApp Automazione</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Scrivi un messaggio WhatsApp di benvenuto per un nuovo lead che ha lasciato i dati su una landing page.
 Business: [tipo di attività].
 Tono: caldo, diretto, non commerciale.
-Massimo 160 caratteri.
+Massimo 3-4 righe. Niente paragrafi lunghi — i messaggi WhatsApp si leggono in mobilità.
 Usa la variabile {{contact.first_name}} per il nome.
 Termina con una domanda che invita a rispondere.</pre>
+
       </div>
 
       <h2>Checklist Giornaliera GHL</h2>
@@ -1110,7 +1111,7 @@ Massimo 150 parole. No gergo tecnico — il cliente deve capire tutto.</pre>
         <tbody>
           <tr><td>Scrivere caption social</td><td>→ M4</td></tr>
           <tr><td>Generare idee di contenuto</td><td>→ M4</td></tr>
-          <tr><td>Scrivere email o SMS per GHL</td><td>→ M3</td></tr>
+          <tr><td>Scrivere email o WhatsApp per GHL</td><td>→ M3</td></tr>
           <tr><td>Headline e copy per Meta Ads</td><td>→ M5</td></tr>
           <tr><td>Analisi performance Meta</td><td>→ M5</td></tr>
           <tr><td>Keyword e copy per Google Ads</td><td>→ M6</td></tr>
