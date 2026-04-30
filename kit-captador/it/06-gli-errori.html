@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>06 — Gli Errori | Manuale Collaboratore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --bg-card: #1a1d27; --border: #2d3148;
+    --text: #e8eaf0; --text-muted: #8b8fa8; --accent: #6c63ff;
+    --green: #00d4aa; --red: #ff6b6b; --yellow: #ffd166;
+    --accent-light: rgba(108,99,255,0.12); --green-light: rgba(0,212,170,0.12);
+    --red-light: rgba(255,107,107,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; }
+  .nav { background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .nav-back { color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; min-height: 44px; }
+  .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); border-color: var(--accent); }
+  .nav-links a.active { background: var(--accent-light); }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 20px 60px; }
+  .module-hero { margin-bottom: 48px; }
+  .module-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .module-title { font-size: clamp(28px,5vw,42px); font-weight: 900; line-height: 1.15; margin-bottom: 14px; }
+  .module-lead { font-size: 18px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  .section { margin-bottom: 56px; }
+  .section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  h2 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; padding-left: 16px; border-left: 3px solid var(--red); }
+  p { margin-bottom: 16px; color: var(--text-muted); }
+  p strong { color: var(--text); }
+
+  .error-card { background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--red); border-radius: 16px; padding: 24px 28px; margin-bottom: 16px; }
+  .error-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
+  .error-num { width: 40px; height: 40px; background: var(--red-light); border: 1px solid rgba(255,107,107,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 900; color: var(--red); flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .error-meta { flex: 1; }
+  .error-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .error-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+  .error-example { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.2); border-radius: 10px; padding: 12px 16px; }
+  .error-example-label { font-size: 11px; font-weight: 700; color: var(--red); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .error-example-text { font-size: 14px; color: var(--text-muted); }
+  .error-fix { background: rgba(0,212,170,0.06); border: 1px solid rgba(0,212,170,0.2); border-radius: 10px; padding: 12px 16px; margin-top: 10px; }
+  .error-fix-label { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .error-fix-text { font-size: 14px; color: var(--text-muted); }
+
+  .next-module { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+  .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Torna all'indice</a>
+    <div class="nav-links">
+      <a href="01-la-missione.html">01</a>
+      <a href="02-il-prospect.html">02</a>
+      <a href="03-lo-script.html">03</a>
+      <a href="04-fissare-appuntamento.html">04</a>
+      <a href="05-le-obiezioni.html">05</a>
+      <a href="06-gli-errori.html" class="active">06</a>
+      <a href="07-pratica.html">07</a>
+      <a href="08-compensazione.html">08</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="module-hero">
+    <div class="module-num">Modulo 06</div>
+    <h1 class="module-title">Cosa Non<br>Devi Fare</h1>
+    <p class="module-lead">Tutti questi errori hanno una cosa in comune: si commettono con buone intenzioni. Impararli prima della tua prima conversazione reale vale più di qualsiasi script.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">I 7 errori</div>
+    <h2>Cosa Evitare Fin dal Primo Giorno</h2>
+
+    <div class="error-card">
+      <div class="error-header">
+        <div class="error-num">1</div>
+        <div class="error-meta">
+          <div class="error-title">Spiegare il servizio nella chat</div>
+        </div>
+      </div>
+      <div class="error-desc">È l'errore più comune. La persona chiede "di cosa si tratta?" e il collaboratore inizia a spiegare tutto: cos'è il marketing digitale, come funziona la pubblicità, che risultati si ottengono... Più spieghi, meno la persona ha bisogno di parlare con Marco. E se non parla con Marco, non c'è vendita.</div>
+      <div class="error-example">
+        <div class="error-example-label">Come suona l'errore</div>
+        <div class="error-example-text">"Sostanzialmente si tratta di creare campagne su Meta e Instagram per generare lead, poi si ottimizzano i pubblici e si misura il costo per acquisizione per scalare…"</div>
+      </div>
+      <div class="error-fix">
+        <div class="error-fix-label">La cosa giusta</div>
+        <div class="error-fix-text">"È una metodologia per trovare più clienti — dipende molto da ogni attività, per questo Marco preferisce vederlo in una chiamata breve. Hai 20 minuti questa settimana?"</div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-header">
+        <div class="error-num">2</div>
+        <div class="error-meta">
+          <div class="error-title">Dire il prezzo quando chiedono</div>
+        </div>
+      </div>
+      <div class="error-desc">Il prezzo senza contesto sembra sempre caro. Dirlo in chat, prima che la persona abbia capito il valore, ammazza la conversazione prima che inizi. Il prezzo lo presenta Marco di persona, dove può spiegarlo con il contesto giusto.</div>
+      <div class="error-example">
+        <div class="error-example-label">Come suona l'errore</div>
+        <div class="error-example-text">"Il prezzo dipende, ma più o meno si va da €1.500 a €4.000 di avvio, più una quota mensile."</div>
+      </div>
+      <div class="error-fix">
+        <div class="error-fix-label">La cosa giusta</div>
+        <div class="error-fix-text">"Dipende da ogni attività — Marco lo vede con te in chiamata per adattarlo alla tua situazione reale."</div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-header">
+        <div class="error-num">3</div>
+        <div class="error-meta">
+          <div class="error-title">Improvvisare fuori dallo script</div>
+        </div>
+      </div>
+      <div class="error-desc">Lo script esiste perché funziona. Cambiare parole, aggiungere cose, "personalizzarlo troppo" o saltare passaggi perché "in quel momento sembrava una buona idea" sono le cause più comuni di perdere appuntamenti che erano quasi in tasca.</div>
+      <div class="error-example">
+        <div class="error-example-label">Come suona l'errore</div>
+        <div class="error-example-text">"Beh, e tra l'altro ti posso dire che Marco ha lavorato con ristoranti e cliniche e ha risultati incredibili, di fatto..."</div>
+      </div>
+      <div class="error-fix">
+        <div class="error-fix-label">La cosa giusta</div>
+        <div class="error-fix-text">Usa gli script del Modulo 03. Se senti che la conversazione richiede qualcosa di diverso, consulta prima di improvvisare.</div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-header">
+        <div class="error-num">4</div>
+        <div class="error-meta">
+          <div class="error-title">Proporre l'appuntamento senza qualificare</div>
+        </div>
+      </div>
+      <div class="error-desc">Fissare un appuntamento con qualcuno che non corrisponde al profilo fa perdere tempo a Marco e confonde il prospect. Un appuntamento mal qualificato è peggio che non fissarne nessuno — perché crea un'esperienza negativa per tutti.</div>
+      <div class="error-example">
+        <div class="error-example-label">Come suona l'errore</div>
+        <div class="error-example-text">Fissare una chiamata con qualcuno che ha un'attività da 3 mesi, senza chiedergli da quanto tempo è aperto né se ha budget disponibile.</div>
+      </div>
+      <div class="error-fix">
+        <div class="error-fix-label">La cosa giusta</div>
+        <div class="error-fix-text">Le 2 domande del Modulo 02 sempre prima di proporre l'appuntamento. Senza eccezioni.</div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-header">
+        <div class="error-num">5</div>
+        <div class="error-meta">
+          <div class="error-title">Fare promesse sui risultati</div>
+        </div>
+      </div>
+      <div class="error-desc">Dire "con questo troverai X clienti" o "Marco ti garantisce risultati in Y settimane" senza sapere niente dell'attività della persona è una promessa che non puoi mantenere. E quando non si realizza, il problema è tuo — e di chi te lo ha incaricato.</div>
+      <div class="error-example">
+        <div class="error-example-label">Come suona l'errore</div>
+        <div class="error-example-text">"Con questo puoi arrivare a raddoppiare i tuoi clienti in un paio di mesi, te lo dico per esperienza."</div>
+      </div>
+      <div class="error-fix">
+        <div class="error-fix-label">La cosa giusta</div>
+        <div class="error-fix-text">"I risultati dipendono da ogni attività — per questo Marco preferisce parlare con te prima di dirti qualcosa di concreto."</div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-header">
+        <div class="error-num">6</div>
+        <div class="error-meta">
+          <div class="error-title">Fare più di un follow-up</div>
+        </div>
+      </div>
+      <div class="error-desc">Un unico messaggio di follow-up se non rispondono. Solo uno. Mandarne due, tre o quattro di fila non produce più appuntamenti — genera solo disagio e danneggia il rapporto con la persona.</div>
+      <div class="error-example">
+        <div class="error-example-label">Come suona l'errore</div>
+        <div class="error-example-text">Giorno 1: "Come va, ci hai pensato?" — Giorno 3: "Solo per vedere se ti è arrivato" — Giorno 5: "Un ultimo tentativo…"</div>
+      </div>
+      <div class="error-fix">
+        <div class="error-fix-label">La cosa giusta</div>
+        <div class="error-fix-text">Un solo follow-up dopo 2-3 giorni. Se non rispondono, chiudi e passa al prossimo. Chi vuole, risponde.</div>
+      </div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-header">
+        <div class="error-num">7</div>
+        <div class="error-meta">
+          <div class="error-title">Non dare contesto dopo aver fissato</div>
+        </div>
+      </div>
+      <div class="error-desc">Fissare l'appuntamento senza compilare il modulo di note è come presentare qualcuno senza dire il suo nome. Marco arriva alla chiamata senza sapere chi è la persona, da dove viene né cosa la preoccupa — il che riduce drasticamente le possibilità che la chiamata vada bene.</div>
+      <div class="error-example">
+        <div class="error-example-label">Come suona l'errore</div>
+        <div class="error-example-text">Fissare l'appuntamento e non compilare il modulo perché "lo faccio dopo" — e poi dimenticarlo.</div>
+      </div>
+      <div class="error-fix">
+        <div class="error-fix-label">La cosa giusta</div>
+        <div class="error-fix-text">Il modulo si compila subito dopo aver fissato l'appuntamento, quando hai tutto fresco. Non "dopo". Modulo 04.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="next-module">
+    <div>
+      <div style="font-size:13px; color: var(--text-muted); margin-bottom:4px;">Modulo successivo</div>
+      <div style="font-size:18px; font-weight:800; color: var(--text);">Scenari Reali</div>
+    </div>
+    <a href="07-pratica.html">Modulo 07 →</a>
+  </div>
+
+  <footer class="footer">Formazione Interna · Uso Esclusivo del Collaboratore</footer>
+</div>
+</body>
+</html>

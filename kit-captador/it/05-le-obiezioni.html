@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 — Le Obiezioni | Manuale Collaboratore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --bg-card: #1a1d27; --border: #2d3148;
+    --text: #e8eaf0; --text-muted: #8b8fa8; --accent: #6c63ff;
+    --green: #00d4aa; --red: #ff6b6b; --yellow: #ffd166;
+    --accent-light: rgba(108,99,255,0.12); --green-light: rgba(0,212,170,0.12);
+    --red-light: rgba(255,107,107,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; }
+  .nav { background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .nav-back { color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; min-height: 44px; }
+  .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); border-color: var(--accent); }
+  .nav-links a.active { background: var(--accent-light); }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 20px 60px; }
+  .module-hero { margin-bottom: 48px; }
+  .module-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .module-title { font-size: clamp(28px,5vw,42px); font-weight: 900; line-height: 1.15; margin-bottom: 14px; }
+  .module-lead { font-size: 18px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  .section { margin-bottom: 56px; }
+  .section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  h2 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; padding-left: 16px; border-left: 3px solid var(--accent); }
+  p { margin-bottom: 16px; color: var(--text-muted); }
+  p strong { color: var(--text); }
+
+  .objection { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 20px; }
+  .objection-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+  .obj-num { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,107,107,0.12); border: 1px solid rgba(255,107,107,0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: var(--red); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+  .obj-meta { flex: 1; }
+  .obj-tag { font-size: 11px; font-weight: 700; color: var(--red); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .obj-phrase { font-size: 19px; font-weight: 800; color: var(--text); font-style: italic; }
+  .obj-why { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid var(--border); }
+  .obj-response-label { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .obj-script { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text); background: #111420; border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; line-height: 1.8; position: relative; }
+  .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); color: var(--accent); font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; min-height: 32px; }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+  .copy-btn.copied { background: var(--green-light); border-color: rgba(0,212,170,0.3); color: var(--green); }
+  .obj-note { font-size: 13px; color: var(--text-muted); margin-top: 12px; padding: 10px 14px; background: rgba(255,209,102,0.05); border-radius: 8px; border-left: 3px solid rgba(255,209,102,0.4); }
+
+  .intro-box { background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.2); border-radius: 14px; padding: 20px 24px; margin-bottom: 32px; }
+  .intro-box strong { color: var(--text); }
+
+  .next-module { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+  .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
+
+  @media (max-width: 600px) {
+    .obj-script { font-size: 13px; }
+    .copy-btn { position: static; margin-top: 10px; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Torna all'indice</a>
+    <div class="nav-links">
+      <a href="01-la-missione.html">01</a>
+      <a href="02-il-prospect.html">02</a>
+      <a href="03-lo-script.html">03</a>
+      <a href="04-fissare-appuntamento.html">04</a>
+      <a href="05-le-obiezioni.html" class="active">05</a>
+      <a href="06-gli-errori.html">06</a>
+      <a href="07-pratica.html">07</a>
+      <a href="08-compensazione.html">08</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="module-hero">
+    <div class="module-num">Modulo 05</div>
+    <h1 class="module-title">Le Risposte<br>Esatte</h1>
+    <p class="module-lead">Le obiezioni non sono la fine della conversazione. Sono domande mascherate. Qui trovi la risposta esatta per ognuna — senza improvvisare.</p>
+  </div>
+
+  <div class="intro-box">
+    <strong>Prima di iniziare:</strong> Queste risposte sono per la <strong>chat prima dell'appuntamento</strong> — non per la chiamata. Il tuo obiettivo in ogni caso è semplice: <strong>tenere la conversazione aperta e avvicinare la persona a dire sì ai 20 minuti.</strong> Non devi convincere di nient'altro.
+  </div>
+
+  <div class="section">
+    <div class="section-label">Le 7 situazioni</div>
+    <h2>Come Rispondere in Ogni Caso</h2>
+
+    <div class="objection">
+      <div class="objection-header">
+        <div class="obj-num">1</div>
+        <div class="obj-meta">
+          <div class="obj-tag">Obiezione 1</div>
+          <div class="obj-phrase">"Di cosa si tratta esattamente?"</div>
+        </div>
+      </div>
+      <div class="obj-why">Questa non è una vera obiezione — è curiosità. La persona vuole informazioni prima di impegnarsi. Il tuo lavoro è mantenere quella curiosità senza soddisfarla del tutto, in modo che la chiamata mantenga il suo valore.</div>
+      <div class="obj-response-label">La tua risposta</div>
+      <div class="obj-script" id="o1">
+        Fondamentalmente è una metodologia per aiutare attività come la tua a trovare più clienti con la pubblicità online in modo costante. Ma dipende molto da ogni situazione — per questo Marco preferisce vederla in una chiamata breve prima di spiegare qualcosa. Hai 20 minuti questa settimana?
+        <button class="copy-btn" onclick="copyObj('o1', this)">Copia</button>
+      </div>
+      <div class="obj-note">Non entrare in altri dettagli anche se insistono. Se chiedono ancora: "Questo lo vede Marco con te direttamente, ha più contesto per spiegarlo bene."</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-header">
+        <div class="obj-num">2</div>
+        <div class="obj-meta">
+          <div class="obj-tag">Obiezione 2</div>
+          <div class="obj-phrase">"Quanto costa?"</div>
+        </div>
+      </div>
+      <div class="obj-why">Chiedere il prezzo prima di capire il valore è normale. Ma tu non devi rispondere a questo — perché il prezzo dipende dalla situazione di ogni attività ed è Marco che lo presenta.</div>
+      <div class="obj-response-label">La tua risposta</div>
+      <div class="obj-script" id="o2">
+        Dipende molto da ogni attività — per questo Marco ne parla direttamente in chiamata. Così può adattarlo alla tua situazione reale invece di darti un numero generico. Hai 20 minuti questa settimana per vederlo con lui?
+        <button class="copy-btn" onclick="copyObj('o2', this)">Copia</button>
+      </div>
+      <div class="obj-note">Non dire mai un prezzo. Se insistono molto: "Capisco che sia importante, e per questo Marco lo spiega lui stesso — per fare una conversazione reale, non un numero senza contesto."</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-header">
+        <div class="obj-num">3</div>
+        <div class="obj-meta">
+          <div class="obj-tag">Obiezione 3</div>
+          <div class="obj-phrase">"Non ho tempo adesso"</div>
+        </div>
+      </div>
+      <div class="obj-why">Molte volte è vero. Altre volte è un modo educato per rimandare. In ogni caso, la tua risposta non deve premere — deve rendere molto facile dire sì.</div>
+      <div class="obj-response-label">La tua risposta</div>
+      <div class="obj-script" id="o3">
+        Sono solo 20 minuti — senza preparazione previa né impegno. Ti va meglio giovedì o venerdì pomeriggio?
+        <button class="copy-btn" onclick="copyObj('o3', this)">Copia</button>
+      </div>
+      <div class="obj-note">Proponi sempre due opzioni concrete di giorni, non dire "quando vuoi" — rende tutto più vago. Se dicono che non hanno niente questa settimana: "E la settimana prossima?"</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-header">
+        <div class="obj-num">4</div>
+        <div class="obj-meta">
+          <div class="obj-tag">Obiezione 4</div>
+          <div class="obj-phrase">"Ho già qualcuno che mi segue il marketing"</div>
+        </div>
+      </div>
+      <div class="obj-why">Avere qualcuno non significa che stia funzionando bene. Non contraddirlo — curiosità, non dibattito.</div>
+      <div class="obj-response-label">La tua risposta</div>
+      <div class="obj-script" id="o4">
+        Perfetto, così hai un punto di riferimento per confrontare. Marco può guardare quello che hai già e dirti se c'è qualcosa da migliorare — senza nessun impegno. Vale la pena che vi parliate 20 minuti?
+        <button class="copy-btn" onclick="copyObj('o4', this)">Copia</button>
+      </div>
+      <div class="obj-note">Non dire che quello che hanno non funziona. Posiziona solo la chiamata come una "seconda opinione" gratuita.</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-header">
+        <div class="obj-num">5</div>
+        <div class="obj-meta">
+          <div class="obj-tag">Obiezione 5</div>
+          <div class="obj-phrase">"Devo pensarci"</div>
+        </div>
+      </div>
+      <div class="obj-why">Questa frase di solito nasconde un dubbio concreto che non hanno espresso. Prima di arrenderti, prova a scoprire qual è.</div>
+      <div class="obj-response-label">La tua risposta</div>
+      <div class="obj-script" id="o5">
+        Certo, ha senso. Cosa ti genera dubbi? Così ti dico direttamente se vale la pena la chiamata o no.
+        <button class="copy-btn" onclick="copyObj('o5', this)">Copia</button>
+      </div>
+      <div class="obj-note">Se rispondono con il dubbio reale (prezzo, tempo, ecc.), hai un'altra obiezione con risposta in questo modulo. Se dicono "niente di preciso", non insistere: "Perfetto, quando hai le idee chiare dimmelo e lo organizziamo."</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-header">
+        <div class="obj-num">6</div>
+        <div class="obj-meta">
+          <div class="obj-tag">Obiezione 6</div>
+          <div class="obj-phrase">"Mandami prima delle informazioni"</div>
+        </div>
+      </div>
+      <div class="obj-why">Chiedere informazioni scritte è il modo più morbido per rimandare indefinitamente. Un PDF o un lungo messaggio non convincono nessuno — danno solo motivi per dire no senza parlare con te.</div>
+      <div class="obj-response-label">La tua risposta</div>
+      <div class="obj-script" id="o6">
+        Ti capisco, ma la verità è che i risultati dipendono talmente da ogni attività che qualsiasi cosa ti mandi suonerà generica. Per questo Marco preferisce parlare 20 minuti e darti qualcosa di concreto per la tua situazione. Ti va bene così?
+        <button class="copy-btn" onclick="copyObj('o6', this)">Copia</button>
+      </div>
+      <div class="obj-note">Se insistono ancora, puoi mandarli al sito — ma nient'altro. Niente PDF, niente presentazioni, niente spiegazioni lunghe per iscritto.</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-header">
+        <div class="obj-num">7</div>
+        <div class="obj-meta">
+          <div class="obj-tag">Obiezione 7</div>
+          <div class="obj-phrase">"Non ho budget in questo momento"</div>
+        </div>
+      </div>
+      <div class="obj-why">Questa è l'unica obiezione dove a volte la cosa giusta è chiudere la conversazione. Se non c'è budget reale, non c'è cliente — e forzarlo fa solo perdere tempo a tutti.</div>
+      <div class="obj-response-label">La tua risposta</div>
+      <div class="obj-script" id="o7">
+        Ha tutto il senso — senza una base economica solida la conversazione non ha molto senso adesso. Se in futuro la situazione cambia, dimmelo e lo organizziamo.
+        <button class="copy-btn" onclick="copyObj('o7', this)">Copia</button>
+      </div>
+      <div class="obj-note">Chiudi con gentilezza e senza pressione. Lascia la porta aperta per più avanti, ma non continuare a cercare di fissare l'appuntamento. Non tutti sono clienti adesso — e va bene così.</div>
+    </div>
+
+  </div>
+
+  <div class="next-module">
+    <div>
+      <div style="font-size:13px; color: var(--text-muted); margin-bottom:4px;">Modulo successivo</div>
+      <div style="font-size:18px; font-weight:800; color: var(--text);">Cosa Non Devi Fare</div>
+    </div>
+    <a href="06-gli-errori.html">Modulo 06 →</a>
+  </div>
+
+  <footer class="footer">Formazione Interna · Uso Esclusivo del Collaboratore</footer>
+</div>
+
+<script>
+function copyObj(id, btn) {
+  const el = document.getElementById(id);
+  const clone = el.cloneNode(true);
+  const b = clone.querySelector('button');
+  if(b) b.remove();
+  const text = clone.textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiato'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copia'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => { btn.textContent = '✓ OK'; setTimeout(() => { btn.textContent = 'Copia'; }, 2000); });
+}
+</script>
+</body>
+</html>

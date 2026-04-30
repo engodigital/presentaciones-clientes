@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>08 — La Tua Compensazione | Manuale Collaboratore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --bg-card: #1a1d27; --border: #2d3148;
+    --text: #e8eaf0; --text-muted: #8b8fa8; --accent: #6c63ff;
+    --green: #00d4aa; --red: #ff6b6b; --yellow: #ffd166;
+    --accent-light: rgba(108,99,255,0.12); --green-light: rgba(0,212,170,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; }
+  .nav { background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .nav-back { color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; min-height: 44px; }
+  .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); border-color: var(--accent); }
+  .nav-links a.active { background: var(--accent-light); }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 20px 60px; }
+  .module-hero { margin-bottom: 48px; }
+  .module-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .module-title { font-size: clamp(28px,5vw,42px); font-weight: 900; line-height: 1.15; margin-bottom: 14px; }
+  .module-lead { font-size: 18px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  .section { margin-bottom: 56px; }
+  .section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  h2 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; padding-left: 16px; border-left: 3px solid var(--green); }
+  p { margin-bottom: 16px; color: var(--text-muted); }
+  p strong { color: var(--text); }
+
+  .commission-hero { background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(108,99,255,0.1) 100%); border: 1px solid rgba(0,212,170,0.3); border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 32px; }
+  .commission-label { font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+  .commission-amount { font-size: clamp(52px,10vw,80px); font-weight: 900; color: var(--green); font-family: 'JetBrains Mono', monospace; line-height: 1; margin-bottom: 10px; }
+  .commission-desc { font-size: 16px; color: var(--text-muted); }
+  .commission-desc strong { color: var(--text); }
+
+  .calc-table-wrapper { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 16px; }
+  .calc-table { width: 100%; border-collapse: collapse; }
+  .calc-table thead th { padding: 14px 20px; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); background: rgba(255,255,255,0.03); text-align: left; border-bottom: 1px solid var(--border); }
+  .calc-table tbody td { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 15px; vertical-align: middle; }
+  .calc-table tbody tr:last-child td { border-bottom: none; }
+  .calc-table .setup-val { font-family: 'JetBrains Mono', monospace; color: var(--text); font-weight: 700; }
+  .calc-table .earn-val { font-family: 'JetBrains Mono', monospace; color: var(--green); font-size: 18px; font-weight: 900; }
+  .calc-table .note-val { font-size: 13px; color: var(--text-muted); }
+
+  .payment-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .payment-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .payment-card.good { border-top: 3px solid var(--green); }
+  .payment-card.bad { border-top: 3px solid var(--red); }
+  .payment-icon { font-size: 28px; margin-bottom: 10px; }
+  .payment-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .payment-desc { font-size: 14px; color: var(--text-muted); }
+
+  .ladder { display: flex; flex-direction: column; gap: 0; }
+  .ladder-step { display: flex; gap: 20px; align-items: flex-start; padding: 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; position: relative; }
+  .ladder-step.active { border-color: rgba(0,212,170,0.4); background: rgba(0,212,170,0.04); }
+  .ladder-step.future { opacity: 0.75; }
+  .ladder-badge { position: absolute; top: 16px; right: 16px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+  .ladder-badge.now { background: var(--green-light); color: var(--green); border: 1px solid rgba(0,212,170,0.3); }
+  .ladder-badge.future-tag { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+  .ladder-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .ladder-icon.l1 { background: var(--green-light); }
+  .ladder-icon.l2 { background: rgba(255,209,102,0.1); }
+  .ladder-icon.l3 { background: var(--accent-light); }
+  .ladder-body { flex: 1; padding-right: 80px; }
+  .ladder-level { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .ladder-title { font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+  .ladder-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
+  .ladder-earn { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--green); font-weight: 700; }
+  .ladder-earn.future-earn { color: var(--text-muted); }
+  .ladder-condition { font-size: 13px; color: var(--text-muted); margin-top: 6px; padding: 8px 12px; background: rgba(255,209,102,0.05); border-radius: 8px; border-left: 3px solid rgba(255,209,102,0.3); }
+
+  .close-box { background: linear-gradient(135deg, rgba(108,99,255,0.1) 0%, rgba(0,212,170,0.1) 100%); border: 1px solid rgba(108,99,255,0.3); border-radius: 20px; padding: 32px; text-align: center; }
+  .close-title { font-size: clamp(20px,4vw,28px); font-weight: 900; color: var(--text); margin-bottom: 16px; line-height: 1.3; }
+  .close-desc { font-size: 16px; color: var(--text-muted); max-width: 520px; margin: 0 auto; }
+
+  .back-to-index { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 32px; }
+  .back-to-index a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+  .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
+
+  @media (max-width: 600px) {
+    .payment-cards { grid-template-columns: 1fr; }
+    .ladder-body { padding-right: 0; }
+    .ladder-badge { position: static; margin-bottom: 8px; display: inline-block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Torna all'indice</a>
+    <div class="nav-links">
+      <a href="01-la-missione.html">01</a>
+      <a href="02-il-prospect.html">02</a>
+      <a href="03-lo-script.html">03</a>
+      <a href="04-fissare-appuntamento.html">04</a>
+      <a href="05-le-obiezioni.html">05</a>
+      <a href="06-gli-errori.html">06</a>
+      <a href="07-pratica.html">07</a>
+      <a href="08-compensazione.html" class="active">08</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="module-hero">
+    <div class="module-num">Modulo 08</div>
+    <h1 class="module-title">Quanto Guadagni<br>e Come Crescere</h1>
+    <p class="module-lead">La tua compensazione attuale è chiara e diretta. E se in futuro vuoi guadagnare di più, esiste un percorso di formazione per farlo. Ecco tutto.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">La tua compensazione attuale</div>
+    <h2>Come Funziona la Tua Commissione</h2>
+
+    <div class="commission-hero">
+      <div class="commission-label">La tua percentuale di commissione</div>
+      <div class="commission-amount">5%</div>
+      <div class="commission-desc">del valore del contratto firmato, <strong>pagato quando il cliente fa il primo pagamento.</strong></div>
+    </div>
+
+    <p>Il 5% si applica sull'importo di avvio del contratto — quello che il cliente paga alla firma. <strong>Non devi fare la vendita né essere in chiamata: devi solo fissare l'appuntamento e dare il contesto.</strong> Il resto lo fa Marco.</p>
+
+    <div class="calc-table-wrapper">
+      <table class="calc-table">
+        <thead>
+          <tr>
+            <th>Tipo di contratto</th>
+            <th>Importo di avvio</th>
+            <th>Tu guadagni</th>
+            <th>Quando</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="note-val">Contratto piccolo</td>
+            <td class="setup-val">€1.500</td>
+            <td class="earn-val">€75</td>
+            <td class="note-val">Al primo pagamento del cliente</td>
+          </tr>
+          <tr>
+            <td class="note-val">Contratto medio</td>
+            <td class="setup-val">€2.500</td>
+            <td class="earn-val">€125</td>
+            <td class="note-val">Al primo pagamento del cliente</td>
+          </tr>
+          <tr>
+            <td class="note-val">Contratto grande</td>
+            <td class="setup-val">€4.000</td>
+            <td class="earn-val">€200</td>
+            <td class="note-val">Al primo pagamento del cliente</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.2); border-radius: 12px; padding: 16px 20px; font-size: 14px; color: var(--text-muted);">
+      <strong style="color: var(--text);">Esempio reale:</strong> Se in un mese fissi 4 appuntamenti e 2 si chiudono — uno da €1.500 e uno da €2.500 — guadagni €75 + €125 = <strong style="color: var(--green);">€200 quel mese</strong>, senza aver fatto nessuna chiamata di vendita.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Condizioni</div>
+    <h2>Quando Vieni Pagato e Quando No</h2>
+
+    <div class="payment-cards">
+      <div class="payment-card good">
+        <div class="payment-icon">✓</div>
+        <div class="payment-title">Vieni pagato quando…</div>
+        <div class="payment-desc">Il cliente che hai fissato firma il contratto e fa il primo pagamento. In quel momento, la tua commissione si genera automaticamente.</div>
+      </div>
+      <div class="payment-card bad">
+        <div class="payment-icon">✗</div>
+        <div class="payment-title">Non vieni pagato quando…</div>
+        <div class="payment-desc">Il cliente non firma (la chiamata non si chiude). Oppure quando fissi qualcuno che non corrisponde al profilo e Marco lo scarta in chiamata.</div>
+      </div>
+    </div>
+
+    <p style="font-size: 14px;">Ecco perché qualificare bene è così importante. Un appuntamento mal fatto non solo non produce commissione — fa perdere tempo a tutti.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Il tuo percorso di crescita</div>
+    <h2>Come Guadagnare di Più Se Vuoi</h2>
+    <p>Il ruolo di collaboratore commerciale è il punto di ingresso. Se col tempo vuoi formarti di più e aumentare i tuoi guadagni, esiste un percorso chiaro — con più responsabilità e più compensazione. Nessuno è obbligato a percorrerlo, ma è disponibile per chi vuole.</p>
+
+    <div class="ladder">
+
+      <div class="ladder-step active">
+        <span class="ladder-badge now">Tu adesso</span>
+        <div class="ladder-icon l1">📅</div>
+        <div class="ladder-body">
+          <div class="ladder-level">Fase 1 — Collaboratore Commerciale</div>
+          <div class="ladder-title">Fissi appuntamenti. Solo.</div>
+          <div class="ladder-desc">Trovi i prospect, li qualifichi in chat, fissi l'appuntamento e dai il contesto. Marco fa il resto.</div>
+          <div class="ladder-earn">5% dell'importo di avvio → tra €75 e €200 per cliente</div>
+        </div>
+      </div>
+
+      <div class="ladder-step future">
+        <span class="ladder-badge future-tag">Formazione futura</span>
+        <div class="ladder-icon l2">📞</div>
+        <div class="ladder-body">
+          <div class="ladder-level">Fase 2 — Collaboratore + Prima Chiamata</div>
+          <div class="ladder-title">Fai tu la chiamata di conoscenza.</div>
+          <div class="ladder-desc">Oltre a fissare gli appuntamenti, impari a fare la prima chiamata di 20-30 minuti: ascoltare il problema, capire il prospect e passarlo a Marco già pre-qualificato e con informazioni chiave.</div>
+          <div class="ladder-earn future-earn">Commissione maggiore — si definisce in formazione</div>
+          <div class="ladder-condition">Disponibile quando hai fissato i tuoi primi 10 appuntamenti di buona qualità. Parlane con Marco.</div>
+        </div>
+      </div>
+
+      <div class="ladder-step future">
+        <span class="ladder-badge future-tag">Formazione avanzata</span>
+        <div class="ladder-icon l3">🤝</div>
+        <div class="ladder-body">
+          <div class="ladder-level">Fase 3 — Ciclo Completo</div>
+          <div class="ladder-title">Acquisisci, qualifichi e chiudi.</div>
+          <div class="ladder-desc">Il livello più alto. Impari il processo completo di vendita: dal primo contatto alla firma del contratto. Massima autonomia, massima commissione.</div>
+          <div class="ladder-earn future-earn">Commissione massima su avvio + mensile ricorrente</div>
+          <div class="ladder-condition">Richiede aver completato la Fase 2 con risultati consistenti. Marco ti valuterà personalmente.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="background: rgba(255,209,102,0.07); border: 1px solid rgba(255,209,102,0.25); border-radius: 14px; padding: 18px 22px; margin-top: 20px;">
+      <p style="margin: 0; font-size: 14px; color: var(--text-muted);"><strong style="color: var(--yellow);">Quando iniziare la Fase 2?</strong> Quando hai fissato i tuoi primi appuntamenti di buona qualità e senti di avere il processo sotto controllo. Non c'è un numero minimo fisso — parlane con Marco e lui ti dice se sei pronto.</p>
+    </div>
+  </div>
+
+  <div class="close-box">
+    <div class="close-title">Hai completato la formazione.<br>Adesso inizia il lavoro vero.</div>
+    <div class="close-desc">Gli script, i moduli e gli scenari sono solo la mappa. Il territorio è sempre diverso. Più conversazioni reali fai, meglio diventi. Inizia oggi.</div>
+  </div>
+
+  <div class="back-to-index">
+    <div>
+      <div style="font-size:13px; color: var(--text-muted); margin-bottom:4px;">Torna all'inizio</div>
+      <div style="font-size:18px; font-weight:800; color: var(--text);">Indice del Manuale</div>
+    </div>
+    <a href="index.html">← Torna all'indice</a>
+  </div>
+
+  <footer class="footer">Formazione Interna · Uso Esclusivo del Collaboratore</footer>
+</div>
+</body>
+</html>

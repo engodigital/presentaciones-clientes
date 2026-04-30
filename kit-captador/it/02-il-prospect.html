@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 — Il Prospect Ideale | Manuale Collaboratore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --bg-card: #1a1d27; --border: #2d3148;
+    --text: #e8eaf0; --text-muted: #8b8fa8; --accent: #6c63ff;
+    --green: #00d4aa; --red: #ff6b6b; --yellow: #ffd166;
+    --accent-light: rgba(108,99,255,0.12); --green-light: rgba(0,212,170,0.12);
+    --red-light: rgba(255,107,107,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; }
+  .nav { background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .nav-back { color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; min-height: 44px; }
+  .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); border-color: var(--accent); }
+  .nav-links a.active { background: var(--accent-light); }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 20px 60px; }
+  .module-hero { margin-bottom: 48px; }
+  .module-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .module-title { font-size: clamp(28px,5vw,42px); font-weight: 900; line-height: 1.15; margin-bottom: 14px; }
+  .module-lead { font-size: 18px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  .section { margin-bottom: 56px; }
+  .section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  h2 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; padding-left: 16px; border-left: 3px solid var(--accent); }
+  p { margin-bottom: 16px; color: var(--text-muted); }
+  p strong { color: var(--text); }
+
+  .persona-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 28px; }
+  .persona-intro { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
+  .persona-traits { display: flex; flex-wrap: wrap; gap: 8px; }
+  .trait-tag { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); color: var(--accent); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 100px; }
+
+  .flags-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .flag-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+  .flag-card.green-card { border-top: 3px solid var(--green); }
+  .flag-card.red-card { border-top: 3px solid var(--red); }
+  .flag-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .flag-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .flag-icon.green { background: var(--green-light); }
+  .flag-icon.red { background: var(--red-light); }
+  .flag-title { font-size: 16px; font-weight: 800; }
+  .flag-title.green { color: var(--green); }
+  .flag-title.red { color: var(--red); }
+  .flag-list { display: flex; flex-direction: column; gap: 8px; }
+  .flag-item { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text-muted); }
+  .flag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+  .flag-dot.green { background: var(--green); }
+  .flag-dot.red { background: var(--red); }
+
+  .qualif-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .qualif-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .qualif-num { font-size: 32px; font-weight: 900; color: var(--accent); font-family: 'JetBrains Mono', monospace; margin-bottom: 10px; line-height: 1; }
+  .qualif-q { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .qualif-why { font-size: 13px; color: var(--text-muted); }
+
+  .script-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 14px; }
+  .script-label { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; background: var(--green-light); color: var(--green); border: 1px solid rgba(0,212,170,0.3); }
+  .script-text { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--text); background: #111420; border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; line-height: 1.8; position: relative; }
+  .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); color: var(--accent); font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; min-height: 32px; }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+  .copy-btn.copied { background: var(--green-light); border-color: rgba(0,212,170,0.3); color: var(--green); }
+  .script-note { font-size: 13px; color: var(--text-muted); margin-top: 12px; padding: 10px 14px; background: rgba(255,209,102,0.05); border-radius: 8px; border-left: 3px solid rgba(255,209,102,0.4); }
+
+  .rule-box { background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.2); border-radius: 12px; padding: 18px 22px; font-size: 14px; color: var(--text-muted); }
+  .rule-box strong { color: var(--text); }
+
+  .sector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .sector-tag { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+  .sector-tag span { font-size: 18px; }
+
+  .next-module { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+  .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
+
+  @media (max-width: 600px) {
+    .flags-grid { grid-template-columns: 1fr; }
+    .qualif-cards { grid-template-columns: 1fr; }
+    .script-text { font-size: 13px; }
+    .copy-btn { position: static; margin-top: 10px; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Torna all'indice</a>
+    <div class="nav-links">
+      <a href="01-la-missione.html">01</a>
+      <a href="02-il-prospect.html" class="active">02</a>
+      <a href="03-lo-script.html">03</a>
+      <a href="04-fissare-appuntamento.html">04</a>
+      <a href="05-le-obiezioni.html">05</a>
+      <a href="06-gli-errori.html">06</a>
+      <a href="07-pratica.html">07</a>
+      <a href="08-compensazione.html">08</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="module-hero">
+    <div class="module-num">Modulo 02</div>
+    <h1 class="module-title">Il Prospect<br>Ideale</h1>
+    <p class="module-lead">Non tutte le persone meritano il tuo tempo. Imparare a riconoscere chi cercare — e chi scartare — è la competenza più importante di questo lavoro.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Il profilo</div>
+    <h2>Chi Stiamo Cercando</h2>
+    <p>Il cliente ideale è un imprenditore o imprenditrice locale con un'attività avviata che vuole più clienti ma non sa come ottenerli con il marketing digitale. <strong>Ha budget, ha urgenza, e ha già provato da solo senza buoni risultati.</strong></p>
+
+    <div class="persona-box">
+      <div class="persona-intro">Titolare di un'attività locale consolidata. Fattura, ha clienti, ma sente che potrebbe crescere di più. Ha provato cose da solo o con agenzie senza risultati chiari. Vuole delegare il marketing a qualcuno che capisca il suo business.</div>
+      <div class="persona-traits">
+        <span class="trait-tag">Attività propria +1 anno</span>
+        <span class="trait-tag">Con dipendenti o locale fisico</span>
+        <span class="trait-tag">Vuole crescere</span>
+        <span class="trait-tag">Ha già provato senza risultati</span>
+        <span class="trait-tag">Non ha tempo di farlo da solo</span>
+        <span class="trait-tag">Budget disponibile</span>
+        <span class="trait-tag">Prende decisioni autonomamente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Dove funziona bene</div>
+    <h2>Settori con Più Potenziale</h2>
+    <p>Il servizio funziona in quasi qualsiasi attività locale, ma questi settori mostrano risultati più rapidi e budget più definiti.</p>
+    <div class="sector-grid">
+      <div class="sector-tag"><span>🍕</span>Ristoranti</div>
+      <div class="sector-tag"><span>🏠</span>Agenzie immobiliari</div>
+      <div class="sector-tag"><span>💆</span>Centri estetici</div>
+      <div class="sector-tag"><span>⚖️</span>Studi legali</div>
+      <div class="sector-tag"><span>🦷</span>Cliniche dentistiche</div>
+      <div class="sector-tag"><span>🏋️</span>Palestre</div>
+      <div class="sector-tag"><span>🏗️</span>Edilizia / Ristrutturazioni</div>
+      <div class="sector-tag"><span>🚗</span>Concessionarie auto</div>
+      <div class="sector-tag"><span>📦</span>Commercio locale</div>
+      <div class="sector-tag"><span>🎓</span>Scuole / Formazione</div>
+    </div>
+    <p style="font-size: 14px;">Se hai dubbi su un settore, consultati con Marco prima di investire tempo nel prospect.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Segnali da leggere</div>
+    <h2>Impara a Leggere i Segnali</h2>
+    <p>Prima di proporre l'appuntamento, devi individuare i segnali. Non servono tutti e sette quelli positivi — due o tre bastano per andare avanti. Un segnale negativo chiaro è sufficiente per fermarsi.</p>
+
+    <div class="flags-grid">
+      <div class="flag-card green-card">
+        <div class="flag-header">
+          <div class="flag-icon green">✓</div>
+          <div class="flag-title green">Segnali Positivi</div>
+        </div>
+        <div class="flag-list">
+          <div class="flag-item"><div class="flag-dot green"></div><span>Ha un'attività propria da più di 1 anno</span></div>
+          <div class="flag-item"><div class="flag-dot green"></div><span>Dice che gli mancano clienti o vuole crescere</span></div>
+          <div class="flag-item"><div class="flag-dot green"></div><span>Ha già provato marketing (social, Google, volantini) senza risultati</span></div>
+          <div class="flag-item"><div class="flag-dot green"></div><span>Ha urgenza: "ho bisogno di qualcosa prima dell'estate"</span></div>
+          <div class="flag-item"><div class="flag-dot green"></div><span>Ha dipendenti o un locale fisico</span></div>
+          <div class="flag-item"><div class="flag-dot green"></div><span>Viene segnalato da qualcuno di fiducia</span></div>
+          <div class="flag-item"><div class="flag-dot green"></div><span>Prende lui stesso le decisioni di investimento</span></div>
+        </div>
+      </div>
+      <div class="flag-card red-card">
+        <div class="flag-header">
+          <div class="flag-icon red">✗</div>
+          <div class="flag-title red">Segnali di Scarto</div>
+        </div>
+        <div class="flag-list">
+          <div class="flag-item"><div class="flag-dot red"></div><span>Non ha un'attività propria (lavora per qualcun altro)</span></div>
+          <div class="flag-item"><div class="flag-dot red"></div><span>È attivo da meno di 1 anno o ha appena aperto</span></div>
+          <div class="flag-item"><div class="flag-dot red"></div><span>Vuole imparare a farlo da solo</span></div>
+          <div class="flag-item"><div class="flag-dot red"></div><span>Dice "non ho budget adesso"</span></div>
+          <div class="flag-item"><div class="flag-dot red"></div><span>Vuole solo consigli gratis o informazioni</span></div>
+          <div class="flag-item"><div class="flag-dot red"></div><span>Deve consultarsi con soci o partner per qualsiasi decisione</span></div>
+          <div class="flag-item"><div class="flag-dot red"></div><span>Freelance senza team né sede fissa</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-box">
+      <strong>Regola pratica:</strong> Due o più segnali positivi insieme = merita le domande di qualifica. Un segnale di scarto chiaro = chiudi con gentilezza e passa al prossimo. Non perdere tempo cercando di convincere qualcuno che non è in target.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Qualifica</div>
+    <h2>Le 2 Domande di Qualifica</h2>
+    <p>Quando qualcuno sembra interessante, fai queste due domande. Non farle di seguito come un interrogatorio — integrales naturalmente nella conversazione.</p>
+
+    <div class="qualif-cards">
+      <div class="qualif-card">
+        <div class="qualif-num">D1</div>
+        <div class="qualif-q">Hai un'attività tua?</div>
+        <div class="qualif-why">Se non ha un'attività propria, non è il nostro cliente. Non perdere altro tempo. Chiudi con gentilezza.</div>
+      </div>
+      <div class="qualif-card">
+        <div class="qualif-num">D2</div>
+        <div class="qualif-q">Da quanto tempo sei attivo?</div>
+        <div class="qualif-why">Meno di 1 anno può essere rischioso. Avvisa Marco e lascia che sia lui a decidere se vale la pena continuare.</div>
+      </div>
+    </div>
+
+    <div class="script-card">
+      <span class="script-label">Come farle in modo naturale</span>
+      <div class="script-text" id="q1text">
+        E l'attività è tua o lavori con qualcuno?
+        <button class="copy-btn" onclick="copyScript('q1text', this)">Copia</button>
+      </div>
+      <div style="margin-top: 12px;">
+        <div class="script-text" id="q2text">
+          Ottimo! Da quanto tempo sei aperto?
+          <button class="copy-btn" onclick="copyScript('q2text', this)">Copia</button>
+        </div>
+      </div>
+      <div class="script-note">Falle con curiosità genuina, non come un modulo. Se entrambe le risposte sono positive, continui. Se no, chiudi con gentilezza: "Ha senso, se in futuro vuoi crescere di più dimmelo e te lo presento."</div>
+    </div>
+  </div>
+
+  <div class="next-module">
+    <div>
+      <div style="font-size:13px; color: var(--text-muted); margin-bottom:4px;">Modulo successivo</div>
+      <div style="font-size:18px; font-weight:800; color: var(--text);">Lo Script di Conversazione</div>
+    </div>
+    <a href="03-lo-script.html">Modulo 03 →</a>
+  </div>
+
+  <footer class="footer">Formazione Interna · Uso Esclusivo del Collaboratore</footer>
+</div>
+
+<script>
+function copyScript(id, btn) {
+  const el = document.getElementById(id);
+  const clone = el.cloneNode(true);
+  const b = clone.querySelector('button');
+  if(b) b.remove();
+  const text = clone.textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiato'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copia'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => { btn.textContent = '✓ OK'; setTimeout(() => { btn.textContent = 'Copia'; }, 2000); });
+}
+</script>
+</body>
+</html>

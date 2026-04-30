@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>07 — Scenari Reali | Manuale Collaboratore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --bg-card: #1a1d27; --border: #2d3148;
+    --text: #e8eaf0; --text-muted: #8b8fa8; --accent: #6c63ff;
+    --green: #00d4aa; --red: #ff6b6b; --yellow: #ffd166;
+    --accent-light: rgba(108,99,255,0.12); --green-light: rgba(0,212,170,0.12);
+    --red-light: rgba(255,107,107,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; }
+  .nav { background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .nav-back { color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; min-height: 44px; }
+  .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); border-color: var(--accent); }
+  .nav-links a.active { background: var(--accent-light); }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 20px 60px; }
+  .module-hero { margin-bottom: 48px; }
+  .module-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .module-title { font-size: clamp(28px,5vw,42px); font-weight: 900; line-height: 1.15; margin-bottom: 14px; }
+  .module-lead { font-size: 18px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  .section { margin-bottom: 60px; }
+  .section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  h2 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; padding-left: 16px; border-left: 3px solid var(--accent); }
+  p { margin-bottom: 16px; color: var(--text-muted); }
+  p strong { color: var(--text); }
+
+  .scenario { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 24px; }
+  .scenario.green { border-top: 3px solid var(--green); }
+  .scenario.yellow { border-top: 3px solid var(--yellow); }
+  .scenario.red { border-top: 3px solid var(--red); }
+  .scenario-header { margin-bottom: 20px; }
+  .scenario-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 100px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .scenario-badge.green { background: var(--green-light); color: var(--green); border: 1px solid rgba(0,212,170,0.3); }
+  .scenario-badge.yellow { background: rgba(255,209,102,0.1); color: var(--yellow); border: 1px solid rgba(255,209,102,0.3); }
+  .scenario-badge.red { background: var(--red-light); color: var(--red); border: 1px solid rgba(255,107,107,0.3); }
+  .scenario-title { font-size: 20px; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+  .scenario-context { font-size: 14px; color: var(--text-muted); padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid var(--border); }
+
+  .chat { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+  .msg { max-width: 80%; }
+  .msg.them { align-self: flex-start; }
+  .msg.you { align-self: flex-end; }
+  .msg-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; color: var(--text-muted); }
+  .msg.them .msg-label { color: var(--text-muted); }
+  .msg.you .msg-label { color: var(--accent); text-align: right; }
+  .msg-bubble { padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.6; }
+  .msg.them .msg-bubble { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .msg.you .msg-bubble { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); color: var(--text); border-bottom-right-radius: 4px; }
+  .msg-note { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+  .msg.you .msg-note { text-align: right; }
+
+  .scenario-result { background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.25); border-radius: 12px; padding: 14px 18px; margin-top: 16px; }
+  .scenario-result.red-r { background: rgba(255,107,107,0.07); border-color: rgba(255,107,107,0.25); }
+  .scenario-result.yellow-r { background: rgba(255,209,102,0.07); border-color: rgba(255,209,102,0.25); }
+  .result-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .result-label.green { color: var(--green); }
+  .result-label.red { color: var(--red); }
+  .result-label.yellow { color: var(--yellow); }
+  .result-text { font-size: 14px; color: var(--text-muted); }
+
+  .eval-grid { display: flex; flex-direction: column; gap: 10px; }
+  .eval-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 18px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; }
+  .eval-num { width: 28px; height: 28px; background: var(--accent-light); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--accent); flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .eval-q { font-size: 14px; color: var(--text-muted); }
+
+  .solo-box { background: var(--bg-card); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; }
+  .solo-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 16px; }
+  .solo-list { display: flex; flex-direction: column; gap: 10px; }
+  .solo-item { display: flex; gap: 14px; align-items: flex-start; font-size: 14px; color: var(--text-muted); }
+  .solo-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+
+  .next-module { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+  .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
+
+  @media (max-width: 600px) { .msg { max-width: 95%; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Torna all'indice</a>
+    <div class="nav-links">
+      <a href="01-la-missione.html">01</a>
+      <a href="02-il-prospect.html">02</a>
+      <a href="03-lo-script.html">03</a>
+      <a href="04-fissare-appuntamento.html">04</a>
+      <a href="05-le-obiezioni.html">05</a>
+      <a href="06-gli-errori.html">06</a>
+      <a href="07-pratica.html" class="active">07</a>
+      <a href="08-compensazione.html">08</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="module-hero">
+    <div class="module-num">Modulo 07</div>
+    <h1 class="module-title">Scenari<br>Reali</h1>
+    <p class="module-lead">Tre conversazioni complete dall'inizio alla fine. Leggi ognuna con attenzione: nella prima vedi cosa funziona, nella seconda come gestire la resistenza, nella terza come scartare correttamente.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Scenario 1</div>
+    <h2>Il Prospect Ideale</h2>
+
+    <div class="scenario green">
+      <div class="scenario-header">
+        <span class="scenario-badge green">Risultato: Appuntamento fissato</span>
+        <div class="scenario-title">Ristorante referito, qualifica in 6 messaggi</div>
+        <div class="scenario-context">Contesto: Carlo ha un ristorante a Milano. Un amico comune te lo ha presentato dicendo che vuole trovare più prenotazioni. Sono in contatto da 2 giorni.</div>
+      </div>
+
+      <div class="chat">
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ciao Carlo, [nome dell'amico] mi ha parlato di te e del ristorante. Mi sembra molto interessante quello che hai. Come va tutto?</div>
+          <div class="msg-note">Script 2 — Contatto referito</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Carlo</div>
+          <div class="msg-bubble">Ciao! Bene, il ristorante va bene ma potrebbe andare meglio. Soprattutto in inverno che cala un po' tutto.</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Capisco, è abbastanza comune nella ristorazione. E hai qualcosa per attrarre clienti nella bassa stagione o vai avanti principalmente con i soliti?</div>
+          <div class="msg-note">Domanda aperta — lascialo parlare</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Carlo</div>
+          <div class="msg-bubble">Principalmente i soliti e un po' di Instagram ma non mi arriva molto. Lo gestisco io da solo e non ho molto tempo per i social.</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ha senso! Senti, il ristorante è tuo o lo gestisci con qualcuno?</div>
+          <div class="msg-note">Domanda di qualifica D1</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Carlo</div>
+          <div class="msg-bubble">Mio, sono aperto da 6 anni.</div>
+          <div class="msg-note">✓ Qualificato: attività propria + più di 1 anno</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ottimo. Senti, quello che mi racconti ha molto senso — ho un collega che si occupa esattamente di questo, di aiutare attività come la tua a trovare più clienti con la pubblicità online. Avresti 20 minuti questa settimana per una chiamata veloce con lui, senza impegno, per vedere se potrebbe aiutarti?</div>
+          <div class="msg-note">Script 4 — Proposta appuntamento</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Carlo</div>
+          <div class="msg-bubble">Sì, perché no? Quando sarebbe?</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Perfetto. Ti va meglio giovedì o venerdì pomeriggio?</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Carlo</div>
+          <div class="msg-bubble">Giovedì verso le 17 mi va bene.</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Perfetto Carlo, la chiamata è confermata per giovedì alle 17. Riceverai un promemoria prima. Hai qualche domanda nel frattempo?</div>
+          <div class="msg-note">Messaggio di conferma — Modulo 04</div>
+        </div>
+      </div>
+
+      <div class="scenario-result">
+        <div class="result-label green">Risultato</div>
+        <div class="result-text">Appuntamento fissato in 10 messaggi. Adesso: compilare il modulo con il contesto (ristorante a Milano, calo in inverno, gestisce Instagram da solo senza risultati, 6 anni di attività, referito da [nome]).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Scenario 2</div>
+    <h2>Il Prospect con Resistenza</h2>
+
+    <div class="scenario yellow">
+      <div class="scenario-header">
+        <span class="scenario-badge yellow">Risultato: Appuntamento fissato dopo obiezione</span>
+        <div class="scenario-title">Studio dentistico, chiede il prezzo prima di fissare</div>
+        <div class="scenario-context">Contesto: Maria ha uno studio dentistico. L'hai conosciuta a un evento. È aperta da 3 anni.</div>
+      </div>
+
+      <div class="chat">
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ciao Maria, sono [tuo nome], ci siamo conosciuti ieri all'evento. Sono contento di averti incontrata. Come va lo studio ultimamente?</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Maria</div>
+          <div class="msg-bubble">Bene, grazie. Abbiamo pazienti ma mi piacerebbe crescere di più, soprattutto sugli impianti che hanno il margine più alto.</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ha senso. Ho un collega che si occupa di aiutare studi dentistici a trovare più pazienti con la pubblicità online. Avresti 20 minuti questa settimana per parlarci, senza impegno?</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Maria</div>
+          <div class="msg-bubble">E quanto costa una cosa del genere? Perché mi hanno già chiamato mille volte con questo.</div>
+          <div class="msg-note">Obiezione 2: chiede il prezzo</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Lo capisco perfettamente, c'è molto rumore là fuori. Il prezzo dipende molto da ogni studio — per questo Marco preferisce parlare con te prima di dirti qualcosa di concreto. Così non ti dà un numero generico ma qualcosa adatto alla tua situazione. Vale la pena che vi parliate 20 minuti?</div>
+          <div class="msg-note">Risposta obiezione 2 — Modulo 05</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Maria</div>
+          <div class="msg-bubble">Beh, 20 minuti sì posso. Quando sarebbe?</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ti va meglio mercoledì o giovedì pomeriggio?</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Maria</div>
+          <div class="msg-bubble">Giovedì alle 16 mi va.</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Perfetto Maria, confermata la chiamata giovedì alle 16. Riceverai un promemoria. Qualche domanda?</div>
+        </div>
+      </div>
+
+      <div class="scenario-result yellow-r">
+        <div class="result-label yellow">Chiave di questo scenario</div>
+        <div class="result-text">L'obiezione del prezzo non era la fine — era un'opportunità per inquadrare la chiamata come qualcosa di concreto e personalizzato, non generico. Non hai difeso il prezzo, non hai dato numeri. L'appuntamento è stato fissato lo stesso.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Scenario 3</div>
+    <h2>Lo Scarto Corretto</h2>
+
+    <div class="scenario red">
+      <div class="scenario-header">
+        <span class="scenario-badge red">Risultato: Scarto gentile</span>
+        <div class="scenario-title">Freelance che non corrisponde al profilo</div>
+        <div class="scenario-context">Contesto: Roberto dice di avere "la sua attività" ma risulta essere un freelance indipendente, senza sede, senza dipendenti e con meno di 1 anno di attività.</div>
+      </div>
+
+      <div class="chat">
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Che interessante! E di solito come trovi i clienti? Funziona bene o stai cercando di crescere?</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Roberto</div>
+          <div class="msg-bubble">Su LinkedIn soprattutto. Ho iniziato qualche mese fa come freelance nel design grafico, mi sto ancora sistemando.</div>
+          <div class="msg-note">Segnale di alerta: "qualche mese" + freelance</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ottimo che stai partendo! E l'attività è tua o lavori con qualcuno?</div>
+          <div class="msg-note">Qualifica D1</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Roberto</div>
+          <div class="msg-bubble">Mia, sono freelance indipendente. Per ora da solo, senza team.</div>
+        </div>
+        <div class="msg you">
+          <div class="msg-label">Tu</div>
+          <div class="msg-bubble">Ha senso costruire passo dopo passo. Senti, quello che facciamo è più adatto ad attività con un team o una sede già avviata — per qualcuno che sta iniziando adesso non avrebbe molto senso ancora. Ma se in futuro hai l'attività più consolidata e vuoi crescere, con piacere te lo presento. In bocca al lupo con il lancio!</div>
+          <div class="msg-note">Scarto gentile — senza pressione, senza porta chiusa</div>
+        </div>
+        <div class="msg them">
+          <div class="msg-label">Roberto</div>
+          <div class="msg-bubble">Ah, capisco. Sì, ha senso. Grazie comunque.</div>
+        </div>
+      </div>
+
+      <div class="scenario-result red-r">
+        <div class="result-label red">Chiave di questo scenario</div>
+        <div class="result-text">Non hai insistito, non hai cercato di convincerlo che magari poteva andar bene lo stesso, non hai proposto la chiamata "per sicurezza". Scartare bene è importante quanto fissare bene — protegge il tempo di tutti e lascia il rapporto in positivo per il futuro.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Dopo ogni pratica</div>
+    <h2>La Tua Scheda di Autovalutazione</h2>
+    <p>Dopo ogni conversazione reale o di pratica, fatti queste domande:</p>
+
+    <div class="eval-grid">
+      <div class="eval-item"><div class="eval-num">1</div><div class="eval-q">Ho fatto le 2 domande di qualifica prima di proporre l'appuntamento?</div></div>
+      <div class="eval-item"><div class="eval-num">2</div><div class="eval-q">Ho spiegato il servizio o ho mantenuto il mistero per la chiamata?</div></div>
+      <div class="eval-item"><div class="eval-num">3</div><div class="eval-q">Ho usato lo script o ho improvvisato in qualche momento?</div></div>
+      <div class="eval-item"><div class="eval-num">4</div><div class="eval-q">Se è emersa un'obiezione, ho usato la risposta del Modulo 05?</div></div>
+      <div class="eval-item"><div class="eval-num">5</div><div class="eval-q">Se ho fissato l'appuntamento, ho compilato il modulo subito dopo?</div></div>
+      <div class="eval-item"><div class="eval-num">6</div><div class="eval-q">Se ho scartato, l'ho fatto con gentilezza e senza pressione?</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Prima delle conversazioni reali</div>
+    <h2>Come Praticare da Solo</h2>
+
+    <div class="solo-box">
+      <div class="solo-title">Tre modi per esercitarsi senza aver bisogno di nessuno</div>
+      <div class="solo-list">
+        <div class="solo-item">
+          <div class="solo-icon">🤖</div>
+          <div><strong style="color: var(--text);">Simula con un'IA (ChatGPT o simili):</strong> Digli di fare il ruolo del prospect e rispondere in modo realistico. Esercita i tre scenari di questo modulo finché lo script non esce da solo.</div>
+        </div>
+        <div class="solo-item">
+          <div class="solo-icon">🎙️</div>
+          <div><strong style="color: var(--text);">Registrati a voce alta:</strong> Leggi lo script a voce alta come se stessi parlando con qualcuno. Ascoltati. Se suona forzato o artificiale, esercitati finché non suona naturale.</div>
+        </div>
+        <div class="solo-item">
+          <div class="solo-icon">👥</div>
+          <div><strong style="color: var(--text);">Esercitati con qualcuno di fiducia:</strong> Chiedi a un amico o familiare di fare il prospect. Non farsi dire sì di partenza — che mettano resistenza. I migliori collaboratori si esercitano in situazioni scomode.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="next-module">
+    <div>
+      <div style="font-size:13px; color: var(--text-muted); margin-bottom:4px;">Ultimo modulo</div>
+      <div style="font-size:18px; font-weight:800; color: var(--text);">Quanto Guadagni e Come Crescere</div>
+    </div>
+    <a href="08-compensazione.html">Modulo 08 →</a>
+  </div>
+
+  <footer class="footer">Formazione Interna · Uso Esclusivo del Collaboratore</footer>
+</div>
+</body>
+</html>
