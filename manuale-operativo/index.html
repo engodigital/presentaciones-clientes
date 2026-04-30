@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale Operativo — Engo Agency</title>
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card2: #243447;
+  --border: #334155;
+  --accent: #38bdf8;
+  --green: #22c55e;
+  --yellow: #eab308;
+  --red: #ef4444;
+  --orange: #f97316;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --sidebar: 280px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+code{background:var(--card2);padding:2px 6px;border-radius:4px;font-size:13px;font-family:'Courier New',monospace}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;background:#0a1120;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;
+  transition:transform .25s ease;z-index:100
+}
+.sidebar-logo{padding:20px 16px 8px;border-bottom:1px solid var(--border)}
+.sidebar-logo h2{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+.sidebar-logo p{font-size:11px;color:var(--muted);margin-top:2px}
+.nav-section{padding:12px 0 4px}
+.nav-label{padding:4px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;
+  font-size:13px;color:var(--muted);transition:all .15s;border-left:3px solid transparent
+}
+.nav-item:hover{color:var(--text);background:rgba(56,189,248,.06)}
+.nav-item.active{color:var(--accent);background:rgba(56,189,248,.1);border-left-color:var(--accent)}
+.nav-item .badge{
+  margin-left:auto;font-size:10px;background:var(--card2);
+  padding:1px 6px;border-radius:10px;color:var(--muted)
+}
+
+/* TOPBAR mobile */
+.topbar{
+  display:none;position:fixed;top:0;left:0;right:0;height:52px;
+  background:#0a1120;border-bottom:1px solid var(--border);
+  align-items:center;padding:0 16px;gap:12px;z-index:99
+}
+.topbar h2{font-size:13px;font-weight:700;color:var(--accent)}
+.menu-btn{background:none;border:none;color:var(--text);cursor:pointer;font-size:20px;line-height:1}
+
+/* OVERLAY mobile */
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99
+}
+
+/* CONTENT */
+.content{margin-left:var(--sidebar);flex:1;padding:48px 40px;max-width:900px}
+
+/* MODULES */
+.module{display:none}
+.module.active{display:block}
+
+/* TYPOGRAPHY */
+h1{font-size:26px;font-weight:700;color:var(--text);margin-bottom:6px}
+h2{font-size:20px;font-weight:600;color:var(--accent);margin:36px 0 12px}
+h3{font-size:16px;font-weight:600;color:var(--text);margin:24px 0 8px}
+p{margin-bottom:12px;color:#cbd5e1}
+ul,ol{margin:8px 0 16px 20px;color:#cbd5e1}
+li{margin-bottom:4px}
+.subtitle{font-size:13px;color:var(--muted);margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin:16px 0}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+
+/* BOXES */
+.box{border-radius:8px;padding:14px 16px;margin:12px 0;border-left:3px solid}
+.box-tip{background:rgba(34,197,94,.08);border-color:var(--green)}
+.box-tip .box-label{color:var(--green);font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.box-warn{background:rgba(234,179,8,.08);border-color:var(--yellow)}
+.box-warn .box-label{color:var(--yellow);font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.box-error{background:rgba(239,68,68,.08);border-color:var(--red)}
+.box-error .box-label{color:var(--red);font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.box-info{background:rgba(56,189,248,.08);border-color:var(--accent)}
+.box-info .box-label{color:var(--accent);font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.box p{margin:0;color:#cbd5e1;font-size:14px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+th{background:var(--card2);color:var(--accent);padding:10px 12px;text-align:left;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:#cbd5e1;vertical-align:top}
+tr:last-child td{border-bottom:none}
+.td-green{color:var(--green);font-weight:600}
+.td-yellow{color:var(--yellow);font-weight:600}
+.td-red{color:var(--red);font-weight:600}
+
+/* CHECKLIST */
+.checklist{list-style:none;margin:0 0 16px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(51,65,85,.5)}
+.checklist li:last-child{border-bottom:none}
+.checklist input[type=checkbox]{
+  width:17px;height:17px;flex-shrink:0;margin-top:2px;
+  accent-color:var(--accent);cursor:pointer
+}
+.checklist label{cursor:pointer;font-size:14px;color:#cbd5e1;flex:1}
+.checklist input:checked+label{color:var(--muted);text-decoration:line-through}
+.cl-section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:12px 0}
+.cl-section h4{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
+.cl-note{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+/* PROMPT BLOCKS */
+.prompt-block{background:#0d1929;border:1px solid var(--border);border-radius:8px;margin:12px 0;overflow:hidden}
+.prompt-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 14px;background:rgba(56,189,248,.1);border-bottom:1px solid var(--border)
+}
+.prompt-header span{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.copy-btn{
+  background:var(--card2);border:1px solid var(--border);color:var(--muted);
+  padding:3px 10px;border-radius:4px;font-size:11px;cursor:pointer;transition:all .15s
+}
+.copy-btn:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+.copy-btn.copied{background:var(--green);color:#000;border-color:var(--green)}
+.prompt-block pre{padding:14px;font-size:13px;font-family:'Courier New',monospace;color:#93c5fd;white-space:pre-wrap;word-break:break-word;line-height:1.6}
+
+/* KPI SEMAFORO */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:16px 0}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+.kpi-card .kpi-val{font-size:22px;font-weight:700;margin:4px 0}
+.kpi-card .kpi-name{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.kpi-green .kpi-val{color:var(--green)}
+.kpi-yellow .kpi-val{color:var(--yellow)}
+.kpi-red .kpi-val{color:var(--red)}
+
+/* COMPARISON TABLE */
+.compare-table{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin:16px 0}
+.compare-col{background:var(--card);padding:16px}
+.compare-col h4{font-size:13px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.compare-col.good h4{color:var(--green)}
+.compare-col.bad h4{color:var(--red)}
+.compare-col ul{list-style:none;margin:0}
+.compare-col ul li{padding:5px 0;font-size:13px;color:#cbd5e1;border-bottom:1px solid rgba(51,65,85,.4)}
+.compare-col ul li:last-child{border-bottom:none}
+.compare-col ul li::before{margin-right:6px}
+.compare-col.good ul li::before{content:'✓';color:var(--green)}
+.compare-col.bad ul li::before{content:'✗';color:var(--red)}
+
+/* ESCALATION */
+.escalation{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:16px;margin:16px 0}
+.escalation h4{color:var(--red);font-size:13px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
+.escalation ul{list-style:none;margin:0}
+.escalation ul li{padding:4px 0;font-size:13px;color:#fca5a5;border-bottom:1px solid rgba(239,68,68,.15)}
+.escalation ul li:last-child{border-bottom:none}
+.escalation ul li::before{content:'▶';color:var(--red);margin-right:6px;font-size:10px}
+
+/* READING PATH */
+.reading-path{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:32px}
+.reading-path h3{font-size:14px;color:var(--accent);margin:0 0 14px}
+.weeks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.week-card{background:var(--card2);border-radius:8px;padding:12px;text-align:center}
+.week-card .week-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.week-card .week-title{font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px}
+.week-card .week-mods{font-size:11px;color:var(--muted)}
+.emergency-path{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:13px;color:var(--yellow)}
+.emergency-path strong{color:var(--yellow)}
+
+/* STEP FLOW */
+.steps{counter-reset:step;list-style:none;margin:0 0 16px}
+.steps li{counter-increment:step;display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(51,65,85,.4)}
+.steps li:last-child{border-bottom:none}
+.steps li::before{
+  content:counter(step);min-width:24px;height:24px;background:var(--accent);
+  color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;flex-shrink:0;margin-top:2px
+}
+.steps li .step-text{font-size:14px;color:#cbd5e1}
+.steps li .step-detail{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* DRIVE TREE */
+.drive-tree{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'Courier New',monospace;font-size:13px;color:#93c5fd;line-height:1.8}
+
+/* TAG */
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin:2px}
+.tag-tool{background:rgba(56,189,248,.15);color:var(--accent);border:1px solid rgba(56,189,248,.3)}
+.tag-ai{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.3)}
+.tag-warn{background:rgba(234,179,8,.15);color:var(--yellow);border:1px solid rgba(234,179,8,.3)}
+
+/* BREADCRUMB */
+.mod-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mod-num{background:var(--accent);color:#000;font-size:11px;font-weight:800;padding:2px 8px;border-radius:4px}
+
+/* PROGRESS bar */
+.progress-bar{height:3px;background:var(--border);border-radius:3px;margin:8px 0 4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+
+/* STORAGE NOTE */
+.storage-note{
+  background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);
+  border-radius:6px;padding:8px 12px;font-size:11px;color:#fde047;
+  display:flex;align-items:center;gap:6px;margin-bottom:12px
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .overlay.show{display:block}
+  .topbar{display:flex}
+  .content{margin-left:0;padding:72px 20px 40px}
+  .card-grid{grid-template-columns:1fr}
+  .weeks{grid-template-columns:1fr 1fr}
+  .compare-table{grid-template-columns:1fr}
+  h1{font-size:22px}
+  h2{font-size:18px}
+}
+@media(max-width:480px){
+  .weeks{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE TOPBAR -->
+<div class="topbar">
+  <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show')">☰</button>
+  <h2>Manuale Operativo</h2>
+</div>
+<div class="overlay" id="overlay" onclick="document.getElementById('sidebar').classList.remove('open');this.classList.remove('show')"></div>
+
+<!-- APP -->
+<div class="layout" x-data="app()">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <h2>Manuale Operativo</h2>
+      <p>Engo Agency · v1.0</p>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Inizio</div>
+      <div class="nav-item" :class="active==='path'?'active':''" @click="go('path')">📍 Percorso di Lettura</div>
+      <div class="nav-item" :class="active==='m0'?'active':''" @click="go('m0')">00 · Il Metodo</div>
+      <div class="nav-item" :class="active==='m1'?'active':''" @click="go('m1')">01 · Il Tuo Ruolo</div>
+      <div class="nav-item" :class="active==='m2'?'active':''" @click="go('m2')">02 · Onboarding Cliente</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Strumenti</div>
+      <div class="nav-item" :class="active==='m3'?'active':''" @click="go('m3')">03 · GoHighLevel</div>
+      <div class="nav-item" :class="active==='m4'?'active':''" @click="go('m4')">04 · Social Organico</div>
+      <div class="nav-item" :class="active==='m5'?'active':''" @click="go('m5')">05 · Meta Ads</div>
+      <div class="nav-item" :class="active==='m6'?'active':''" @click="go('m6')">06 · Google Ads</div>
+      <div class="nav-item" :class="active==='m7'?'active':''" @click="go('m7')">07 · KPI e Reporting</div>
+      <div class="nav-item" :class="active==='m8'?'active':''" @click="go('m8')">08 · Strumenti AI <span class="badge">ref</span></div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Appendici</div>
+      <div class="nav-item" :class="active==='aa'?'active':''" @click="go('aa')">A · Azioni Giornaliere</div>
+      <div class="nav-item" :class="active==='ab'?'active':''" @click="go('ab')">B · Scheda Cliente</div>
+      <div class="nav-item" :class="active==='ac'?'active':''" @click="go('ac')">C · Glossario KPI</div>
+      <div class="nav-item" :class="active==='ad'?'active':''" @click="go('ad')">D · Auto-Certificazione</div>
+      <div class="nav-item" :class="active==='ae'?'active':''" @click="go('ae')">E · Changelog</div>
+    </div>
+  </nav>
+
+  <!-- CONTENT AREA -->
+  <main class="content">
+
+    <!-- ===== PERCORSO DI LETTURA ===== -->
+    <section class="module" :class="active==='path'?'active':''">
+      <div class="mod-header"><span class="mod-num">START</span></div>
+      <h1>Percorso di Lettura</h1>
+      <p class="subtitle">Dove iniziare, cosa leggere e quando. Segui il percorso standard se stai iniziando da zero. Scegli il percorso emergenza se sei già operativo.</p>
+
+      <div class="reading-path">
+        <h3>📅 Percorso Standard — 4 Settimane</h3>
+        <div class="weeks">
+          <div class="week-card">
+            <div class="week-num">Settimana 1</div>
+            <div class="week-title">Fondamenta</div>
+            <div class="week-mods">M0 · M1 · M2</div>
+          </div>
+          <div class="week-card">
+            <div class="week-num">Settimana 2</div>
+            <div class="week-title">Operatività Base</div>
+            <div class="week-mods">M3 · M4</div>
+          </div>
+          <div class="week-card">
+            <div class="week-num">Settimana 3</div>
+            <div class="week-title">Campagne</div>
+            <div class="week-mods">M5 · M6</div>
+          </div>
+          <div class="week-card">
+            <div class="week-num">Settimana 4</div>
+            <div class="week-title">Misura e Certifica</div>
+            <div class="week-mods">M7 · Appendici</div>
+          </div>
+        </div>
+        <div class="emergency-path">
+          <strong>⚡ Percorso Emergenza</strong> — Sei già operativo su campagne attive? Leggi subito: M2 (accessi e setup), M5 o M6 (il canale su cui stai lavorando), Appendice A (azioni giornaliere). Poi torna al percorso standard.
+        </div>
+      </div>
+
+      <div class="box box-info">
+        <div class="box-label">Come funzionano le checklist</div>
+        <p>Ogni modulo ha checklist interattive. Le spunte vengono salvate su questo browser. <strong>Se cambi dispositivo, i progressi non si trasferiscono</strong> — usa lo stesso browser su cui hai iniziato.</p>
+      </div>
+
+      <div class="box box-tip">
+        <div class="box-label">Consiglio</div>
+        <p>Leggi ogni modulo almeno due volte. La prima per capire. La seconda mentre esegui il lavoro reale sul cliente.</p>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 0: IL METODO ===== -->
+    <section class="module" :class="active==='m0'?'active':''">
+      <div class="mod-header"><span class="mod-num">M0</span></div>
+      <h1>Il Metodo</h1>
+      <p class="subtitle">Prima di toccare qualsiasi piattaforma, capisci chi sei e come lavori. Questo modulo non è opzionale.</p>
+
+      <h2>La Filosofia di Base</h2>
+      <p>Il tuo lavoro non è <em>fare cose</em>. È <strong>far funzionare un sistema che produce risultati misurabili per il cliente</strong>.</p>
+      <p>La differenza sembra sottile. Non lo è. Chi "fa cose" esegue task e aspetta le istruzioni. Chi gestisce un sistema osserva, anticipa, misura e propone. Il cliente non paga per il tuo tempo — paga per i risultati che il tuo lavoro genera.</p>
+
+      <div class="box box-warn">
+        <div class="box-label">Principio Fondamentale</div>
+        <p>Ogni azione che fai deve rispondere a una domanda: <strong>"Questo porta il cliente verso il suo obiettivo?"</strong> Se non sai rispondere, non agire: chiedi prima.</p>
+      </div>
+
+      <h2>Caso Pratico: Due Operativi, Stessa Situazione</h2>
+      <p>Sono le 15:00 di un giovedì. Il cliente manda un messaggio: <em>"Cambia il post di domani, voglio mettere una foto del nuovo prodotto."</em></p>
+
+      <div class="compare-table">
+        <div class="compare-col bad">
+          <h4>Esecutore di Task</h4>
+          <ul>
+            <li>Risponde "ok" subito</li>
+            <li>Cambia il post senza domande</li>
+            <li>Non sa se la foto è quella giusta</li>
+            <li>Non verifica il formato</li>
+            <li>Il post esce mediocre</li>
+            <li>Il cliente è a malapena soddisfatto</li>
+          </ul>
+        </div>
+        <div class="compare-col good">
+          <h4>Operativo con Metodo</h4>
+          <ul>
+            <li>Risponde: "Perfetto. Mandami la foto. Preferisci tenere la caption originale o ne scrivo una nuova per il prodotto?"</li>
+            <li>Verifica il formato della foto (ratio, risoluzione)</li>
+            <li>Adatta la caption al nuovo soggetto</li>
+            <li>Aggiorna il calendario editoriale</li>
+            <li>Il post esce coerente e professionale</li>
+            <li>Il cliente si fida sempre di più</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>La differenza? Una domanda e trenta secondi di riflessione prima di agire.</p>
+
+      <h2>Operativo vs. Commerciale</h2>
+      <p>Questa distinzione è critica. Confonderla crea problemi seri.</p>
+
+      <table>
+        <thead><tr><th>Operativo (TU)</th><th>Commerciale (non tu)</th></tr></thead>
+        <tbody>
+          <tr><td>Esegue le campagne</td><td>Vende i servizi</td></tr>
+          <tr><td>Gestisce GHL, Ads, Social</td><td>Gestisce le trattative</td></tr>
+          <tr><td>Riporta i risultati</td><td>Decide la strategia commerciale</td></tr>
+          <tr><td>Parla di performance e contenuti</td><td>Parla di prezzi, contratti, rinnovi</td></tr>
+          <tr><td>Risolve problemi tecnici</td><td>Gestisce insoddisfazioni gravi</td></tr>
+        </tbody>
+      </table>
+
+      <div class="escalation">
+        <h4>Escala Subito al Responsabile se il Cliente:</h4>
+        <ul>
+          <li>Chiede di modificare il contratto o il prezzo</li>
+          <li>Minaccia di andarsene o esprime insoddisfazione grave</li>
+          <li>Fa domande sulla struttura del servizio o sui costi</li>
+          <li>È aggressivo o irrispettoso</li>
+        </ul>
+      </div>
+
+      <h2>Le 3 Caratteristiche dell'Operativo Eccellente</h2>
+
+      <div class="card">
+        <h3>1. Usa domande, non affermazioni</h3>
+        <p>Prima di agire, chiedi. Prima di inviare, verifica. Una domanda in più ti salva da un errore costoso. Regola: se hai un dubbio, non assumi — chiedi. Se il cliente manda una richiesta vaga, non interpretarla — chiarisci.</p>
+        <div class="box box-tip"><div class="box-label">Esempio</div><p>❌ "Ho cambiato la campagna come chiedeva."<br>✅ "Prima di modificare la campagna: confermi che vuoi aumentare il budget anche sull'adset principale o solo su quello nuovo?"</p></div>
+      </div>
+
+      <div class="card">
+        <h3>2. Porta dati, non opinioni</h3>
+        <p>Non dire "il post è andato bene". Di' "il post ha raggiunto 3.200 persone con un engagement rate del 4.8%, sopra la media del 3.1%". I dati convincono. Le opinioni si discutono. Quando riporti, usa sempre numeri.</p>
+      </div>
+
+      <div class="card">
+        <h3>3. Segue le azioni giornaliere senza aspettare che te lo dicano</h3>
+        <p>Ogni giorno hai una checklist (Appendice A). Non aspetti che qualcuno te la ricordi. Non la salti perché "non ci sono urgenze". Le emergenze nascono proprio quando salti le azioni preventive. La disciplina giornaliera è ciò che separa chi produce risultati costanti da chi lavora a singhiozzo.</p>
+      </div>
+
+      <h2>Comunicazione con il Cliente</h2>
+      <p>Parli con il cliente come rappresentante dell'agenzia. Ogni messaggio che mandi è un riflesso della professionalità del servizio.</p>
+
+      <table>
+        <thead><tr><th>Aspetto</th><th>Regola</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Canale principale</strong></td><td>WhatsApp per aggiornamenti veloci, email per documenti e report</td></tr>
+          <tr><td><strong>Tempo di risposta</strong></td><td>Entro 3 ore nelle ore lavorative. Non rispondere la sera o nei weekend salvo urgenze reali</td></tr>
+          <tr><td><strong>Tono</strong></td><td>Professionale ma diretto. No gergo tecnico. Parla come parlerebbe un consulente, non come un tecnico</td></tr>
+          <tr><td><strong>Cosa puoi dire</strong></td><td>Aggiornamenti sulle campagne, richieste di materiali, domande su contenuti, invio report</td></tr>
+          <tr><td><strong>Cosa NON puoi dire</strong></td><td>Prezzi, rinnovi, confronti con altri servizi, promesse di risultati specifici</td></tr>
+          <tr><td><strong>Se non sai rispondere</strong></td><td>"Ottima domanda, lo verifico e ti rispondo entro [ora]." Poi verifica davvero.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="box box-warn">
+        <div class="box-label">Non fare mai questo</div>
+        <p>Non improvvisare risposte su argomenti che non conosci. È meglio dire "verifico e ti rispondo" che rispondere in modo errato. Un'informazione sbagliata crea più danni di un silenzio momentaneo.</p>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 1: IL TUO RUOLO ===== -->
+    <section class="module" :class="active==='m1'?'active':''">
+      <div class="mod-header"><span class="mod-num">M1</span></div>
+      <h1>Il Tuo Ruolo</h1>
+      <p class="subtitle">Scopo, KPI, attività mensili e gestione del tempo. Questo è il tuo manuale di volo personale.</p>
+
+      <h2>Scopo del Ruolo</h2>
+      <div class="card" style="border-left:3px solid var(--accent)">
+        <p style="font-size:16px;color:var(--text);font-style:italic">"Far crescere il business del cliente attraverso esecuzione precisa, misurazione costante e comunicazione chiara."</p>
+      </div>
+      <p>Ogni decisione che prendi, ogni azione che esegui, torna a questa frase. Se quello che stai facendo non contribuisce a uno di questi tre pilastri — esecuzione, misurazione, comunicazione — fermati e chiediti perché lo stai facendo.</p>
+
+      <h2>I Tuoi KPI Settimanali</h2>
+      <p>Le statistiche settimanali misurano se stai svolgendo il tuo ruolo. Non sono numeri del cliente — sono numeri <em>tuoi</em>, che misurano la qualità del tuo lavoro.</p>
+
+      <table>
+        <thead><tr><th>KPI Operativo</th><th>Target</th><th>Come si misura</th></tr></thead>
+        <tbody>
+          <tr><td>Contenuti pubblicati vs. pianificati</td><td>100%</td><td>Calendario editoriale su Sheets</td></tr>
+          <tr><td>Nessuna chat cliente non letta da +3 giorni</td><td>0 chat in ritardo</td><td>Check GHL + WhatsApp ogni mattina</td></tr>
+          <tr><td>Campagne attive senza errori o disapprovazioni</td><td>0 errori</td><td>Check giornaliero Meta + Google</td></tr>
+          <tr><td>Report mensile inviato entro il 3 del mese</td><td>Rispettato</td><td>Data invio email/WhatsApp</td></tr>
+          <tr><td>KPI cliente aggiornati su Sheets</td><td>Aggiornati ogni lunedì</td><td>Data ultimo aggiornamento nel file</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Top 10 Attività Mensili</h2>
+      <p>Ogni mese, queste 10 attività devono essere completate per ogni cliente attivo. Non sono opzionali.</p>
+
+      <ol style="margin-left:20px;color:#cbd5e1">
+        <li style="margin-bottom:8px"><strong>Aggiornamento Scheda Cliente</strong> — verifica che i dati siano attuali (contatti, obiettivi, note)</li>
+        <li style="margin-bottom:8px"><strong>Revisione calendario editoriale</strong> — pianifica il mese successivo entro il 25</li>
+        <li style="margin-bottom:8px"><strong>Verifica automazioni GHL</strong> — controlla che tutti i workflow siano attivi e funzionanti</li>
+        <li style="margin-bottom:8px"><strong>Report mensile ads</strong> — dati Meta + Google, analisi, raccomandazioni</li>
+        <li style="margin-bottom:8px"><strong>Ottimizzazione campagne</strong> — applica le modifiche basate sui dati del mese</li>
+        <li style="margin-bottom:8px"><strong>Pubblicazione contenuti settimanali</strong> — 4 cicli nel mese, senza salti</li>
+        <li style="margin-bottom:8px"><strong>Follow-up lead non risposti in GHL</strong> — nessun lead rimane silenzioso per più di 7 giorni</li>
+        <li style="margin-bottom:8px"><strong>Backup Drive aggiornato</strong> — materiali grafici, report, documenti del mese salvati</li>
+        <li style="margin-bottom:8px"><strong>Aggiornamento KPI su Sheets</strong> — tab mensile completato con dati definitivi</li>
+        <li style="margin-bottom:8px"><strong>Check-in mensile con responsabile</strong> — 15 minuti, avanzamenti e blocchi aperti</li>
+      </ol>
+
+      <h2>Gestione del Tempo</h2>
+
+      <div class="card">
+        <h3>Il Quadrante II: il 25% del tuo tempo</h3>
+        <p>Ogni settimana blocca <strong>2-3 ore</strong> per attività importanti ma non urgenti: formazione, analisi, miglioramento procedure, lettura del mercato. Queste ore sembrano "non produttive" sul momento. Sono le più importanti della settimana. Chi le salta si ritrova sempre a spegnere incendi invece di prevenirli.</p>
+        <div class="box box-tip"><div class="box-label">Come si fa</div><p>Blocca queste ore in calendario (lunedì o venerdì mattina). Trattale come riunioni che non si spostano. Se arriva un'urgenza, spostale al giorno dopo — non eliminarle.</p></div>
+      </div>
+
+      <div class="card">
+        <h3>La Regola dei 5 Minuti</h3>
+        <p>Se un'azione richiede meno di 5 minuti, falla adesso. Non scriverla nella to-do list, non rimandarla a dopo. Rispondere a un messaggio semplice, aggiornare una cella su Sheets, aggiungere un tag in GHL — <strong>fallo subito</strong>. Le piccole cose che rimandano si accumulano e diventano un lavoro pesante la sera del venerdì.</p>
+      </div>
+
+      <h2>Soglie di Escalation</h2>
+      <p>Non devi prendere ogni decisione da solo. Queste sono le situazioni in cui <strong>devi</strong> coinvolgere il responsabile:</p>
+
+      <table>
+        <thead><tr><th>Situazione</th><th>Quando escalare</th><th>Urgenza</th></tr></thead>
+        <tbody>
+          <tr><td>ROAS campagne</td><td>Sotto 1.5 per 2 settimane consecutive</td><td class="td-yellow">Entro 24h</td></tr>
+          <tr><td>Cliente non risponde</td><td>Nessuna risposta da 7 giorni su qualcosa di importante</td><td class="td-yellow">Entro 24h</td></tr>
+          <tr><td>Errore tecnico irrisolvibile</td><td>Non hai soluzione dopo 4 ore di tentativi</td><td class="td-yellow">Entro 4h</td></tr>
+          <tr><td>Account ads sospeso</td><td>Immediatamente</td><td class="td-red">Subito</td></tr>
+          <tr><td>Cliente insoddisfatto o aggressivo</td><td>Immediatamente</td><td class="td-red">Subito</td></tr>
+          <tr><td>Automazione GHL rotta su +10 contatti</td><td>Entro 2 ore dalla scoperta</td><td class="td-red">Urgente</td></tr>
+          <tr><td>Richieste commerciali del cliente</td><td>Immediatamente, non rispondere da solo</td><td class="td-red">Subito</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== MODULO 2: ONBOARDING CLIENTE ===== -->
+    <section class="module" :class="active==='m2'?'active':''">
+      <div class="mod-header"><span class="mod-num">M2</span></div>
+      <h1>Onboarding Cliente</h1>
+      <p class="subtitle">La prima settimana con un nuovo cliente determina come andranno i prossimi 12 mesi. Non saltare nessuno step.</p>
+
+      <h2>Pre-Flight: Prima di Iniziare</h2>
+      <p>Prima di toccare qualsiasi piattaforma, verifica di avere tutti gli accessi. Un operativo che inizia a lavorare senza i permessi giusti può fare danni silenziosi difficili da correggere.</p>
+
+      <div class="box box-error">
+        <div class="box-label">Critico — GHL Location ID</div>
+        <p>Ogni cliente ha un proprio sub-account GHL con un <strong>location_id univoco</strong>. Verifica sempre che il location_id che usi corrisponda al cliente assegnato. Un'operazione eseguita sul location_id sbagliato non si vede subito — si vede quando il danno è già fatto. Controlla due volte prima di ogni operazione.</p>
+      </div>
+
+      <div class="cl-section">
+        <h4>✅ Checklist Pre-Flight — Prima di Iniziare</h4>
+        <div class="storage-note">💾 Le spunte vengono salvate su questo browser</div>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('pf1')}"><input type="checkbox" x-model="c"><label :class="c?'done':''">Ricevuto accesso Google Drive (cartella condivisa del cliente)</label></li>
+          <li x-data="{c:$persist(false).as('pf2')}"><input type="checkbox" x-model="c"><label :class="c?'done':''">Ricevuto invito GHL — location_id confermato e salvato nella Scheda Cliente</label></li>
+          <li x-data="{c:$persist(false).as('pf3')}"><input type="checkbox" x-model="c"><label :class="c?'done':''">Accesso account Meta Business Manager del cliente (non creare account nuovo)</label></li>
+          <li x-data="{c:$persist(false).as('pf4')}"><input type="checkbox" x-model="c"><label :class="c?'done':''">Accesso account Google Ads del cliente (cliente come proprietario, tu come manager)</label></li>
+          <li x-data="{c:$persist(false).as('pf5')}"><input type="checkbox" x-model="c"><label :class="c?'done':''">Numero WhatsApp del cliente salvato</label></li>
+          <li x-data="{c:$persist(false).as('pf6')}"><input type="checkbox" x-model="c"><label :class="c?'done':''">Scheda Cliente (Appendice B) compilata con dati base</label></li>
+          <li x-data="{c:$persist(false).as('pf7')}"><input type="checkbox" x-model="c"><label :class="c?'done':''">Pixel Meta installato e verificato (Events Manager)</label></li>
+        </ul>
+      </div>
+
+      <h2>Struttura Drive del Cliente</h2>
+      <p>Ogni cliente ha una cartella Drive con questa struttura. Creala esattamente così — non inventare sottocartelle diverse da cliente a cliente.</p>
+
+      <div class="drive-tree">
+📁 [NomeCliente]/<br>
+├── 📄 00-Scheda-Cliente.gdoc<br>
+├── 📊 01-Calendario-Editoriale.gsheet<br>
+├── 📊 02-KPI-Report.gsheet<br>
+├── 📁 03-Ads/<br>
+│   ├── 📁 Meta/<br>
+│   │   ├── 📁 Creatività/<br>
+│   │   └── 📁 Report/<br>
+│   └── 📁 Google/<br>
+│       ├── 📁 Copy-Annunci/<br>
+│       └── 📁 Report/<br>
+├── 📁 04-Social/<br>
+│   ├── 📁 Grafiche/<br>
+│   └── 📁 Video/<br>
+└── 📁 05-Report-Mensili/
+      </div>
+
+      <h2>Configurazione Iniziale GHL</h2>
+
+      <ol class="steps">
+        <li><div><div class="step-text">Verifica la pipeline esistente</div><div class="step-detail">Assicurati che i stage della pipeline corrispondano al funnel del cliente. Se mancano stage o hanno nomi sbagliati, segnala al responsabile prima di modificare.</div></div></li>
+        <li><div><div class="step-text">Configura i tag base</div><div class="step-detail">Aggiungi almeno: fonte-lead (es. meta-ads, google-ads, organico, passaparola), lingua, stato-cliente. Standardizza i nomi — usa sempre minuscolo con trattini.</div></div></li>
+        <li><div><div class="step-text">Verifica i workflow attivi</div><div class="step-detail">Apri ogni workflow, controlla che sia attivo e che i trigger siano corretti. Esegui un test manuale su un contatto di prova prima di lasciare tutto in produzione.</div></div></li>
+        <li><div><div class="step-text">Collega il calendario</div><div class="step-detail">Il calendario GHL deve essere configurato con gli orari di disponibilità corretti del cliente. Ogni appuntamento prenotato via form deve apparire nel calendario GHL.</div></div></li>
+        <li><div><div class="step-text">Verifica i template email/SMS</div><div class="step-detail">Apri ogni template attivo, leggi il contenuto, verifica che non ci siano segnaposto vuoti o dati di un altro cliente.</div></div></li>
+      </ol>
+
+      <h2>Checklist Operative</h2>
+
+      <div class="cl-section">
+        <h4>📅 Day 1 — Primo Giorno</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('d1_1')}"><input type="checkbox" x-model="c"><label>Pre-flight completato (tutti gli accessi verificati)</label></li>
+          <li x-data="{c:$persist(false).as('d1_2')}"><input type="checkbox" x-model="c"><label>Cartella Drive creata con struttura standard</label></li>
+          <li x-data="{c:$persist(false).as('d1_3')}"><input type="checkbox" x-model="c"><label>Scheda Cliente compilata e salvata in Drive</label></li>
+          <li x-data="{c:$persist(false).as('d1_4')}"><input type="checkbox" x-model="c"><label>location_id GHL annotato nella Scheda Cliente</label></li>
+          <li x-data="{c:$persist(false).as('d1_5')}"><input type="checkbox" x-model="c"><label>Pipeline GHL verificata</label></li>
+          <li x-data="{c:$persist(false).as('d1_6')}"><input type="checkbox" x-model="c"><label>Primo messaggio di benvenuto al cliente inviato (se non già fatto)</label></li>
+        </ul>
+      </div>
+
+      <div class="cl-section">
+        <h4>📅 Week 1 — Prima Settimana</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('w1_1')}"><input type="checkbox" x-model="c"><label>Calendario editoriale del primo mese creato su Sheets</label></li>
+          <li x-data="{c:$persist(false).as('w1_2')}"><input type="checkbox" x-model="c"><label>Prima campagna ads pianificata (struttura + audience + budget)</label></li>
+          <li x-data="{c:$persist(false).as('w1_3')}"><input type="checkbox" x-model="c"><label>KPI baseline registrati su Sheets (numeri attuali prima di iniziare)</label></li>
+          <li x-data="{c:$persist(false).as('w1_4')}"><input type="checkbox" x-model="c"><label>Workflow GHL testati con contatto di prova</label></li>
+          <li x-data="{c:$persist(false).as('w1_5')}"><input type="checkbox" x-model="c"><label>Check-in con responsabile — allineamento su obiettivi e priorità</label></li>
+        </ul>
+      </div>
+
+      <div class="cl-section">
+        <h4>📅 Month 1 — Fine Primo Mese</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('mo1_1')}"><input type="checkbox" x-model="c"><label>Primo report mensile preparato e inviato entro il 3 del mese successivo</label></li>
+          <li x-data="{c:$persist(false).as('mo1_2')}"><input type="checkbox" x-model="c"><label>Tutte le automazioni GHL testate in produzione</label></li>
+          <li x-data="{c:$persist(false).as('mo1_3')}"><input type="checkbox" x-model="c"><label>Campagne ottimizzate basandosi sui primi dati</label></li>
+          <li x-data="{c:$persist(false).as('mo1_4')}"><input type="checkbox" x-model="c"><label>Feedback del cliente raccolto e documentato in Drive</label></li>
+          <li x-data="{c:$persist(false).as('mo1_5')}"><input type="checkbox" x-model="c"><label>Piano del secondo mese pronto</label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 3: GHL ===== -->
+    <section class="module" :class="active==='m3'?'active':''">
+      <div class="mod-header"><span class="mod-num">M3</span></div>
+      <h1>GoHighLevel</h1>
+      <p class="subtitle">Il CRM è il centro operativo del cliente. Qui vivono i lead, le automazioni e il calendario. Tienilo pulito e aggiornato.</p>
+
+      <h2>Struttura di un Account GHL</h2>
+      <div class="card">
+        <p><strong>Location</strong> → è il sub-account del cliente. Ha un location_id univoco. Non mescolare mai dati tra location diverse.</p>
+        <p><strong>Pipeline</strong> → il funnel dei lead, diviso in stage. Ogni stage ha un significato preciso. Non spostare i lead a caso — ogni movimento deve riflettere un'azione reale.</p>
+        <p><strong>Contatti</strong> → il database. Ogni contatto ha tag, note, storico delle interazioni. Più è ricco, meglio funzionano le automazioni.</p>
+        <p><strong>Workflow</strong> → le automazioni. Un trigger avvia una sequenza di azioni. Ogni workflow deve essere documentato: cosa fa, quando si avvia, su chi si applica.</p>
+      </div>
+
+      <h2>Gestione della Pipeline</h2>
+      <p>La pipeline non è una lista di persone. È la mappa dello stato reale di ogni relazione commerciale. Ogni stage deve corrispondere a un'azione verificabile.</p>
+
+      <table>
+        <thead><tr><th>Stage tipico</th><th>Significato</th><th>Quando muovere</th></tr></thead>
+        <tbody>
+          <tr><td>Nuovo Lead</td><td>Appena entrato, non ancora contattato</td><td>Automatico, all'opt-in</td></tr>
+          <tr><td>Contattato</td><td>Primo contatto inviato</td><td>Dopo il primo WhatsApp/email</td></tr>
+          <tr><td>Risposto</td><td>Ha risposto al primo messaggio</td><td>Quando arriva la risposta</td></tr>
+          <tr><td>Call Prenotata</td><td>Appuntamento fissato in calendario</td><td>Quando l'appuntamento è confermato</td></tr>
+          <tr><td>Cliente</td><td>Contratto firmato</td><td>Solo dopo conferma del responsabile</td></tr>
+          <tr><td>Non Interessato</td><td>Ha detto no, non adatto</td><td>Dopo risposta negativa esplicita</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Workflow e Automazioni</h2>
+
+      <div class="box box-info">
+        <div class="box-label">Come funziona un workflow</div>
+        <p>Trigger (es. nuovo lead da landing page) → Condizione (es. ha il tag "meta-ads") → Azione (es. invia WhatsApp di benvenuto, attendi 1 giorno, invia email follow-up).</p>
+      </div>
+
+      <p>Prima di modificare un workflow attivo:</p>
+      <ol class="steps">
+        <li><div><div class="step-text">Disattiva il workflow</div><div class="step-detail">Non modificare mai un workflow mentre è attivo in produzione. Disattivalo prima.</div></div></li>
+        <li><div><div class="step-text">Fai la modifica</div><div class="step-detail">Cambia solo quello che è necessario. Non toccare step che non riguardano la modifica richiesta.</div></div></li>
+        <li><div><div class="step-text">Testa con un contatto fittizio</div><div class="step-detail">Crea un contatto di test, fallo passare nel workflow, verifica ogni step.</div></div></li>
+        <li><div><div class="step-text">Riattiva</div><div class="step-detail">Solo dopo aver verificato che il test ha funzionato correttamente.</div></div></li>
+      </ol>
+
+      <h2><span class="tag tag-ai">AI</span> Claude per GHL</h2>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Email di Follow-up</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Scrivi un'email di follow-up per un cliente che non risponde da 5 giorni.
+Tono: professionale e caldo, non pressante.
+Business: [tipo di attività].
+Ultimo contatto: [argomento dell'ultimo messaggio].
+Obiettivo: riaprire la conversazione con una domanda aperta.
+Massimo 80 parole. No emoji.
+Includi l'oggetto dell'email come prima riga.</pre>
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — SMS Automazione</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Scrivi un SMS di benvenuto per un nuovo lead che ha lasciato i dati su una landing page.
+Business: [tipo di attività].
+Tono: caldo, diretto, non commerciale.
+Massimo 160 caratteri.
+Usa la variabile {{contact.first_name}} per il nome.
+Termina con una domanda che invita a rispondere.</pre>
+      </div>
+
+      <h2>Checklist Giornaliera GHL</h2>
+
+      <div class="cl-section">
+        <h4>☀️ Check Mattutino — ogni giorno lavorativo</h4>
+        <div class="storage-note">💾 Reset questa checklist ogni mattina — le spunte di ieri non contano</div>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('ghl_d1')}"><input type="checkbox" x-model="c"><label>Nessuna chat non letta da più di 3 giorni (su tutti i clienti attivi)</label></li>
+          <li x-data="{c:$persist(false).as('ghl_d2')}"><input type="checkbox" x-model="c"><label>Nuovi lead della notte assegnati alla pipeline con tag corretto</label></li>
+          <li x-data="{c:$persist(false).as('ghl_d3')}"><input type="checkbox" x-model="c"><label>Workflow — nessun errore nella sezione "Execution Logs"</label></li>
+          <li x-data="{c:$persist(false).as('ghl_d4')}"><input type="checkbox" x-model="c"><label>Appuntamenti del giorno confermati in calendario</label></li>
+          <li x-data="{c:$persist(false).as('ghl_d5')}"><input type="checkbox" x-model="c"><label>Follow-up pianificati per la giornata eseguiti</label></li>
+        </ul>
+      </div>
+
+      <h2>Errori Comuni GHL</h2>
+
+      <table>
+        <thead><tr><th>Problema</th><th>Causa probabile</th><th>Soluzione</th></tr></thead>
+        <tbody>
+          <tr><td>Workflow non si avvia</td><td>Trigger non configurato correttamente o workflow disattivo</td><td>Controlla status (attivo/disattivo) e le condizioni del trigger. Esegui test manuale.</td></tr>
+          <tr><td>Lead non entra in pipeline</td><td>Tag mancante o filtro pipeline non corrispondente</td><td>Verifica i tag del contatto e i criteri di accesso alla pipeline.</td></tr>
+          <tr><td>Email non arriva</td><td>Dominio non verificato o email nel spam</td><td>Controlla impostazioni dominio nel sub-account. Testa con email personale.</td></tr>
+          <tr><td>Calendario non mostra disponibilità</td><td>Orari non configurati o timezone sbagliata</td><td>Settings → Calendars → verifica orari e timezone del cliente.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="escalation">
+        <h4>Quando Escalare su GHL</h4>
+        <ul>
+          <li>Workflow rotto che ha già impattato più di 10 contatti → escala entro 2 ore</li>
+          <li>Lead persi a causa di un errore di automazione → escala subito con screenshot</li>
+          <li>Non riesci a risolvere un problema tecnico dopo 4 ore → escala</li>
+          <li>Modifiche alla pipeline richieste dal cliente → non agire da solo, escala per approvazione</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 4: SOCIAL ORGANICO ===== -->
+    <section class="module" :class="active==='m4'?'active':''">
+      <div class="mod-header"><span class="mod-num">M4</span></div>
+      <h1>Social Organico</h1>
+      <p class="subtitle">Il contenuto organico costruisce fiducia nel tempo. Non genera risultati immediati — genera risultati costanti.</p>
+
+      <h2>Il Calendario Editoriale</h2>
+      <p>Il calendario editoriale è lo strumento principale di gestione dei contenuti. Vive su Google Sheets ed è condiviso con il cliente (in sola lettura).</p>
+
+      <table>
+        <thead><tr><th>Colonna</th><th>Contenuto</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><code>Data</code></td><td>Data di pubblicazione</td><td>Formato GG/MM/AAAA</td></tr>
+          <tr><td><code>Piattaforma</code></td><td>Instagram / Facebook / entrambi</td><td>—</td></tr>
+          <tr><td><code>Formato</code></td><td>Post / Reel / Story / Carosello</td><td>—</td></tr>
+          <tr><td><code>Argomento</code></td><td>Tema del contenuto (1 riga)</td><td>Basta l'idea, non il testo completo</td></tr>
+          <tr><td><code>Caption</code></td><td>Testo completo del post</td><td>Include CTA e hashtag</td></tr>
+          <tr><td><code>Status</code></td><td>Bozza / Approvato / Pubblicato</td><td>Non pubblicare senza "Approvato"</td></tr>
+          <tr><td><code>Link</code></td><td>URL del post pubblicato</td><td>Compilare dopo la pubblicazione</td></tr>
+        </tbody>
+      </table>
+
+      <div class="box box-warn">
+        <div class="box-label">Regola Fondamentale</div>
+        <p>Non pubblicare mai un contenuto con status "Bozza". Deve essere esplicitamente "Approvato" dal responsabile o dal cliente prima di andare online. In caso di dubbio, chiedi.</p>
+      </div>
+
+      <h2>Formati e Specifiche Tecniche</h2>
+
+      <table>
+        <thead><tr><th>Formato</th><th>Ratio</th><th>Risoluzione minima</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Post immagine</td><td>1:1 o 4:5</td><td>1080×1080 o 1080×1350</td><td>—</td></tr>
+          <tr><td>Reel</td><td>9:16</td><td>1080×1920</td><td>15–90 sec</td></tr>
+          <tr><td>Story</td><td>9:16</td><td>1080×1920</td><td>Max 15 sec per slide</td></tr>
+          <tr><td>Carosello</td><td>1:1</td><td>1080×1080 per slide</td><td>Max 10 slide</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Processo di Pubblicazione</h2>
+      <ol class="steps">
+        <li><div><div class="step-text">Scrivi la caption in bozza</div><div class="step-detail">Segui il brief del cliente. Se non c'è brief, usa le informazioni nella Scheda Cliente. Usa Claude se hai il blocco creativo (vedi prompt sotto).</div></div></li>
+        <li><div><div class="step-text">Verifica coerenza brand</div><div class="step-detail">Tono giusto? CTA presente? Hashtag pertinenti (max 20, mix tra ampi e di nicchia)? Nessun errore grammaticale?</div></div></li>
+        <li><div><div class="step-text">Aggiorna status a "Approvato"</div><div class="step-detail">O invia per approvazione se richiesto. Non procedere finché non c'è il via libera.</div></div></li>
+        <li><div><div class="step-text">Pubblica nel giorno e ora pianificati</div><div class="step-detail">Orari ottimali generali: martedì-giovedì 9-11 e 19-21. Verifica gli insights del profilo specifico per personalizzare.</div></div></li>
+        <li><div><div class="step-text">Aggiorna il calendario</div><div class="step-detail">Cambia status a "Pubblicato" e incolla il link al post nella colonna Link.</div></div></li>
+      </ol>
+
+      <h2><span class="tag tag-ai">AI</span> Claude per la Caption</h2>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Caption Instagram</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Scrivi una caption per Instagram per un'attività di [tipo di business].
+Argomento: [descrizione del contenuto visivo].
+Tono: [es. professionale e caldo / informale / autorevole].
+Target: [es. donne 35-50 anni, residenti locali].
+Include: una frase di apertura che cattura l'attenzione, 2-3 righe di corpo, una CTA chiara.
+Massimo 150 parole. No emoji eccessivi (max 3).</pre>
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Idee Contenuti</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Dammi 8 idee di contenuto per Instagram per [tipo di attività].
+Mese: [mese].
+Obiettivo: [es. aumentare la visibilità locale / promuovere un servizio specifico].
+Target: [target del cliente].
+Per ogni idea: formato (post/reel/carosello), argomento in 1 riga, angolo narrativo (perché funziona).
+Nessuna idea generica — ogni idea deve essere specifica per questo business.</pre>
+      </div>
+
+      <h2><span class="tag tag-ai">AI</span> Gemini per Trend e Ispirazione</h2>
+      <p>Usa Gemini (su Google) per trovare trend del momento nel settore del cliente, esempi di contenuti che stanno funzionando, e idee visive da proporre al graphic designer o al cliente.</p>
+      <p>Esempio: <em>"Quali trend di contenuto Instagram stanno funzionando per [settore] in Italia nel [mese/anno]?"</em></p>
+
+      <h2>Checklist Settimanale Social</h2>
+
+      <div class="cl-section">
+        <h4>📅 Ogni Lunedì</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('soc_w1')}"><input type="checkbox" x-model="c"><label>Tutti i post della settimana precedente pubblicati e link aggiornati su Sheets</label></li>
+          <li x-data="{c:$persist(false).as('soc_w2')}"><input type="checkbox" x-model="c"><label>Calendario settimana corrente completo e approvato</label></li>
+          <li x-data="{c:$persist(false).as('soc_w3')}"><input type="checkbox" x-model="c"><label>KPI settimana precedente registrati (reach, engagement, follower)</label></li>
+          <li x-data="{c:$persist(false).as('soc_w4')}"><input type="checkbox" x-model="c"><label>Bozze settimana successiva iniziate</label></li>
+        </ul>
+      </div>
+
+      <h2>Gestione Feedback del Cliente sui Contenuti</h2>
+
+      <div class="card">
+        <h3>Il cliente vuole cambiare un post già approvato</h3>
+        <p>Chiedi sempre il motivo prima di agire. Non perché devi discutere — ma perché capire il motivo ti permette di fare un lavoro migliore (e di evitare lo stesso errore la prossima volta). Poi modifica, aggiorna il calendario, richiedi la nuova approvazione.</p>
+      </div>
+
+      <div class="card">
+        <h3>Il cliente non approva e non spiega perché</h3>
+        <p>Chiedi: <em>"Cosa ti piacerebbe cambiare? Tono, argomento, visuale?"</em> Non indovinare. Un feedback vago genera una modifica sbagliata. Hai il diritto di chiedere una spiegazione per fare un lavoro migliore.</p>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 5: META ADS ===== -->
+    <section class="module" :class="active==='m5'?'active':''">
+      <div class="mod-header"><span class="mod-num">M5</span></div>
+      <h1>Meta Ads</h1>
+      <p class="subtitle">Facebook e Instagram Ads. Struttura, setup, ottimizzazione e quando agire — o non agire.</p>
+
+      <h2>Struttura della Campagna</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Campaign</h3>
+          <p>Definisce l'obiettivo: Awareness, Traffic, Leads, Conversions. Un obiettivo per campagna. Non mescolare.</p>
+        </div>
+        <div class="card">
+          <h3>Ad Set</h3>
+          <p>Definisce audience, budget, placement, schedule. Ogni variante di audience è un Ad Set separato.</p>
+        </div>
+        <div class="card">
+          <h3>Ad</h3>
+          <p>Il contenuto visivo + testo. Testa sempre 2-3 varianti per Ad Set. Lascia girare almeno 7 giorni prima di giudicare.</p>
+        </div>
+      </div>
+
+      <h2>Setup Iniziale</h2>
+      <ol class="steps">
+        <li><div><div class="step-text">Verifica il Pixel</div><div class="step-detail">Events Manager → il Pixel deve mostrare eventi recenti (PageView almeno). Se non c'è attività, il Pixel non è installato correttamente — segnala prima di procedere.</div></div></li>
+        <li><div><div class="step-text">Verifica l'account ads</div><div class="step-detail">Il cliente deve essere il proprietario dell'account ads. L'agenzia entra come Partner nel Business Manager. Non creare mai un nuovo account ads — usa sempre quello del cliente.</div></div></li>
+        <li><div><div class="step-text">Costruisci le audience</div><div class="step-detail">Custom: lista clienti esistenti + visitatori sito. Lookalike: 1-3% basato sulla Custom Audience migliore. Interest: come terza opzione, non come prima.</div></div></li>
+        <li><div><div class="step-text">Imposta il budget</div><div class="step-detail">Budget giornaliero sul Ad Set (non campagna). Inizia conservativo — puoi sempre aumentare. Non si diminuisce il budget durante la fase di apprendimento (prime 2 settimane).</div></div></li>
+      </ol>
+
+      <h2>KPI di Riferimento</h2>
+
+      <table>
+        <thead><tr><th>KPI</th><th class="td-green">Buono</th><th class="td-yellow">Attenzione</th><th class="td-red">Critico</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CTR</strong> (click-through rate)</td><td class="td-green">&gt;1.5%</td><td class="td-yellow">0.8–1.5%</td><td class="td-red">&lt;0.8%</td></tr>
+          <tr><td><strong>CPM</strong> (costo per 1000 impression)</td><td class="td-green">&lt;12€</td><td class="td-yellow">12–25€</td><td class="td-red">&gt;25€</td></tr>
+          <tr><td><strong>ROAS</strong> (ritorno sulla spesa ads)</td><td class="td-green">&gt;3.0</td><td class="td-yellow">1.5–3.0</td><td class="td-red">&lt;1.5</td></tr>
+          <tr><td><strong>Frequenza</strong></td><td class="td-green">&lt;3</td><td class="td-yellow">3–5</td><td class="td-red">&gt;5</td></tr>
+          <tr><td><strong>CPL</strong> (costo per lead)</td><td class="td-green">Sotto target</td><td class="td-yellow">1–1.5x target</td><td class="td-red">&gt;2x target</td></tr>
+        </tbody>
+      </table>
+
+      <div class="box box-warn">
+        <div class="box-label">Attenzione — ROAS su Meta</div>
+        <p>Il ROAS su Meta include le conversioni view-through (persone che hanno visto l'annuncio ma non cliccato). Questo può gonfiare il numero rispetto a Google. Leggi sempre il ROAS "Click-through only" per il dato più preciso.</p>
+      </div>
+
+      <h2><span class="tag tag-ai">AI</span> Claude per Meta Ads</h2>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Headline Annunci</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Scrivi 5 headline per un annuncio Meta Ads.
+Business: [tipo di attività].
+Offerta o servizio: [descrizione].
+Target: [chi vediamo l'annuncio].
+Obiettivo: [click / lead / acquisto].
+Massimo 40 caratteri per headline.
+Varia l'angolo: beneficio, curiosità, urgenza, domanda, prova sociale.</pre>
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Analisi Performance</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Analizza questi dati di performance Meta Ads e dimmi le 3 azioni prioritarie:
+Budget giornaliero: [X]€
+Spesa ultimi 14 giorni: [X]€
+Impressioni: [X]
+CTR: [X]%
+CPM: [X]€
+ROAS: [X]
+CPL o CPA: [X]€
+Considera il settore: [tipo di business].
+Dimmi: cosa sta funzionando, cosa non funziona, cosa cambiare per primo.</pre>
+      </div>
+
+      <h2>Regole di Ottimizzazione</h2>
+
+      <div class="card">
+        <h3>Settimana 1–2: Non toccare</h3>
+        <p>Meta ha bisogno di un periodo di apprendimento per ottimizzare la distribuzione. Modifiche nelle prime 2 settimane resettano l'apprendimento. Osserva i dati, prenditi appunti, non intervenire.</p>
+      </div>
+      <div class="card">
+        <h3>Da settimana 3: Intervieni con dati</h3>
+        <ul>
+          <li><strong>CTR &lt;0.8%</strong> → cambia la creatività (immagine/video). Il problema è l'annuncio, non l'audience.</li>
+          <li><strong>CPM &gt;25€</strong> → l'audience è troppo ristretta o il punteggio di qualità è basso. Allarga l'audience o cambia il contenuto.</li>
+          <li><strong>Frequenza &gt;5</strong> → l'audience è satura. Espandi o crea nuovi annunci.</li>
+          <li><strong>ROAS &lt;1.5 per 2 settimane</strong> → segnale serio. Analizza tutta la catena (annuncio → landing page → offerta).</li>
+        </ul>
+      </div>
+
+      <div class="escalation">
+        <h4>Quando Escalare su Meta Ads</h4>
+        <ul>
+          <li>ROAS sotto 1.5 per 2 settimane consecutive → avvisa entro 24 ore con screenshot</li>
+          <li>Account ads sospeso o annunci disapprovati → escala SUBITO (entro 30 minuti)</li>
+          <li>Budget esaurito prima del previsto (più del 20% in anticipo) → escala</li>
+          <li>Pixel che smette di registrare eventi → escala entro 4 ore</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 6: GOOGLE ADS ===== -->
+    <section class="module" :class="active==='m6'?'active':''">
+      <div class="mod-header"><span class="mod-num">M6</span></div>
+      <h1>Google Ads</h1>
+      <p class="subtitle">Le persone cercano. Google Ads ti mette davanti a loro nel momento esatto. La struttura è tutto.</p>
+
+      <h2>Struttura della Campagna</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Campaign</h3>
+          <p>Definisce il tipo (Search, Performance Max, Display) e il budget giornaliero. Un obiettivo, un tipo per campagna.</p>
+        </div>
+        <div class="card">
+          <h3>Ad Group</h3>
+          <p>Raggruppa keyword con lo stesso intento. Massimo 10–15 keyword per gruppo. Keyword troppo diverse = score basso.</p>
+        </div>
+        <div class="card">
+          <h3>Keyword + Ad</h3>
+          <p>Le keyword determinano quando appare l'annuncio. L'annuncio deve contenere le keyword principali nel titolo.</p>
+        </div>
+      </div>
+
+      <h2>Tipi di Campagna: Quando Usarli</h2>
+
+      <table>
+        <thead><tr><th>Tipo</th><th>Quando usarlo</th><th>Nota</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Search</strong></td><td>Sempre come prima campagna. Cattura la domanda esistente.</td><td>Più controllo, migliore per lead generation locale</td></tr>
+          <tr><td><strong>Performance Max</strong></td><td>Solo dopo che la Search ha dati (min. 30 conversioni/mese)</td><td>Google decide tutto. Meno controllo, più volume</td></tr>
+          <tr><td><strong>Display</strong></td><td>Remarketing o awareness, mai come prima campagna</td><td>Non porta lead diretti, rinforza la memoria del brand</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Match Type: La Regola Fondamentale</h2>
+
+      <table>
+        <thead><tr><th>Match Type</th><th>Sintassi</th><th>Quando si attiva</th><th>Uso consigliato</th></tr></thead>
+        <tbody>
+          <tr><td>Exact</td><td>[keyword]</td><td>Solo quel termine esatto</td><td>Keyword ad alto valore, massima precisione</td></tr>
+          <tr><td>Phrase</td><td>"keyword"</td><td>Varianti vicine con stesso significato</td><td>Default per la maggior parte delle keyword</td></tr>
+          <tr><td>Broad</td><td>keyword</td><td>Google decide — può essere molto lontano</td><td>Mai senza negative keywords massive</td></tr>
+        </tbody>
+      </table>
+
+      <div class="box box-error">
+        <div class="box-label">Errore Comune — Broad Match senza negative</div>
+        <p>Broad match senza negative keywords brucia il budget su ricerche irrilevanti. Se una campagna usa Broad match, la lista di negative keywords deve essere compilata e aggiornata ogni settimana guardando il report "Search Terms".</p>
+      </div>
+
+      <h2>Negative Keywords: Come e Quando</h2>
+      <p>Le negative keywords escludono ricerche irrilevanti. Vanno aggiornate ogni settimana guardando il report "Termini di ricerca" (Search Terms).</p>
+      <p><strong>Esempio:</strong> per un ristorante, aggiungi come negative: "ricetta", "come fare", "corso cucina", "video", "gratis", "lavoro".</p>
+
+      <h2>KPI di Riferimento</h2>
+
+      <table>
+        <thead><tr><th>KPI</th><th class="td-green">Buono</th><th class="td-yellow">Attenzione</th><th class="td-red">Critico</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Quality Score</strong></td><td class="td-green">7–10</td><td class="td-yellow">5–6</td><td class="td-red">&lt;5</td></tr>
+          <tr><td><strong>CTR (Search)</strong></td><td class="td-green">&gt;5%</td><td class="td-yellow">2–5%</td><td class="td-red">&lt;2%</td></tr>
+          <tr><td><strong>Impression Share</strong></td><td class="td-green">&gt;60%</td><td class="td-yellow">40–60%</td><td class="td-red">&lt;40%</td></tr>
+          <tr><td><strong>CPA</strong></td><td class="td-green">Sotto target</td><td class="td-yellow">1–2x target</td><td class="td-red">&gt;2x target</td></tr>
+        </tbody>
+      </table>
+
+      <div class="box box-warn">
+        <div class="box-label">Quality Score basso (&lt;5)</div>
+        <p>Significa che Google considera il tuo annuncio poco rilevante per la keyword. Conseguenza: paghi di più per ogni click. Soluzione: assicurati che la keyword principale appaia nel titolo dell'annuncio e che la landing page tratti esattamente quell'argomento.</p>
+      </div>
+
+      <h2><span class="tag tag-ai">AI</span> Claude per Google Ads</h2>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Keyword Research</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Suggerisci 20 keyword per Google Ads Search.
+Business: [tipo di attività].
+Città/area geografica: [dove opera].
+Lingua annunci: [italiano / spagnolo / altro].
+Escludi già: [keyword negative ovvie come "gratis", "lavoro", ecc.].
+Formato risposta: una keyword per riga, con match type consigliato tra parentesi [Exact / Phrase] e volume stimato (alto/medio/basso).</pre>
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Copy Annunci Search</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Scrivi 3 varianti di annuncio per Google Search.
+Business: [tipo di attività, città].
+Keyword principale: [keyword].
+Offerta o vantaggio principale: [cosa offre].
+Headlines: massimo 30 caratteri ciascuna (scrivi 3 per ogni variante).
+Descriptions: massimo 90 caratteri ciascuna (scrivi 2 per ogni variante).
+Includi la keyword nel primo headline di ogni variante.</pre>
+      </div>
+
+      <div class="escalation">
+        <h4>Quando Escalare su Google Ads</h4>
+        <ul>
+          <li>CPA sopra 2x il target per 2 settimane → avvisa con analisi</li>
+          <li>Account sospeso → escala SUBITO</li>
+          <li>Impression Share crollato improvvisamente (&gt;30% in una settimana) → escala</li>
+          <li>Quality Score &lt;3 su keyword strategiche → segnala con piano di correzione</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 7: KPI E REPORTING ===== -->
+    <section class="module" :class="active==='m7'?'active':''">
+      <div class="mod-header"><span class="mod-num">M7</span></div>
+      <h1>KPI e Reporting</h1>
+      <p class="subtitle">Misurare non è burocrazia. È l'unico modo per capire se stai producendo risultati o solo attività.</p>
+
+      <h2>Il Foglio KPI su Google Sheets</h2>
+      <p>Ogni cliente ha un file <code>02-KPI-Report.gsheet</code> in Drive con questa struttura:</p>
+
+      <table>
+        <thead><tr><th>Tab</th><th>Contenuto</th><th>Aggiornamento</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Dashboard</strong></td><td>Numeri chiave del mese con semafori (verde/giallo/rosso)</td><td>Settimanale</td></tr>
+          <tr><td><strong>Meta Ads</strong></td><td>Spesa, impressioni, CTR, CPM, ROAS, CPL per mese</td><td>Mensile (dati definitivi)</td></tr>
+          <tr><td><strong>Google Ads</strong></td><td>Spesa, click, CTR, Quality Score medio, CPA per mese</td><td>Mensile</td></tr>
+          <tr><td><strong>Social Organico</strong></td><td>Follower, reach, engagement rate, post pubblicati</td><td>Mensile</td></tr>
+          <tr><td><strong>GHL</strong></td><td>Nuovi lead, lead convertiti, tasso di conversione</td><td>Mensile</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Cadenza di Aggiornamento</h2>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3>Giornaliero — 5 minuti</h3>
+          <p>Controlla anomalie. Se un numero è fuori scala rispetto al giorno precedente (spesa raddoppiata, zero click), indaga subito. Non aspettare il report mensile.</p>
+        </div>
+        <div class="card">
+          <h3>Settimanale — 20 minuti</h3>
+          <p>Aggiorna la Dashboard con i numeri della settimana. Scrivi un brief di 3 righe per il responsabile: cosa è andato bene, cosa è da monitorare, cosa stai facendo.</p>
+        </div>
+        <div class="card">
+          <h3>Mensile — 1-2 ore</h3>
+          <p>Report completo: tutti i tab aggiornati, analisi dei trend, confronto mese precedente, raccomandazioni per il mese successivo.</p>
+        </div>
+      </div>
+
+      <h2>Come Si Legge un KPI: Esempio Pratico</h2>
+
+      <div class="card" style="border-left:3px solid var(--accent)">
+        <h3>Scenario: Il ROAS di Meta scende da 2.8 a 2.1</h3>
+        <p><strong>Cosa vedi:</strong> ROAS Meta questo mese 2.1. Il mese scorso era 2.8. Stai spendendo di più per gli stessi risultati.</p>
+        <p><strong>Non fare:</strong> non spegnere la campagna. Non alzare il budget pensando "forse non arriva abbastanza". Non comunicare al cliente "le ads non funzionano".</p>
+        <p><strong>Fai questo:</strong></p>
+        <ol style="margin-left:20px;color:#cbd5e1;margin-top:8px">
+          <li>Guarda se il CPM è aumentato (possibile aumento competitività stagionale)</li>
+          <li>Guarda il CTR — è sceso? Problema di creatività</li>
+          <li>Guarda la frequenza — è salita? L'audience è satura</li>
+          <li>Confronta con lo stesso periodo del mese scorso — c'era un evento o promozione?</li>
+          <li>Solo dopo aver trovato la causa → proponi un'azione</li>
+        </ol>
+      </div>
+
+      <h2><span class="tag tag-ai">AI</span> Claude e NotebookLM per il Reporting</h2>
+
+      <div class="prompt-block">
+        <div class="prompt-header"><span>Prompt — Sintesi Report Mensile</span><button class="copy-btn" onclick="copyPrompt(this)">Copia</button></div>
+        <pre>Scrivi un paragrafo di sintesi per il report mensile da inviare al cliente.
+Dati Meta Ads: spesa [X]€, ROAS [X], CPL [X]€ ([+/-X]% vs mese scorso).
+Dati Google Ads: spesa [X]€, CPA [X]€, CTR [X]%.
+Social: [X] post pubblicati, reach medio [X], engagement [X]%.
+Tono: professionale, diretto, ottimista ma onesto.
+Evidenzia: il risultato migliore del mese e il punto di miglioramento.
+Massimo 150 parole. No gergo tecnico — il cliente deve capire tutto.</pre>
+      </div>
+
+      <div class="box box-info">
+        <div class="box-label">NotebookLM per il Cliente</div>
+        <p>Crea un notebook NotebookLM per ogni cliente attivo. Carica i report mensili come fonti. Dopo 3-4 mesi puoi interrogarlo per trovare trend, anomalie e pattern che non vedresti guardando un solo mese.</p>
+      </div>
+
+      <h2>Quando i Numeri Sono Negativi</h2>
+      <p>Non nasconderli. Il cliente se ne accorge comunque — e se lo scopre da solo, perde fiducia. I numeri negativi presentati con una causa e un piano d'azione sono gestibili. I numeri negativi scoperti senza preavviso sono crisi.</p>
+
+      <div class="card" style="border-left:3px solid var(--yellow)">
+        <h3>Template per Numeri Negativi</h3>
+        <p><em>"Il KPI [X] è calato del [Y]% rispetto al mese scorso. Causa probabile: [analisi breve — es. stagionalità, cambio algoritmo, creative stanche]. Azione in corso: [cosa stai già facendo]. Obiettivo: recupero entro [timeframe]. Ti aggiorno la prossima settimana."</em></p>
+      </div>
+    </section>
+
+    <!-- ===== MODULO 8: AI REFERENCE ===== -->
+    <section class="module" :class="active==='m8'?'active':''">
+      <div class="mod-header"><span class="mod-num">M8</span></div>
+      <h1>Strumenti AI — Reference Rapida</h1>
+      <p class="subtitle">Questa è una pagina di riferimento. I prompt completi vivono nei moduli operativi. Usa questa pagina per lookup veloci.</p>
+
+      <div class="box box-warn">
+        <div class="box-label">Regola Unica</div>
+        <p>L'AI <strong>propone</strong>, tu <strong>decidi</strong>. Non pubblicare mai output di AI senza averlo letto, verificato e adattato al contesto del cliente. L'AI velocizza il lavoro — non lo sostituisce.</p>
+      </div>
+
+      <h2>Claude — Quando Usarlo</h2>
+      <table>
+        <thead><tr><th>Scenario</th><th>Dove trovi il prompt</th></tr></thead>
+        <tbody>
+          <tr><td>Scrivere caption social</td><td>→ M4</td></tr>
+          <tr><td>Generare idee di contenuto</td><td>→ M4</td></tr>
+          <tr><td>Scrivere email o SMS per GHL</td><td>→ M3</td></tr>
+          <tr><td>Headline e copy per Meta Ads</td><td>→ M5</td></tr>
+          <tr><td>Analisi performance Meta</td><td>→ M5</td></tr>
+          <tr><td>Keyword e copy per Google Ads</td><td>→ M6</td></tr>
+          <tr><td>Sintesi report mensile</td><td>→ M7</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Gemini — Quando Usarlo</h2>
+      <table>
+        <thead><tr><th>Scenario</th><th>Come</th></tr></thead>
+        <tbody>
+          <tr><td>Trovare trend di contenuto nel settore</td><td>Ricerca Google con prompt specifico</td></tr>
+          <tr><td>Generare idee visive per i post</td><td>Gemini Advanced con descrizione dettagliata</td></tr>
+          <tr><td>Analizzare dati su Google Sheets</td><td>Gemini integrato in Sheets (funzione AI)</td></tr>
+          <tr><td>Ricerca concorrenti e settore</td><td>Google Search + Gemini Overview</td></tr>
+        </tbody>
+      </table>
+
+      <h2>NotebookLM — Quando Usarlo</h2>
+      <table>
+        <thead><tr><th>Scenario</th><th>Come</th></tr></thead>
+        <tbody>
+          <tr><td>Costruire una knowledge base del cliente</td><td>Crea un notebook, carica: brief, report, scheda cliente, note strategia</td></tr>
+          <tr><td>Trovare trend nei report storici</td><td>Carica i report degli ultimi mesi come fonti, fai domande specifiche</td></tr>
+          <tr><td>Preparare la risposta a una domanda del cliente</td><td>Interroga il notebook con la domanda del cliente</td></tr>
+          <tr><td>Onboarding su un nuovo cliente</td><td>Carica tutti i documenti esistenti, interroga per capire il contesto velocemente</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== APPENDICE A: AZIONI GIORNALIERE ===== -->
+    <section class="module" :class="active==='aa'?'active':''">
+      <div class="mod-header"><span class="mod-num">A</span></div>
+      <h1>Azioni Giornaliere</h1>
+      <p class="subtitle">Questa è la checklist del mattino. Aprila ogni giorno lavorativo prima di iniziare qualsiasi altro compito.</p>
+
+      <div class="box box-warn">
+        <div class="box-label">Nota sul reset</div>
+        <p>Questa checklist è pensata per essere usata ogni giorno. Le spunte di ieri non contano — resettale mentalmente ogni mattina e ricomincia da capo.</p>
+      </div>
+
+      <div class="cl-section">
+        <h4>☀️ Mattina — Prima di tutto il resto (max 15 minuti)</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('ag1')}"><input type="checkbox" x-model="c"><label>GHL — nessuna chat non letta da più di 3 giorni (tutti i clienti)</label></li>
+          <li x-data="{c:$persist(false).as('ag2')}"><input type="checkbox" x-model="c"><label>Meta Ads — nessun annuncio disapprovato o account con notifiche di errore</label></li>
+          <li x-data="{c:$persist(false).as('ag3')}"><input type="checkbox" x-model="c"><label>Google Ads — nessuna campagna sospesa o con avvisi di policy</label></li>
+          <li x-data="{c:$persist(false).as('ag4')}"><input type="checkbox" x-model="c"><label>GHL — nuovi lead della notte assegnati alla pipeline con tag corretto</label></li>
+          <li x-data="{c:$persist(false).as('ag5')}"><input type="checkbox" x-model="c"><label>Calendario editoriale — contenuti di oggi programmati e pronti</label></li>
+        </ul>
+        <div class="cl-note">Se trovi qualcosa di anomalo in questi 5 punti, gestiscilo prima di passare ad altro.</div>
+      </div>
+
+      <div class="cl-section">
+        <h4>🌤️ Durante la Giornata</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('ag6')}"><input type="checkbox" x-model="c"><label>Follow-up GHL — contatta i lead programmati per oggi</label></li>
+          <li x-data="{c:$persist(false).as('ag7')}"><input type="checkbox" x-model="c"><label>Pubblica i contenuti social pianificati per oggi</label></li>
+          <li x-data="{c:$persist(false).as('ag8')}"><input type="checkbox" x-model="c"><label>Rispondi ai messaggi dei clienti entro 3 ore (nelle ore lavorative)</label></li>
+          <li x-data="{c:$persist(false).as('ag9')}"><input type="checkbox" x-model="c"><label>Aggiorna il calendario editoriale con status "Pubblicato" + link</label></li>
+        </ul>
+      </div>
+
+      <div class="cl-section">
+        <h4>🌙 Fine Giornata — 5 minuti</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('ag10')}"><input type="checkbox" x-model="c"><label>Nessuna task urgente aperta senza risposta pianificata</label></li>
+          <li x-data="{c:$persist(false).as('ag11')}"><input type="checkbox" x-model="c"><label>Note sulla giornata aggiornate (se necessario) in Drive</label></li>
+          <li x-data="{c:$persist(false).as('ag12')}"><input type="checkbox" x-model="c"><label>Domani pianificato — sai già qual è la prima cosa che farai</label></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== APPENDICE B: SCHEDA CLIENTE ===== -->
+    <section class="module" :class="active==='ab'?'active':''">
+      <div class="mod-header"><span class="mod-num">B</span></div>
+      <h1>Scheda Cliente Template</h1>
+      <p class="subtitle">Compila questa scheda all'onboarding e aggiornala ogni mese. È il documento di riferimento per tutto il lavoro su questo cliente.</p>
+
+      <div class="card">
+        <h3>Dati Identificativi</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:200px;color:var(--muted)">Nome business</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Settore</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Città / Area</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Referente (nome)</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">WhatsApp referente</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Email referente</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Data inizio servizio</td><td>_______________</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Account e Accessi</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:200px;color:var(--muted)">GHL location_id</td><td style="font-family:monospace;color:var(--accent)">_______________</td></tr>
+            <tr><td style="color:var(--muted)">Meta Business Manager ID</td><td style="font-family:monospace">_______________</td></tr>
+            <tr><td style="color:var(--muted)">Google Ads Account ID</td><td style="font-family:monospace">_______________</td></tr>
+            <tr><td style="color:var(--muted)">Drive folder (link)</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Instagram @</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Facebook Page</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Sito web</td><td>_______________</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Obiettivi e Target</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:200px;color:var(--muted)">Obiettivo principale</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">KPI prioritario</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Target cliente</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Area geografica target</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Stagionalità (se applicabile)</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Concorrenti principali</td><td>_______________</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Brand e Tono</h3>
+        <table>
+          <tbody>
+            <tr><td style="width:200px;color:var(--muted)">Colori brand (hex)</td><td style="font-family:monospace">_______________</td></tr>
+            <tr><td style="color:var(--muted)">Font principale</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Tono comunicazione</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Argomenti da evitare</td><td>_______________</td></tr>
+            <tr><td style="color:var(--muted)">Hashtag fissi</td><td>_______________</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Note Operative</h3>
+        <p style="color:var(--muted);font-style:italic">Inserisci qui qualsiasi informazione operativa specifica per questo cliente: giorni di chiusura, preferenze di comunicazione, cose da non fare, accordi particolari con il responsabile.</p>
+        <div style="background:var(--card2);border-radius:6px;padding:12px;min-height:80px;color:var(--muted);font-style:italic;font-size:13px">[Spazio per note libere]</div>
+      </div>
+    </section>
+
+    <!-- ===== APPENDICE C: GLOSSARIO ===== -->
+    <section class="module" :class="active==='ac'?'active':''">
+      <div class="mod-header"><span class="mod-num">C</span></div>
+      <h1>Glossario KPI</h1>
+      <p class="subtitle">Definizioni brevi e pratiche. Quando il significato cambia tra piattaforme, lo trovi indicato.</p>
+
+      <h2>Metriche Generali</h2>
+      <table>
+        <thead><tr><th>Termine</th><th>Definizione</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Impressioni</strong></td><td>Quante volte il contenuto/annuncio è stato mostrato. Un utente può generare più impressioni.</td></tr>
+          <tr><td><strong>Reach</strong></td><td>Quante persone <em>distinte</em> hanno visto il contenuto. Sempre ≤ impressioni.</td></tr>
+          <tr><td><strong>Engagement</strong></td><td>Interazioni totali (like, commenti, condivisioni, salvataggi). Misura la risposta emotiva al contenuto.</td></tr>
+          <tr><td><strong>Engagement Rate</strong></td><td>Engagement / Reach × 100. Un contenuto con 1.000 reach e 50 interazioni ha un ER del 5%.</td></tr>
+          <tr><td><strong>Conversione</strong></td><td>Un'azione desiderata completata: compilazione form, click su un link, acquisto, telefonata.</td></tr>
+          <tr><td><strong>Tasso di conversione</strong></td><td>Conversioni / Visite × 100. Se 100 persone visitano la landing e 3 compilano il form: 3%.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Meta Ads</h2>
+      <table>
+        <thead><tr><th>Termine</th><th>Definizione</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CPM</strong></td><td>Costo per 1.000 impressioni</td><td>Misura il costo di visibilità. Alto CPM = audience molto competitiva.</td></tr>
+          <tr><td><strong>CPC</strong></td><td>Costo per click</td><td>—</td></tr>
+          <tr><td><strong>CTR</strong></td><td>Click / Impressioni × 100</td><td>Su Meta considera il CTR "Link Click" (non "All clicks")</td></tr>
+          <tr><td><strong>ROAS</strong></td><td>Fatturato ads / Spesa ads</td><td>⚠️ Su Meta include le conversioni view-through. Per dati più precisi usa "Click-through ROAS"</td></tr>
+          <tr><td><strong>CPL</strong></td><td>Costo per lead generato</td><td>Spesa totale / numero di lead ottenuti</td></tr>
+          <tr><td><strong>Frequenza</strong></td><td>Impressioni / Reach</td><td>Quante volte la stessa persona ha visto l'annuncio. Sopra 5 l'audience è satura.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Google Ads</h2>
+      <table>
+        <thead><tr><th>Termine</th><th>Definizione</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Quality Score</strong></td><td>Punteggio 1–10 di Google sulla rilevanza dell'annuncio</td><td>Influenza il costo. QS 7+ = prezzi migliori.</td></tr>
+          <tr><td><strong>Impression Share</strong></td><td>% delle impression ottenute vs. disponibili</td><td>Basso = perdi visibilità per budget o punteggio basso</td></tr>
+          <tr><td><strong>CPA</strong></td><td>Costo per acquisizione (conversione)</td><td>—</td></tr>
+          <tr><td><strong>ROAS</strong></td><td>Fatturato / Spesa</td><td>Su Google è solo click-through, non include view-through come Meta</td></tr>
+          <tr><td><strong>CTR (Search)</strong></td><td>Click / Impressioni</td><td>Target: >5% per campagne Search locali ben strutturate</td></tr>
+          <tr><td><strong>Search Terms</strong></td><td>Le ricerche reali che hanno triggerato il tuo annuncio</td><td>Controllare ogni settimana per aggiornare negative keywords</td></tr>
+        </tbody>
+      </table>
+
+      <h2>GHL e CRM</h2>
+      <table>
+        <thead><tr><th>Termine</th><th>Definizione</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Lead</strong></td><td>Persona che ha espresso interesse (compilato un form, scritto in chat, chiamato)</td></tr>
+          <tr><td><strong>Tasso di conversione lead→cliente</strong></td><td>Lead diventati clienti / Totale lead × 100</td></tr>
+          <tr><td><strong>Pipeline</strong></td><td>Il percorso che fa un lead dalla prima interazione fino a diventare cliente</td></tr>
+          <tr><td><strong>Stage</strong></td><td>Una fase della pipeline. Ogni lead si trova sempre in un solo stage alla volta</td></tr>
+          <tr><td><strong>Workflow</strong></td><td>Sequenza automatica di azioni avviata da un trigger (nuovo lead, tag aggiunto, ecc.)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===== APPENDICE D: AUTO-CERTIFICAZIONE ===== -->
+    <section class="module" :class="active==='ad'?'active':''">
+      <div class="mod-header"><span class="mod-num">D</span></div>
+      <h1>Auto-Certificazione</h1>
+      <p class="subtitle">Completa questa checklist dopo aver finito la Settimana 4 del percorso di lettura. Poi invia conferma al responsabile.</p>
+
+      <div class="box box-info">
+        <div class="box-label">Come si usa</div>
+        <p>Spunta ogni punto solo se puoi rispondere "sì" con certezza. Se hai dei "no", torna al modulo corrispondente, rileggi, e completa il punto prima di procedere. Poi invia uno screenshot di questa pagina al responsabile su WhatsApp con il messaggio: <strong>"Manuale completato ✓"</strong>.</p>
+      </div>
+
+      <div class="cl-section">
+        <h4>M0 — Il Metodo</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('cert_01')}"><input type="checkbox" x-model="c"><label>Conosco la differenza tra esecutore di task e operativo con metodo</label></li>
+          <li x-data="{c:$persist(false).as('cert_02')}"><input type="checkbox" x-model="c"><label>So quali argomenti non sono di mia competenza (commerciale, prezzi, rinnovi)</label></li>
+          <li x-data="{c:$persist(false).as('cert_03')}"><input type="checkbox" x-model="c"><label>Conosco le regole di comunicazione con il cliente (tono, canali, tempi)</label></li>
+        </ul>
+      </div>
+
+      <div class="cl-section">
+        <h4>M1 — Il Tuo Ruolo</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('cert_11')}"><input type="checkbox" x-model="c"><label>So citare a memoria lo scopo del mio ruolo</label></li>
+          <li x-data="{c:$persist(false).as('cert_12')}"><input type="checkbox" x-model="c"><label>Conosco i 5 KPI settimanali che misurano il mio lavoro</label></li>
+          <li x-data="{c:$persist(false).as('cert_13')}"><input type="checkbox" x-model="c"><label>Conosco le soglie di escalation e quando coinvolgere il responsabile</label></li>
+        </ul>
+      </div>
+
+      <div class="cl-section">
+        <h4>M2 — Onboarding Cliente</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('cert_21')}"><input type="checkbox" x-model="c"><label>So creare la struttura Drive standard per un nuovo cliente</label></li>
+          <li x-data="{c:$persist(false).as('cert_22')}"><input type="checkbox" x-model="c"><label>So verificare il location_id GHL prima di iniziare qualsiasi operazione</label></li>
+          <li x-data="{c:$persist(false).as('cert_23')}"><input type="checkbox" x-model="c"><label>Conosco la checklist Day 1 / Week 1 / Month 1</label></li>
+        </ul>
+      </div>
+
+      <div class="cl-section">
+        <h4>M3-M6 — Strumenti Operativi</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('cert_31')}"><input type="checkbox" x-model="c"><label>So navigare la pipeline GHL e spostare i lead correttamente</label></li>
+          <li x-data="{c:$persist(false).as('cert_32')}"><input type="checkbox" x-model="c"><label>So gestire il calendario editoriale su Sheets (creazione, aggiornamento)</label></li>
+          <li x-data="{c:$persist(false).as('cert_33')}"><input type="checkbox" x-model="c"><label>Conosco la struttura Campaign → AdSet → Ad su Meta</label></li>
+          <li x-data="{c:$persist(false).as('cert_34')}"><input type="checkbox" x-model="c"><label>Conosco i 3 match type di Google e quando usarli</label></li>
+          <li x-data="{c:$persist(false).as('cert_35')}"><input type="checkbox" x-model="c"><label>So leggere e interpretare i KPI di riferimento di Meta e Google</label></li>
+        </ul>
+      </div>
+
+      <div class="cl-section">
+        <h4>M7 — Reporting</h4>
+        <ul class="checklist">
+          <li x-data="{c:$persist(false).as('cert_41')}"><input type="checkbox" x-model="c"><label>So costruire il foglio KPI standard su Sheets</label></li>
+          <li x-data="{c:$persist(false).as('cert_42')}"><input type="checkbox" x-model="c"><label>So quando e come comunicare numeri negativi al cliente</label></li>
+          <li x-data="{c:$persist(false).as('cert_43')}"><input type="checkbox" x-model="c"><label>So usare Claude per scrivere la sintesi del report mensile</label></li>
+        </ul>
+      </div>
+
+      <div class="box box-tip" style="margin-top:24px">
+        <div class="box-label">Prossimo Passo</div>
+        <p>Fai uno screenshot di questa pagina con tutte le spunte e invialo al responsabile su WhatsApp con il messaggio: <strong>"Manuale completato ✓"</strong>. Questo sblocca l'assegnazione autonoma di un primo cliente reale.</p>
+      </div>
+    </section>
+
+    <!-- ===== APPENDICE E: CHANGELOG ===== -->
+    <section class="module" :class="active==='ae'?'active':''">
+      <div class="mod-header"><span class="mod-num">E</span></div>
+      <h1>Changelog</h1>
+      <p class="subtitle">Storico delle revisioni. Controlla questa pagina se hai dubbi su quando un modulo è stato aggiornato.</p>
+
+      <div class="box box-warn">
+        <div class="box-label">Come viene aggiornato questo manuale</div>
+        <p>Il responsabile aggiorna il manuale quando cambiano procedure, piattaforme o politiche. Ogni modifica viene registrata qui con data e descrizione. Se stai leggendo una sezione e qualcosa non torna con la realtà operativa, segnalalo — potrebbe essere un aggiornamento mancante.</p>
+      </div>
+
+      <table>
+        <thead><tr><th>Data</th><th>Versione</th><th>Modulo/i</th><th>Descrizione modifica</th></tr></thead>
+        <tbody>
+          <tr><td>30/04/2026</td><td>v1.0</td><td>Tutti</td><td>Prima versione rilasciata</td></tr>
+          <tr><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td><td style="color:var(--muted);font-style:italic">Prossimo aggiornamento</td></tr>
+        </tbody>
+      </table>
+
+      <div class="box box-info" style="margin-top:24px">
+        <div class="box-label">Ultima Revisione</div>
+        <p>Versione 1.0 — 30 aprile 2026</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function app() {
+  return {
+    active: localStorage.getItem('manuale_active') || 'path',
+    go(id) {
+      this.active = id;
+      localStorage.setItem('manuale_active', id);
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+      window.scrollTo(0,0);
+    }
+  }
+}
+
+function copyPrompt(btn) {
+  const pre = btn.closest('.prompt-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copiato!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copia'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
