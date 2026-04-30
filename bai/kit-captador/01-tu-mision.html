@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 — Tu Misión | Kit Captador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --bg-card: #1a1d27; --border: #2d3148;
+    --text: #e8eaf0; --text-muted: #8b8fa8; --accent: #6c63ff;
+    --green: #00d4aa; --red: #ff6b6b; --yellow: #ffd166;
+    --accent-light: rgba(108,99,255,0.12); --green-light: rgba(0,212,170,0.12);
+    --red-light: rgba(255,107,107,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; }
+  .nav { background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .nav-back { color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; min-height: 44px; }
+  .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 12px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; min-height: 44px; display: flex; align-items: center; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); border-color: var(--accent); }
+  .nav-links a.active { background: var(--accent-light); }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 20px 60px; }
+  .module-hero { margin-bottom: 48px; }
+  .module-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .module-title { font-size: clamp(28px,5vw,42px); font-weight: 900; line-height: 1.15; margin-bottom: 14px; }
+  .module-lead { font-size: 18px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  .section { margin-bottom: 56px; }
+  .section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  h2 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; padding-left: 16px; border-left: 3px solid var(--accent); }
+  h3 { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+  p { margin-bottom: 16px; color: var(--text-muted); }
+  p strong { color: var(--text); }
+
+  /* FLOW STEPS */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .flow-step { display: flex; gap: 20px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--border); }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-col { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .flow-num { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 900; color: #fff; font-family: 'JetBrains Mono', monospace; }
+  .flow-num.you { background: linear-gradient(135deg, var(--accent) 0%, #9c63ff 100%); }
+  .flow-num.marco { background: var(--bg-card); border: 2px solid var(--border); color: var(--text-muted); font-size: 14px; }
+  .flow-line { width: 2px; flex: 1; min-height: 16px; background: var(--border); margin-top: 6px; }
+  .flow-step:last-child .flow-line { display: none; }
+  .flow-body { flex: 1; padding-bottom: 6px; }
+  .flow-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 100px; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .flow-tag.you { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(108,99,255,0.3); }
+  .flow-tag.marco { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+  .flow-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .flow-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+  /* SINO TABLE */
+  .sino-table-wrapper { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 16px; }
+  .sino-table { width: 100%; border-collapse: collapse; }
+  .sino-table th { padding: 12px 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-align: left; }
+  .sino-table th.si { background: rgba(0,212,170,0.12); color: var(--green); border-bottom: 2px solid rgba(0,212,170,0.3); }
+  .sino-table th.no { background: rgba(255,107,107,0.1); color: var(--red); border-bottom: 2px solid rgba(255,107,107,0.25); }
+  .sino-table td { padding: 13px 20px; font-size: 15px; color: var(--text-muted); border-bottom: 1px solid var(--border); vertical-align: top; }
+  .sino-table td:first-child { border-right: 1px solid var(--border); }
+  .sino-table tr:last-child td { border-bottom: none; }
+  .sino-table td .check { color: var(--green); font-weight: 800; margin-right: 8px; }
+  .sino-table td .cross { color: var(--red); font-weight: 800; margin-right: 8px; }
+
+  /* CALL BOX */
+  .call-box { background: var(--bg-card); border: 1px solid rgba(255,209,102,0.3); border-radius: 16px; padding: 24px 28px; }
+  .call-box-title { font-size: 16px; font-weight: 800; color: var(--yellow); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .call-box p { margin-bottom: 0; }
+
+  /* GOLDEN RULES */
+  .rules-list { display: flex; flex-direction: column; gap: 14px; }
+  .rule-item { display: flex; gap: 18px; align-items: flex-start; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .rule-num { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--accent) 0%, #9c63ff 100%); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+  .rule-body { flex: 1; }
+  .rule-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .rule-desc { font-size: 14px; color: var(--text-muted); }
+
+  .next-module { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
+  .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
+
+  @media (max-width: 600px) {
+    .flow-step { flex-direction: column; gap: 12px; }
+    .flow-col { flex-direction: row; gap: 12px; align-items: center; }
+    .flow-line { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-back">← Volver al índice</a>
+    <div class="nav-links">
+      <a href="01-tu-mision.html" class="active">01</a>
+      <a href="02-el-prospecto.html">02</a>
+      <a href="03-el-chat.html">03</a>
+      <a href="04-como-agendar.html">04</a>
+      <a href="05-objeciones.html">05</a>
+      <a href="06-errores.html">06</a>
+      <a href="07-practica.html">07</a>
+      <a href="08-compensacion.html">08</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="module-hero">
+    <div class="module-num">Módulo 01</div>
+    <h1 class="module-title">Tu Misión.<br>Sin rodeos.</h1>
+    <p class="module-lead">Antes de aprender el script, tienes que entender exactamente qué se espera de ti — y qué no. La claridad de rol evita el 90% de los errores.</p>
+  </div>
+
+  <!-- FLUJO DEL PROCESO -->
+  <div class="section">
+    <div class="section-label">El proceso completo</div>
+    <h2>Cómo Funciona el Sistema</h2>
+    <p>El proceso tiene pasos distintos, y cada persona hace lo que le corresponde. Tu parte es la primera — y es la que hace que todo lo demás sea posible.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-col">
+          <div class="flow-num you">1</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-body">
+          <span class="flow-tag you">Tu trabajo</span>
+          <div class="flow-title">Encuentras al prospecto</div>
+          <div class="flow-desc">Identificas personas con un negocio propio que podrían necesitar ayuda para conseguir más clientes. Lo encuentras en tu entorno: eventos, contactos, referidos, redes sociales.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-col">
+          <div class="flow-num you">2</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-body">
+          <span class="flow-tag you">Tu trabajo</span>
+          <div class="flow-title">Lo cualificas en el chat</div>
+          <div class="flow-desc">Antes de proponer nada, verificas que encaja con el perfil: negocio propio, tiempo de actividad, señales de que quiere crecer. Si no pasa el filtro, no sigues. Tu tiempo vale.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-col">
+          <div class="flow-num you">3</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-body">
+          <span class="flow-tag you">Tu trabajo</span>
+          <div class="flow-title">Agendas la cita y das el contexto</div>
+          <div class="flow-desc">Propones una llamada de 20-30 minutos con Marco, confirmas el horario, y rellenas el formulario con todo lo que sabes del prospecto: tipo de negocio, qué le preocupa, cómo lo conociste.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-col">
+          <div class="flow-num marco">M</div>
+          <div class="flow-line"></div>
+        </div>
+        <div class="flow-body">
+          <span class="flow-tag marco">Marco</span>
+          <div class="flow-title">Hace la llamada de conocimiento</div>
+          <div class="flow-desc">Marco habla con el prospecto. Escucha su situación, entiende qué necesita y valora si puede ayudarle de verdad. Esta llamada no es una venta — es un diagnóstico.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-col">
+          <div class="flow-num marco">M</div>
+        </div>
+        <div class="flow-body">
+          <span class="flow-tag marco">Marco</span>
+          <div class="flow-title">Presenta la propuesta (si aplica)</div>
+          <div class="flow-desc">Si la persona encaja y Marco puede ayudarla, se agenda una segunda llamada donde se presenta la solución y se cierra el acuerdo. Tú ya no participas en esta parte.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TU ROL EN DETALLE -->
+  <div class="section">
+    <div class="section-label">Tu rol</div>
+    <h2>Qué Haces y Qué NO Haces</h2>
+    <p>Esta tabla es importante. Muchos errores vienen de hacer cosas que no te corresponden — con la mejor intención, pero con resultados malos.</p>
+
+    <div class="sino-table-wrapper">
+      <table class="sino-table">
+        <thead>
+          <tr>
+            <th class="si">✓ Tú haces esto</th>
+            <th class="no">✗ Esto NO te corresponde</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="check">✓</span>Hablar con personas y detectar si tienen un negocio propio</td>
+            <td><span class="cross">✗</span>Explicar en qué consiste el servicio</td>
+          </tr>
+          <tr>
+            <td><span class="check">✓</span>Hacer las preguntas de cualificación</td>
+            <td><span class="cross">✗</span>Decir el precio o hablar de dinero</td>
+          </tr>
+          <tr>
+            <td><span class="check">✓</span>Proponer la llamada de 20-30 minutos con Marco</td>
+            <td><span class="cross">✗</span>Defender el servicio si alguien lo cuestiona</td>
+          </tr>
+          <tr>
+            <td><span class="check">✓</span>Confirmar el horario y agendar la cita</td>
+            <td><span class="cross">✗</span>Hacer promesas sobre resultados</td>
+          </tr>
+          <tr>
+            <td><span class="check">✓</span>Rellenar el formulario con el contexto del prospecto</td>
+            <td><span class="cross">✗</span>Mandar PDFs, presentaciones o materiales</td>
+          </tr>
+          <tr>
+            <td><span class="check">✓</span>Hacer seguimiento si no responden</td>
+            <td><span class="cross">✗</span>Improvisar respuestas fuera del script</td>
+          </tr>
+          <tr>
+            <td><span class="check">✓</span>Avisar a Marco con el estado de cada prospecto</td>
+            <td><span class="cross">✗</span>Tomar decisiones sobre si alguien "merece" o no la llamada sin consultar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size: 14px;">¿Por qué estas limitaciones? No son restricciones arbitrarias. <strong>Cuanto más explicas, menos necesita la persona hablar con Marco.</strong> Tu función es crear curiosidad y urgencia para la llamada — no resolver dudas. Eso lo hace Marco en persona, donde puede escuchar, adaptar y responder con contexto real.</p>
+  </div>
+
+  <!-- QUE PASA EN LA LLAMADA -->
+  <div class="section">
+    <div class="section-label">Contexto útil</div>
+    <h2>Qué Pasa en la Llamada (Para Que Lo Sepas)</h2>
+    <p>No tienes que hacer la llamada, pero sí necesitas saber qué es — porque el prospecto puede preguntarte antes de aceptar.</p>
+
+    <div class="call-box">
+      <div class="call-box-title">📞 La llamada de conocimiento</div>
+      <p>Es una conversación de <strong>20-30 minutos</strong> entre el prospecto y Marco. Marco escucha la situación del negocio, entiende qué está intentando conseguir y qué no está funcionando. No es una presentación de ventas. Es un diagnóstico. El prospecto habla más que Marco.</p>
+      <p style="margin-top: 12px; margin-bottom: 0;">Si el prospecto pregunta "¿para qué es la llamada?", tú dices: <strong style="color: var(--text);">"Marco quiere entender bien tu situación antes de proponerte nada. Son 20-30 minutos, sin compromiso."</strong> Nada más.</p>
+    </div>
+  </div>
+
+  <!-- PRINCIPIOS -->
+  <div class="section">
+    <div class="section-label">Principios base</div>
+    <h2>Los 3 Principios de Este Trabajo</h2>
+
+    <div class="rules-list">
+      <div class="rule-item">
+        <div class="rule-num">1</div>
+        <div class="rule-body">
+          <div class="rule-title">Preguntas, no afirmaciones</div>
+          <div class="rule-desc">Tu trabajo es obtener información, no dar información. Cada mensaje tuyo debería terminar en una pregunta. El que pregunta controla la conversación — sin presionar.</div>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">2</div>
+        <div class="rule-body">
+          <div class="rule-title">Cualifica antes de proponer</div>
+          <div class="rule-desc">No propongas la cita a alguien que no ha pasado el filtro. Una cita mal cualificada hace perder tiempo a Marco — y hace que la persona llegue sin contexto. Peor que no haber agendado.</div>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">3</div>
+        <div class="rule-body">
+          <div class="rule-title">El objetivo es la cita, no la información</div>
+          <div class="rule-desc">No eres consultor, no eres el vendedor, no eres el soporte. Eres quien abre la puerta. Cuando alguien dice "sí" a la llamada, tu trabajo ya terminó — y lo hiciste bien.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="next-module">
+    <div>
+      <div style="font-size:13px; color: var(--text-muted); margin-bottom:4px;">Siguiente módulo</div>
+      <div style="font-size:18px; font-weight:800; color: var(--text);">El Prospecto Ideal</div>
+    </div>
+    <a href="02-el-prospecto.html">Módulo 02 →</a>
+  </div>
+
+  <footer class="footer">Formación Interna · Uso Exclusivo del Colaborador</footer>
+</div>
+</body>
+</html>

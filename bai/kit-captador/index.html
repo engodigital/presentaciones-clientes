@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit de Formación — Captador de Citas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --bg-card: #1a1d27; --border: #2d3148;
+    --text: #e8eaf0; --text-muted: #8b8fa8; --accent: #6c63ff;
+    --green: #00d4aa; --red: #ff6b6b; --yellow: #ffd166;
+    --accent-light: rgba(108,99,255,0.12); --green-light: rgba(0,212,170,0.12);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.7; min-height: 100vh; }
+
+  .nav { background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 16px; }
+  .nav-brand { font-weight: 800; font-size: 15px; color: var(--accent); letter-spacing: -0.3px; }
+  .nav-current { font-size: 13px; color: var(--text-muted); }
+
+  .hero { padding: 60px 20px 40px; text-align: center; max-width: 760px; margin: 0 auto; }
+  .hero-badge { display: inline-block; background: var(--accent-light); color: var(--accent); border: 1px solid rgba(108,99,255,0.3); padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px; }
+  .hero-brand { font-size: clamp(14px,4vw,18px); font-weight: 900; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .hero-title { font-size: clamp(28px,6vw,48px); font-weight: 900; line-height: 1.15; margin-bottom: 16px; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-subtitle { font-size: clamp(14px,3vw,16px); color: var(--text-muted); margin-bottom: 32px; }
+
+  .motto-box { background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(108,99,255,0.1) 100%); border: 1px solid rgba(0,212,170,0.3); border-left: 4px solid var(--green); border-radius: 12px; padding: 28px 32px; margin: 0 auto 48px; max-width: 680px; text-align: center; }
+  .motto-text { font-family: 'JetBrains Mono', monospace; font-size: clamp(16px,3vw,22px); font-weight: 700; color: var(--green); line-height: 1.5; margin-bottom: 10px; }
+  .motto-sub { font-size: 14px; color: var(--text-muted); }
+
+  .progress-section { max-width: 760px; margin: 0 auto 48px; padding: 0 20px; }
+  .progress-section h2 { font-size: 13px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; text-align: center; }
+  .progress-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+  .progress-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; }
+  .progress-num { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .progress-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+  .index-section { max-width: 760px; margin: 0 auto 60px; padding: 0 20px; }
+  .index-section h2 { font-size: 20px; font-weight: 800; margin-bottom: 24px; color: var(--text); }
+  .module-card { display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; margin-bottom: 12px; text-decoration: none; color: var(--text); transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+  .module-card:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: 0 0 24px rgba(108,99,255,0.12); }
+  .module-card-inner { display: flex; align-items: flex-start; gap: 18px; }
+  .module-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .module-icon.purple { background: var(--accent-light); }
+  .module-icon.green { background: var(--green-light); }
+  .module-icon.yellow { background: rgba(255,209,102,0.12); }
+  .module-icon.red { background: rgba(255,107,107,0.12); }
+  .module-meta { flex: 1; }
+  .module-num { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .module-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .module-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+  .module-tag { display: inline-block; background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-top: 8px; }
+  .module-arrow { font-size: 20px; color: var(--accent); margin-top: 2px; }
+
+  .rules-final { max-width: 760px; margin: 0 auto 60px; padding: 0 20px; }
+  .rule-gold { background: linear-gradient(135deg, rgba(255,209,102,0.08) 0%, rgba(108,99,255,0.08) 100%); border: 1px solid rgba(255,209,102,0.3); border-radius: 16px; padding: 28px 32px; text-align: center; }
+  .rule-gold-title { font-size: 13px; font-weight: 700; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+  .rule-gold-text { font-size: clamp(16px,3vw,20px); font-weight: 800; color: var(--text); line-height: 1.5; }
+
+  .footer { border-top: 1px solid var(--border); padding: 32px 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-brand">Formación Interna</span>
+  <span class="nav-current">Kit del Captador de Citas</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Formación Interna · Uso Exclusivo</div>
+  <div class="hero-brand">Captador de Citas</div>
+  <h1 class="hero-title">Tu método.<br>Paso a paso.</h1>
+  <p class="hero-subtitle">Ocho módulos. Un objetivo: llenar la agenda de citas con personas que merecen el tiempo de Marco.</p>
+</div>
+
+<div class="motto-box" style="max-width:680px; margin: 0 auto 48px; padding: 28px 32px;">
+  <div class="motto-text">"Tu trabajo es cualificar, no convencer."</div>
+  <div class="motto-sub">Cuando hagas bien tu parte, el resto se encarga solo.</div>
+</div>
+
+<div class="progress-section">
+  <h2>Lo que vas a aprender</h2>
+  <div class="progress-grid">
+    <div class="progress-item"><div class="progress-num">01</div><span class="progress-label">Tu misión exacta</span></div>
+    <div class="progress-item"><div class="progress-num">02</div><span class="progress-label">Quién es el prospecto ideal</span></div>
+    <div class="progress-item"><div class="progress-num">03</div><span class="progress-label">El script de chat</span></div>
+    <div class="progress-item"><div class="progress-num">04</div><span class="progress-label">Cómo agendar la cita</span></div>
+    <div class="progress-item"><div class="progress-num">05</div><span class="progress-label">Las objeciones frecuentes</span></div>
+    <div class="progress-item"><div class="progress-num">06</div><span class="progress-label">Los errores que cuestan citas</span></div>
+    <div class="progress-item"><div class="progress-num">07</div><span class="progress-label">Práctica con escenarios reales</span></div>
+    <div class="progress-item"><div class="progress-num">08</div><span class="progress-label">Tu compensación y crecimiento</span></div>
+  </div>
+</div>
+
+<div class="index-section">
+  <h2>Módulos de Formación</h2>
+
+  <a href="01-tu-mision.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon purple">🎯</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 01 · Fundamentos</div>
+        <div class="module-title">Tu Misión</div>
+        <div class="module-desc">Qué haces exactamente, qué NO haces, y cómo encaja tu trabajo en el proceso completo. Empieza aquí.</div>
+        <span class="module-tag">Lectura obligatoria</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+
+  <a href="02-el-prospecto.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon green">🎯</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 02 · Cualificación</div>
+        <div class="module-title">El Prospecto Ideal</div>
+        <div class="module-desc">A quién buscar y a quién descartar. Reconocer las señales correctas te ahorra el 80% del tiempo.</div>
+        <span class="module-tag">Con ejemplos reales</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+
+  <a href="03-el-chat.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon purple">💬</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 03 · Script</div>
+        <div class="module-title">El Script de Chat</div>
+        <div class="module-desc">Los mensajes exactos que funcionan. No improvises. Memoriza, practica, repite.</div>
+        <span class="module-tag">Scripts con botón copiar</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+
+  <a href="04-como-agendar.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon green">📅</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 04 · Proceso</div>
+        <div class="module-title">Cómo Agendar la Cita</div>
+        <div class="module-desc">El prospecto dijo que sí. Ahora: tres formas de confirmar la cita, el formulario de notas y qué decirle al cliente.</div>
+        <span class="module-tag">Paso a paso</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+
+  <a href="05-objeciones.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon yellow">🛡️</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 05 · Objeciones</div>
+        <div class="module-title">Las Respuestas Exactas</div>
+        <div class="module-desc">Las siete objeciones más comunes en el chat y cómo responderlas sin improvisar y sin perder la cita.</div>
+        <span class="module-tag">7 objeciones resueltas</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+
+  <a href="06-errores.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon red">⚠️</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 06 · Errores</div>
+        <div class="module-title">Lo Que No Debes Hacer</div>
+        <div class="module-desc">Los siete errores que comete cualquier captador que empieza. Léelo antes de tu primera conversación real.</div>
+        <span class="module-tag">Con casos concretos</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+
+  <a href="07-practica.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon purple">🏋️</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 07 · Práctica</div>
+        <div class="module-title">Escenarios Reales</div>
+        <div class="module-desc">Tres conversaciones completas de inicio a fin: el prospecto ideal, el que pone resistencia, y el que hay que descartar.</div>
+        <span class="module-tag">3 transcripts completos</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+
+  <a href="08-compensacion.html" class="module-card">
+    <div class="module-card-inner">
+      <div class="module-icon green">💰</div>
+      <div class="module-meta">
+        <div class="module-num">Módulo 08 · Compensación</div>
+        <div class="module-title">Cuánto Ganas y Cómo Crecer</div>
+        <div class="module-desc">Tu estructura de comisión actual y el camino de formación para ganar más si quieres dar el siguiente paso.</div>
+        <span class="module-tag">Con calculadora de ingresos</span>
+      </div>
+      <div class="module-arrow">→</div>
+    </div>
+  </a>
+</div>
+
+<div class="rules-final">
+  <div class="rule-gold">
+    <div class="rule-gold-title">La Regla de Oro</div>
+    <div class="rule-gold-text">No eres tú quien convence. Eres tú quien encuentra a las personas que ya están convencidas de que necesitan ayuda — y las conectas con la persona que puede dársela.</div>
+  </div>
+</div>
+
+<footer class="footer">
+  Formación Interna · Uso Exclusivo del Colaborador
+</footer>
+
+</body>
+</html>
