@@ -85,6 +85,16 @@
   .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
   .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
 
+  /* NOTEBOOK */
+  .nb-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; text-decoration: none; font-size: 15px; font-weight: 700; padding: 12px 22px; border-radius: 12px; margin-top: 14px; transition: opacity 0.2s; min-height: 44px; }
+  .nb-btn:hover { opacity: 0.85; }
+  .prompt-box { background: #111420; border: 1px dashed rgba(108,99,255,0.4); border-radius: 12px; padding: 18px 20px; margin-top: 16px; position: relative; }
+  .prompt-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .prompt-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-wrap; padding-right: 64px; }
+  .copy-btn { position: absolute; top: 12px; right: 12px; background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); color: var(--accent); font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; min-height: 32px; }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+  .copy-btn.copied { background: var(--green-light); border-color: rgba(0,212,170,0.3); color: var(--green); }
+
   @media (max-width: 600px) { .msg { max-width: 95%; } }
 </style>
 </head>
@@ -312,19 +322,49 @@
     <h2>Come Praticare da Solo</h2>
 
     <div class="solo-box">
-      <div class="solo-title">Tre modi per esercitarsi senza aver bisogno di nessuno</div>
+      <div class="solo-title">Due modi per esercitarsi senza aver bisogno di nessuno</div>
       <div class="solo-list">
         <div class="solo-item">
           <div class="solo-icon">🤖</div>
-          <div><strong style="color: var(--text);">Simula con un'IA (ChatGPT o simili):</strong> Digli di fare il ruolo del prospect e rispondere in modo realistico. Esercita i tre scenari di questo modulo finché lo script non esce da solo.</div>
+          <div>
+            <strong style="color: var(--text);">Simula con il Notebook IA:</strong> Usa il Notebook dedicato alla formazione per simulare conversazioni realistiche con prospect. Scegli uno dei prompt qui sotto, incollalo all'apertura della chat e inizia direttamente con il tuo script.
+            <br>
+            <a href="https://notebooklm.google.com/notebook/85a559fd-1beb-4006-84cc-455e24c50ecd/preview" target="_blank" rel="noopener" class="nb-btn">Apri il Notebook →</a>
+
+            <div class="prompt-box">
+              <div class="prompt-label">Scenario 1 — Prospect ricettivo (ristorante)</div>
+              <pre class="prompt-text" id="prompt1">Sei Carlo, titolare di un ristorante a Milano.
+Stai cercando di aumentare le prenotazioni, soprattutto in bassa stagione.
+Sei aperto, un po' curioso ma non sai niente di pubblicità online.
+Rispondo in modo naturale come farebbe un vero imprenditore.
+Aspetta che io inizi la conversazione.</pre>
+              <button class="copy-btn" onclick="copyPrompt('prompt1', this)">Copia</button>
+            </div>
+
+            <div class="prompt-box">
+              <div class="prompt-label">Scenario 2 — Prospect scettico (studio dentistico)</div>
+              <pre class="prompt-text" id="prompt2">Sei Maria, titolare di uno studio dentistico a Napoli.
+Ti hanno già contattato altre agenzie marketing e non hai avuto buone esperienze.
+Sei diffidente, chiedi subito i prezzi e vuoi capire perché questa volta sarebbe diverso.
+Rispondi in modo naturale e realistico.
+Aspetta che io inizi la conversazione.</pre>
+              <button class="copy-btn" onclick="copyPrompt('prompt2', this)">Copia</button>
+            </div>
+
+            <div class="prompt-box">
+              <div class="prompt-label">Scenario 3 — Prospect da scartare (freelance)</div>
+              <pre class="prompt-text" id="prompt3">Sei Roberto, grafico freelance indipendente.
+Hai iniziato 3 mesi fa, lavori da solo, non hai sede né team.
+Sei entusiasta e pensi di voler crescere ma in realtà sei ancora agli inizi.
+Rispondi onestamente alle domande che ti vengono fatte.
+Aspetta che io inizi la conversazione.</pre>
+              <button class="copy-btn" onclick="copyPrompt('prompt3', this)">Copia</button>
+            </div>
+          </div>
         </div>
         <div class="solo-item">
           <div class="solo-icon">🎙️</div>
           <div><strong style="color: var(--text);">Registrati a voce alta:</strong> Leggi lo script a voce alta come se stessi parlando con qualcuno. Ascoltati. Se suona forzato o artificiale, esercitati finché non suona naturale.</div>
-        </div>
-        <div class="solo-item">
-          <div class="solo-icon">👥</div>
-          <div><strong style="color: var(--text);">Esercitati con qualcuno di fiducia:</strong> Chiedi a un amico o familiare di fare il prospect. Non farsi dire sì di partenza — che mettano resistenza. I migliori collaboratori si esercitano in situazioni scomode.</div>
         </div>
       </div>
     </div>
@@ -340,5 +380,14 @@
 
   <footer class="footer">Formazione Interna · Uso Esclusivo del Collaboratore</footer>
 </div>
+<script>
+function copyPrompt(id, btn) {
+  const text = document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiato'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copia'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => { btn.textContent = '✓ OK'; setTimeout(() => { btn.textContent = 'Copia'; }, 2000); });
+}
+</script>
 </body>
 </html>
