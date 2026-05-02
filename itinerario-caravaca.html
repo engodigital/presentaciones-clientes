@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Itinerario — Roda › Caravaca de la Cruz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #faf7f2;
+      color: #2d2520;
+      line-height: 1.6;
+    }
+    .hero {
+      background: linear-gradient(135deg, #c9623f 0%, #a84a2a 100%);
+      color: white;
+      padding: 44px 24px 40px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.75;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .hero .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.82;
+      margin-bottom: 28px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.4rem; font-weight: 700; }
+    .stat-label { font-size: 0.7rem; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .btn-route {
+      display: inline-block;
+      background: white;
+      color: #c9623f;
+      padding: 13px 30px;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .btn-route:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 44px 20px 20px;
+    }
+
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #e8d5c4, #d4b89a, #e8d5c4);
+    }
+
+    .stop {
+      position: relative;
+      padding-left: 72px;
+      margin-bottom: 14px;
+    }
+    .stop-dot {
+      position: absolute;
+      left: 18px;
+      top: 28px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #c9623f;
+      border: 3px solid #faf7f2;
+      box-shadow: 0 0 0 2px #c9623f;
+      z-index: 1;
+    }
+    .stop-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      border-left: 4px solid #c9623f;
+    }
+    .stop-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stop-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .stop-number {
+      background: #c9623f;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+    .stop-name { font-size: 1.3rem; font-weight: 700; color: #1a1005; margin-bottom: 2px; }
+    .stop-province { font-size: 0.78rem; color: #999; }
+    .stop-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+    }
+    .stop-time {
+      background: #fef3ee;
+      color: #c9623f;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .btn-maps {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #4285F4;
+      color: white;
+      padding: 7px 13px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-maps:hover { background: #2a6dd4; }
+    .btn-maps svg { width: 13px; height: 13px; }
+
+    .section-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #bbb;
+      font-weight: 600;
+      margin-bottom: 10px;
+      margin-top: 18px;
+    }
+
+    .attractions { list-style: none; }
+    .attractions li {
+      padding: 12px 0;
+      border-bottom: 1px solid #f5ede5;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .attractions li:last-child { border-bottom: none; padding-bottom: 0; }
+    .attraction-icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 1px; }
+    .attraction-content strong { display: block; font-size: 0.93rem; color: #1a1005; margin-bottom: 3px; }
+    .attraction-content p { font-size: 0.83rem; color: #666; line-height: 1.55; margin-bottom: 5px; }
+    .attraction-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .attraction-links a {
+      color: #c9623f;
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .attraction-links a:hover { border-bottom-color: #c9623f; }
+
+    .hours-box {
+      background: #faf6f2;
+      border: 1px solid #ecddd0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .hours-box .hicon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .hours-content strong { font-size: 0.8rem; color: #444; display: block; margin-bottom: 3px; }
+    .hours-content p { font-size: 0.79rem; color: #666; line-height: 1.5; }
+    .hours-warning { color: #c9623f !important; font-size: 0.73rem !important; margin-top: 5px; }
+
+    .tip {
+      background: #fffcf0;
+      border-left: 3px solid #d4a017;
+      padding: 11px 14px;
+      margin-top: 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.82rem;
+      color: #5a4a1a;
+      line-height: 1.55;
+    }
+    .tip strong { color: #7a5a10; }
+
+    .drive-connector {
+      padding-left: 72px;
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .drive-badge {
+      background: #f0e6d3;
+      color: #8a5a30;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .drive-line {
+      flex: 1;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, #d4b89a 0, #d4b89a 5px, transparent 5px, transparent 11px);
+    }
+
+    .arrival-card {
+      border-left-color: #aaa !important;
+    }
+    .arrival-dot { background: #aaa !important; box-shadow: 0 0 0 2px #aaa !important; }
+    .arrival-inner { display: flex; align-items: center; gap: 14px; }
+    .arrival-icon { font-size: 1.6rem; }
+    .arrival-time { margin-left: auto; }
+
+    .summary {
+      background: white;
+      border-radius: 16px;
+      padding: 26px;
+      margin-top: 36px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+    .summary h2 { font-size: 1rem; margin-bottom: 16px; color: #1a1005; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th {
+      text-align: left;
+      padding: 9px 14px;
+      background: #f8f4f0;
+      color: #999;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    th:first-child { border-radius: 8px 0 0 8px; }
+    th:last-child { border-radius: 0 8px 8px 0; }
+    td { padding: 11px 14px; border-bottom: 1px solid #f5ede5; }
+    tr:last-child td { border-bottom: none; }
+    .total-row td { font-weight: 700; background: #fef3ee; color: #c9623f; }
+    .total-row td:first-child { border-radius: 0 0 0 8px; }
+    .total-row td:last-child { border-radius: 0 0 8px 0; }
+
+    .note-box {
+      background: #f0f4ff;
+      border: 1px solid #c8d4f0;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 20px;
+      font-size: 0.82rem;
+      color: #3a4a7a;
+      line-height: 1.6;
+    }
+    .note-box strong { display: block; margin-bottom: 4px; color: #2a3a6a; }
+
+    .footer {
+      text-align: center;
+      padding: 36px 20px;
+      font-size: 0.76rem;
+      color: #bbb;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.6rem; }
+      .hero-stats { gap: 22px; }
+      .stop-header { flex-direction: column; }
+      .stop-meta { flex-direction: row; align-items: center; }
+      .timeline::before { left: 20px; }
+      .stop, .drive-connector { padding-left: 56px; }
+      .stop-dot { left: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Regione di Murcia · Spagna</div>
+  <h1>Roda → Caravaca de la Cruz</h1>
+  <p class="subtitle">Itinerario in giornata · In coppia in macchina · Senza Murcia città né Cartagena</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-value">~252 km</div>
+      <div class="stat-label">Percorso totale</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">4 tappe</div>
+      <div class="stat-label">Luoghi da visitare</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">~4h 10min</div>
+      <div class="stat-label">Solo guida</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">08:30 → 20:30</div>
+      <div class="stat-label">Partenza / Rientro</div>
+    </div>
+  </div>
+  <a class="btn-route"
+     href="https://www.google.com/maps/dir/Roda,+San+Javier,+Murcia/Lorca,+Murcia/Caravaca+de+la+Cruz,+Murcia/Ceheg%C3%ADn,+Murcia/Calasparra,+Murcia/Roda,+San+Javier,+Murcia"
+     target="_blank">
+    ↗ &nbsp;Vedi percorso completo su Google Maps
+  </a>
+</div>
+
+<div class="container">
+  <div class="timeline">
+
+    <!-- ═══════════════════════════════════════════════
+         TAPPA 1 — LORCA
+    ════════════════════════════════════════════════ -->
+    <div class="stop">
+      <div class="stop-dot"></div>
+      <div class="stop-card">
+        <div class="stop-header">
+          <div class="stop-title-row">
+            <div class="stop-number">1</div>
+            <div>
+              <div class="stop-name">Lorca</div>
+              <div class="stop-province">65 km da Roda · ~1h 10min di guida</div>
+            </div>
+          </div>
+          <div class="stop-meta">
+            <span class="stop-time">Arrivo 09:45 · Partenza 12:00</span>
+            <a class="btn-maps" href="https://www.google.com/maps/search/Lorca+Murcia+Spain" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Apri Maps
+            </a>
+          </div>
+        </div>
+
+        <p class="section-label">Cosa vedere — ~2h 15min</p>
+        <ul class="attractions">
+          <li>
+            <span class="attraction-icon">🏰</span>
+            <div class="attraction-content">
+              <strong>Castillo de Lorca — Fortaleza del Sol</strong>
+              <p>Fortezza medievale arroccata sulla collina con vista panoramica a 360° sulla città. Costruita in più epoche: dall'emirato arabo ai Reyes Católicos fino al XV secolo. Si può salire con il cable car. Parco tematico all'interno con ricostruzioni storiche.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Castillo+de+Lorca+Murcia" target="_blank">↗ Google Maps</a>
+                <a href="https://www.castillolorca.es" target="_blank">↗ castillolorca.es</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">⛪</span>
+            <div class="attraction-content">
+              <strong>Colegiata de San Patricio</strong>
+              <p>Imponente chiesa barocca del XVI–XVIII secolo affacciata sulla Plaza de España. Una delle più belle facciate barocche della Murcia. Da non perdere anche solo per la piazza.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Colegiata+de+San+Patricio+Lorca+Murcia" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">🏛️</span>
+            <div class="attraction-content">
+              <strong>Centro storico e Plaza de España</strong>
+              <p>Lorca è chiamata "Ciudad del Barroco". Passeggiata tra palazzi nobiliari del XVI–XVIII sec., il Palazzo del Guevara, portici, e caffè storici. Ottimo per un espresso prima di salire al castello.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Plaza+de+Espana+Lorca+Murcia" target="_blank">↗ Google Maps</a>
+                <a href="https://www.lorcaturismo.es" target="_blank">↗ lorcaturismo.es</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="hours-box">
+          <span class="hicon">🕐</span>
+          <div class="hours-content">
+            <strong>Orari Castillo de Lorca</strong>
+            <p>Mar–Dom: 10:00–20:00 (estate) &nbsp;·&nbsp; Lunedì: chiuso &nbsp;·&nbsp; Ingresso: ~€6–10</p>
+            <p class="hours-warning">⚠ Verificare sempre gli orari aggiornati prima di partire</p>
+          </div>
+        </div>
+
+        <div class="tip">
+          <strong>Consiglio:</strong> Fai un caffè in Plaza de España prima di salire al castello. Se il tempo stringe, il belvedere esterno è gratuito e vale già la sosta — il panorama sulla città è ottimo anche senza il biglietto.
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-badge">↓ &nbsp;55 km · ~50 min verso nord-ovest</div>
+      <div class="drive-line"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         TAPPA 2 — CARAVACA DE LA CRUZ
+    ════════════════════════════════════════════════ -->
+    <div class="stop">
+      <div class="stop-dot"></div>
+      <div class="stop-card">
+        <div class="stop-header">
+          <div class="stop-title-row">
+            <div class="stop-number">2</div>
+            <div>
+              <div class="stop-name">Caravaca de la Cruz</div>
+              <div class="stop-province">Una delle 5 Città Sante del mondo · La tappa principale</div>
+            </div>
+          </div>
+          <div class="stop-meta">
+            <span class="stop-time">Arrivo 13:00 · Partenza 16:00</span>
+            <a class="btn-maps" href="https://www.google.com/maps/search/Caravaca+de+la+Cruz+Murcia+Spain" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Apri Maps
+            </a>
+          </div>
+        </div>
+
+        <p class="section-label">Cosa vedere — ~3h (pranzo incluso)</p>
+        <ul class="attractions">
+          <li>
+            <span class="attraction-icon">✝️</span>
+            <div class="attraction-content">
+              <strong>Santuario della Vera Croce — Castello</strong>
+              <p>Il cuore della giornata. Il castello-santuario medievale domina la città dall'alto della collina. Custodisce la reliquia della Vera Croce portata, secondo la tradizione, da due angeli nel 1231. Caravaca è uno dei soli 5 luoghi al mondo con il privilegio del Giubileo Permanente, accanto a Roma, Gerusalemme, Santiago e Santo Toribio de Liébana.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Santuario+Vera+Cruz+Caravaca+de+la+Cruz+Murcia" target="_blank">↗ Google Maps</a>
+                <a href="https://www.caravacadelacuz.es" target="_blank">↗ caravacadelacuz.es</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">🏺</span>
+            <div class="attraction-content">
+              <strong>Museo della Vera Croce</strong>
+              <p>All'interno del castello: collezione di arte sacra, opere rinascimentali e barocche, la storia secolare della reliquia. Il percorso museale è integrato con la visita al santuario. Guida disponibile.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Museo+Vera+Cruz+Caravaca" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">🚶</span>
+            <div class="attraction-content">
+              <strong>Centro storico e scalinata monumentale</strong>
+              <p>La discesa dal castello lungo le vie medievali è scenografica. Da vedere: Plaza del Arco, Calle Mayor, palazzi barocchi. La scalinata di accesso al santuario è già di per sé una bella fotografia.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/centro+historico+Caravaca+de+la+Cruz" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">🍽️</span>
+            <div class="attraction-content">
+              <strong>Pranzo nel centro storico</strong>
+              <p>Ottimi ristoranti di cucina murciana nei vicoli del centro. Da ordinare: <em>arroz caldero</em> (riso con pesce, tipico murciano), <em>zarangollo</em> (frittata di zucchine), <em>migas</em>. Vino locale: D.O. Bullas, prodotto a pochi km.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/restaurantes+Caravaca+de+la+Cruz" target="_blank">↗ Cerca ristoranti</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="hours-box">
+          <span class="hicon">🕐</span>
+          <div class="hours-content">
+            <strong>Orari Santuario e Castello</strong>
+            <p>Santuario: tutti i giorni 9:00–14:00 / 16:00–19:00 &nbsp;·&nbsp; Castello-museo: 10:30–14:00 / 16:30–19:00</p>
+            <p class="hours-warning">⚠ In anni santi (prossimo: 2031) gli orari si estendono · Verificare su caravacadelacuz.es</p>
+          </div>
+        </div>
+
+        <div class="tip">
+          <strong>Consiglio:</strong> Pranza prima di salire al castello (la coda verso le 14 si allunga). Il castello è sulla collina — indossa scarpe comode. La terrazza con vista sulla ciudad bianca e sulla sierra vale da sola il viaggio.
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-badge">↓ &nbsp;15 km · ~20 min</div>
+      <div class="drive-line"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         TAPPA 3 — CEHEGÍN
+    ════════════════════════════════════════════════ -->
+    <div class="stop">
+      <div class="stop-dot"></div>
+      <div class="stop-card">
+        <div class="stop-header">
+          <div class="stop-title-row">
+            <div class="stop-number">3</div>
+            <div>
+              <div class="stop-name">Cehegín</div>
+              <div class="stop-province">Borgo medievale quasi senza turisti</div>
+            </div>
+          </div>
+          <div class="stop-meta">
+            <span class="stop-time">Arrivo 16:30 · Partenza 17:30</span>
+            <a class="btn-maps" href="https://www.google.com/maps/search/Ceheg%C3%ADn+Murcia+Spain" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Apri Maps
+            </a>
+          </div>
+        </div>
+
+        <p class="section-label">Cosa vedere — ~1h</p>
+        <ul class="attractions">
+          <li>
+            <span class="attraction-icon">🏘️</span>
+            <div class="attraction-content">
+              <strong>Centro storico medievale</strong>
+              <p>Uno dei borghi meglio conservati della Murcia interna. Vie lastricate, case in pietra chiara, balconi fioriti, belvederi sulla vallata del Rio Argos. Quasi zero turisti — atmosfera autentica e tranquilla, il contrario della costa.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/casco+antiguo+Ceheg%C3%ADn+Murcia" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">⛪</span>
+            <div class="attraction-content">
+              <strong>Iglesia de la Magdalena</strong>
+              <p>Chiesa rinascimentale del XVI secolo, una delle più belle dell'entroterra murciano. Facciata sobria in pietra e interni con altari barocchi. Spesso aperta nel pomeriggio per le visite.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Iglesia+Magdalena+Ceheg%C3%ADn+Murcia" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">🏺</span>
+            <div class="attraction-content">
+              <strong>Museo Arqueológico Municipal</strong>
+              <p>Piccolo museo con reperti iberici e romani recuperati nel territorio di Cehegín. Interessante se aperto — non essenziale se il tempo stringe.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Museo+Arqueologico+Municipal+Ceheg%C3%ADn" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="hours-box">
+          <span class="hicon">🕐</span>
+          <div class="hours-content">
+            <strong>Orari</strong>
+            <p>Centro storico: accesso libero sempre &nbsp;·&nbsp; Museo: Mar–Sab 10:00–14:00 / 17:00–19:30 &nbsp;·&nbsp; Dom 10:00–14:00</p>
+          </div>
+        </div>
+
+        <div class="tip">
+          <strong>Consiglio:</strong> Cehegín è piccola — non aspettarti grandi attrazioni da lista. Il valore è nell'atmosfera: un caffè nella Plaza Mayor guardando la vita locale vale più di qualsiasi museo. È il complemento perfetto alla frenesia di Lorca e Caravaca.
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-badge">↓ &nbsp;22 km · ~25 min</div>
+      <div class="drive-line"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         TAPPA 4 — CALASPARRA
+    ════════════════════════════════════════════════ -->
+    <div class="stop">
+      <div class="stop-dot"></div>
+      <div class="stop-card">
+        <div class="stop-header">
+          <div class="stop-title-row">
+            <div class="stop-number">4</div>
+            <div>
+              <div class="stop-name">Calasparra</div>
+              <div class="stop-province">Santuario rupestre · Riso con D.O. · Finale scenografico</div>
+            </div>
+          </div>
+          <div class="stop-meta">
+            <span class="stop-time">Arrivo 18:00 · Partenza 19:00</span>
+            <a class="btn-maps" href="https://www.google.com/maps/search/Calasparra+Murcia+Spain" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Apri Maps
+            </a>
+          </div>
+        </div>
+
+        <p class="section-label">Cosa vedere — ~1h</p>
+        <ul class="attractions">
+          <li>
+            <span class="attraction-icon">⛰️</span>
+            <div class="attraction-content">
+              <strong>Santuario della Vergine della Speranza (rupestre)</strong>
+              <p>Il posto più unico dell'intera giornata. Il santuario è <em>scavato nella roccia viva</em> sopra il Rio Segura: vi si arriva a piedi in 10 minuti lungo un sentiero con vista sul fiume e sulle risaie. La cappella è incastonata nella parete rocciosa come una grotta sacra. Ingresso gratuito, atmosfera commovente.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/Santuario+Virgen+de+la+Esperanza+Calasparra+Murcia" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">🌾</span>
+            <div class="attraction-content">
+              <strong>Risaie con Denominazione di Origine</strong>
+              <p>Il riso di Calasparra è stato il <em>primo riso con D.O. in tutta la Spagna</em>. La vega del Rio Segura con le risaie allagate (in primavera-estate) è un paesaggio inatteso nella Murcia secca: verde intenso, riflessi d'acqua, montagna sullo sfondo. Si vede bene dalla strada verso il santuario.</p>
+              <div class="attraction-links">
+                <a href="https://www.google.com/maps/search/arrozales+Calasparra+Rio+Segura" target="_blank">↗ Google Maps</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="attraction-icon">🛒</span>
+            <div class="attraction-content">
+              <strong>Acquisto riso D.O. Calasparra</strong>
+              <p>Il souvenir gastronomico perfetto da portare a casa. Si trova in qualsiasi supermercato del paese. Due varietà: <em>Bomba</em> (la più pregiata, assorbe 3x il volume) e <em>Balilla x Sollana</em>. Costa poco ma vale molto.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="hours-box">
+          <span class="hicon">🕐</span>
+          <div class="hours-content">
+            <strong>Santuario Virgen de la Esperanza</strong>
+            <p>Sentiero e accesso esterno: sempre libero &nbsp;·&nbsp; Cappella interna: ~9:00–18:30 &nbsp;·&nbsp; Ingresso gratuito</p>
+          </div>
+        </div>
+
+        <div class="tip">
+          <strong>Consiglio:</strong> Chiudi la giornata qui al tramonto — il sole basso sulle risaie con il santuario nella roccia è la scena più fotogenica del viaggio. Porta scarpe comode per i 10 minuti di sentiero.
+        </div>
+      </div>
+    </div>
+
+    <div class="drive-connector">
+      <div class="drive-badge">↓ &nbsp;Rientro: 95 km · ~1h 20min via A-30 → AP-7</div>
+      <div class="drive-line"></div>
+    </div>
+
+    <!-- RIENTRO -->
+    <div class="stop">
+      <div class="stop-dot arrival-dot"></div>
+      <div class="stop-card arrival-card">
+        <div class="arrival-inner">
+          <div class="arrival-icon">🏠</div>
+          <div>
+            <div class="stop-name" style="font-size:1.1rem;">Rientro a Roda</div>
+            <div class="stop-province">San Javier · Arrivo stimato ~20:20–20:30</div>
+          </div>
+          <span class="stop-time arrival-time">~20:20</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <!-- RIEPILOGO -->
+  <div class="summary">
+    <h2>Riepilogo chilometri e tempi di guida</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tratto</th>
+          <th>Km</th>
+          <th>Guida</th>
+          <th>Orario partenza</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Roda → Lorca</td>
+          <td>65 km</td>
+          <td>~1h 10min</td>
+          <td>08:30</td>
+        </tr>
+        <tr>
+          <td>Lorca → Caravaca de la Cruz</td>
+          <td>55 km</td>
+          <td>~55 min</td>
+          <td>12:00</td>
+        </tr>
+        <tr>
+          <td>Caravaca → Cehegín</td>
+          <td>15 km</td>
+          <td>~20 min</td>
+          <td>16:00</td>
+        </tr>
+        <tr>
+          <td>Cehegín → Calasparra</td>
+          <td>22 km</td>
+          <td>~25 min</td>
+          <td>17:30</td>
+        </tr>
+        <tr>
+          <td>Calasparra → Roda</td>
+          <td>95 km</td>
+          <td>~1h 20min</td>
+          <td>19:00</td>
+        </tr>
+        <tr class="total-row">
+          <td>TOTALE</td>
+          <td>~252 km</td>
+          <td>~4h 10min</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:18px;">
+      <strong>Se volete un ritmo più rilassato</strong>
+      Eliminate Lorca e partite alle 09:30 direttamente verso Caravaca (arrivo ~11:00). Avrete 4 ore piene per Caravaca con pranzo senza fretta, poi Cehegín e Calasparra al tramonto. Rientro stimato ~19:30.
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  Orari indicativi — verificare sempre i siti ufficiali prima di partire &nbsp;·&nbsp; Buon viaggio! 🌞
+</div>
+
+</body>
+</html>
