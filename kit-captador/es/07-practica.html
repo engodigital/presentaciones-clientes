@@ -89,6 +89,16 @@
   .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
   .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
 
+  /* NOTEBOOK */
+  .nb-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; text-decoration: none; font-size: 15px; font-weight: 700; padding: 12px 22px; border-radius: 12px; margin-top: 14px; transition: opacity 0.2s; min-height: 44px; }
+  .nb-btn:hover { opacity: 0.85; }
+  .prompt-box { background: #111420; border: 1px dashed rgba(108,99,255,0.4); border-radius: 12px; padding: 18px 20px; margin-top: 16px; position: relative; }
+  .prompt-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .prompt-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-wrap; padding-right: 64px; }
+  .copy-btn { position: absolute; top: 12px; right: 12px; background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); color: var(--accent); font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; min-height: 32px; }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+  .copy-btn.copied { background: var(--green-light); border-color: rgba(0,212,170,0.3); color: var(--green); }
+
   @media (max-width: 600px) { .msg { max-width: 95%; } }
 </style>
 </head>
@@ -321,19 +331,26 @@
     <h2>Cómo Practicar Solo</h2>
 
     <div class="solo-box">
-      <div class="solo-title">Tres formas de practicar sin necesitar a nadie más</div>
+      <div class="solo-title">Dos formas de practicar sin necesitar a nadie más</div>
       <div class="solo-list">
         <div class="solo-item">
           <div class="solo-icon">🤖</div>
-          <div><strong style="color: var(--text);">Simula con una IA (ChatGPT o similar):</strong> Dile que juegue el papel del prospecto y responda de forma realista. Practica los tres escenarios de este módulo hasta que el script salga solo.</div>
+          <div>
+            <strong style="color: var(--text);">Simula con el Notebook de entrenamiento:</strong> Abre el chat, pega el prompt de abajo y practica los tres escenarios hasta que el script salga solo. El Notebook responde de forma realista — pide precio, muestra resistencia, se comporta como un prospecto real.
+            <a href="https://notebooklm.google.com/notebook/85a559fd-1beb-4006-84cc-455e24c50ecd/preview" target="_blank" rel="noopener" class="nb-btn">Abrir Notebook →</a>
+            <div class="prompt-box">
+              <div class="prompt-label">Prompt sugerido — pégalo en el chat al abrir el Notebook</div>
+              <div class="prompt-text" id="promptText">Eres un dueño de negocio local [especifica el sector].
+Voy a practicar mi script de captación contigo.
+Responde de forma natural y realista como lo haría un prospecto real: puedes pedir el precio, decir que estás ocupado o mostrar resistencia.
+Espera a que yo inicie la conversación.</div>
+              <button class="copy-btn" onclick="copyPrompt(this)">Copiar</button>
+            </div>
+          </div>
         </div>
         <div class="solo-item">
           <div class="solo-icon">🎙️</div>
           <div><strong style="color: var(--text);">Grábate en voz alta:</strong> Lee el script en voz alta como si estuvieras hablando con alguien. Escúchate. Si suena forzado o artificial, practica hasta que suene natural.</div>
-        </div>
-        <div class="solo-item">
-          <div class="solo-icon">👥</div>
-          <div><strong style="color: var(--text);">Practica con alguien de confianza:</strong> Pide a un amigo o familiar que haga de prospecto. No te digan que sí de entrada — que pongan resistencia. Los mejores captadores practican en situaciones incómodas.</div>
         </div>
       </div>
     </div>
@@ -349,5 +366,14 @@
 
   <footer class="footer">Formación Interna · Uso Exclusivo del Colaborador</footer>
 </div>
+<script>
+function copyPrompt(btn) {
+  const text = document.getElementById('promptText').textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copiado'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => { btn.textContent = '✓ OK'; setTimeout(() => { btn.textContent = 'Copiar'; }, 2000); });
+}
+</script>
 </body>
 </html>
