@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -93,24 +93,6 @@
   .next-module { background: var(--accent-light); border: 1px solid rgba(108,99,255,0.3); border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .next-module a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 16px; min-height: 44px; display: flex; align-items: center; gap: 8px; }
   .footer { border-top: 1px solid var(--border); padding: 32px 0 0; text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 48px; }
-
-  /* REAL FORM */
-  .real-form { display: flex; flex-direction: column; gap: 14px; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-label { font-size: 13px; font-weight: 700; color: var(--text); }
-  .form-label .req { color: var(--red); margin-left: 3px; }
-  .form-label .opt { color: var(--text-muted); font-size: 11px; font-weight: 400; margin-left: 6px; }
-  .form-input, .form-textarea { background: #111420; border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; padding: 12px 16px; width: 100%; transition: border-color 0.2s; outline: none; }
-  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
-  .form-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
-  .form-submit { background: var(--accent); color: #fff; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; padding: 14px 24px; border-radius: 12px; border: none; cursor: pointer; transition: opacity 0.2s; min-height: 48px; width: 100%; margin-top: 4px; }
-  .form-submit:hover { opacity: 0.85; }
-  .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-  .form-success { display: none; background: var(--green-light); border: 1px solid rgba(0,212,170,0.3); border-radius: 14px; padding: 28px; text-align: center; }
-  .form-success .suc-icon { font-size: 36px; margin-bottom: 12px; }
-  .form-success .suc-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-  .form-success .suc-text { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
-  .form-error { display: none; background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.3); border-radius: 10px; padding: 12px 16px; font-size: 14px; color: var(--red); margin-top: 4px; }
 
   @media (max-width: 500px) {
     .step { flex-direction: column; gap: 10px; }
@@ -234,47 +216,79 @@
     </div>
   </div>
 
-  <!-- FORMULARIO DE NOTAS -->
+  <!-- PROCESO DE RESERVA + CAMPOS DEL FORMULARIO -->
   <div class="section">
-    <div class="section-label">Obligatorio</div>
-    <h2>Rellena el Formulario de Notas</h2>
-    <p>Cada vez que agendes una cita — sin importar qué opción usaste — rellena este formulario. Marco recibe el contexto antes de la llamada y tú recibirás por email el formulario de seguimiento.</p>
+    <div class="section-label">Lo que pasa después</div>
+    <h2>El Proceso Automático</h2>
+    <p>Después de agendar, el sistema gestiona todo solo. Tu único paso extra es rellenar el formulario de seguimiento cuando te llegue el email.</p>
 
-    <div id="notasFormWrapper">
-      <form class="real-form" id="formNotas">
-        <div class="form-group">
-          <label class="form-label">Tu email <span class="req">*</span></label>
-          <input type="email" class="form-input" name="email_comercial" placeholder="tu@email.com" required>
+    <div class="steps" style="margin-bottom: 36px;">
+      <div class="step">
+        <div class="step-num-col"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">El prospecto reserva y rellena sus datos</div>
+          <div class="step-desc">Al entrar en el enlace del calendario, el sistema le pide que rellene un pequeño formulario antes de confirmar la cita.</div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Nombre completo del prospecto <span class="req">*</span></label>
-          <input type="text" class="form-input" name="nombre_prospecto" placeholder="Nombre y apellido" required>
+      </div>
+      <div class="step">
+        <div class="step-num-col"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">Marco recibe la notificación y confirma</div>
+          <div class="step-desc">Marco ve la solicitud de reserva y la aprueba manualmente. La cita no queda activa hasta que él da el visto bueno.</div>
         </div>
-        <div class="form-group">
-          <label class="form-label">WhatsApp o email del prospecto <span class="req">*</span></label>
-          <input type="text" class="form-input" name="contacto_prospecto" placeholder="+34 600 000 000 o email@ejemplo.com" required>
+      </div>
+      <div class="step">
+        <div class="step-num-col"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">El prospecto recibe la confirmación</div>
+          <div class="step-desc">En cuanto Marco confirma, el sistema envía automáticamente el email de confirmación al prospecto con todos los detalles.</div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Tipo de negocio <span class="opt">Opcional</span></label>
-          <input type="text" class="form-input" name="tipo_negocio" placeholder="Ej: restaurante en Alicante, clínica dental...">
+      </div>
+      <div class="step">
+        <div class="step-num-col"><div class="step-num">4</div></div>
+        <div class="step-body">
+          <div class="step-title">Tú recibes el formulario de seguimiento</div>
+          <div class="step-desc">Te llega un email con el enlace al formulario de contexto. Rellénalo antes de la llamada — da a Marco la información que necesita para ir preparado.</div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Cómo lo conociste <span class="opt">Opcional</span></label>
-          <input type="text" class="form-input" name="como_conociste" placeholder="Ej: evento, referido de [nombre], Instagram...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Notas de la conversación <span class="opt">Opcional</span></label>
-          <textarea class="form-textarea" name="notas" placeholder="Lo que te contó: qué le preocupa, qué quiere conseguir, contexto relevante..."></textarea>
-        </div>
-        <div class="form-error" id="formError">Error al enviar. Comprueba tu conexión e inténtalo de nuevo.</div>
-        <button type="submit" class="form-submit" id="submitBtn">Enviar formulario →</button>
-      </form>
+      </div>
     </div>
 
-    <div class="form-success" id="formSuccess">
-      <div class="suc-icon">✓</div>
-      <div class="suc-title">Formulario enviado</div>
-      <div class="suc-text">Marco ya tiene el contexto. Revisa tu email — te hemos enviado el formulario de seguimiento para completar antes de la llamada.</div>
+    <div class="section-label" style="margin-bottom: 16px;">Qué rellenas en el formulario</div>
+    <p>4 preguntas opcionales. Cuanto más completes, mejor va preparado Marco.</p>
+
+    <div class="form-fields">
+      <div class="form-field">
+        <div class="field-num">1</div>
+        <div class="field-body">
+          <div class="field-name">¿Cómo fue la conversación?</div>
+          <div class="field-note">Muy bien / Bien / Regular / Con resistencia.</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="field-num">2</div>
+        <div class="field-body">
+          <div class="field-name">¿Qué problema o dolor principal mencionó el prospecto?</div>
+          <div class="field-note">Lo que más le preocupa o quiere conseguir. Cuanto más específico, mejor.</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="field-num">3</div>
+        <div class="field-body">
+          <div class="field-name">¿Tiene alguna objeción o duda antes de la llamada?</div>
+          <div class="field-note">Si mencionó el precio, dijo que ya tiene alguien, o tiene alguna reserva concreta.</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <div class="field-num">4</div>
+        <div class="field-body">
+          <div class="field-name">¿Algo más que Marco debería saber?</div>
+          <div class="field-note">Cualquier contexto adicional. No hay respuesta incorrecta.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top: 16px;">
+      <strong>El formulario es parte de tu trabajo.</strong> Sin él, Marco va a la llamada sin contexto — lo que le quita ventaja y te quita credibilidad. Se rellena en 2 minutos.
     </div>
   </div>
 
@@ -321,61 +335,6 @@ function copyMsg(id, btn) {
   }).catch(() => { btn.textContent = '✓ OK'; setTimeout(() => { btn.textContent = 'Copiar'; }, 2000); });
 }
 
-// ─── EMAILJS CONFIG ──────────────────────────────────────────────────────────
-// 1. Crea cuenta gratis en https://www.emailjs.com (200 emails/mes)
-// 2. Conecta Gmail: Email Services > Add New Service > Gmail
-// 3. Crea dos Email Templates (Email Templates > Create New Template):
-//
-//    TEMPLATE_MARCO — notificación a Marco:
-//      To email: marketing.engoagency@gmail.com
-//      Subject:  Nuevo prospecto: {{nombre_prospecto}}
-//      Body:     usa las variables {{email_comercial}}, {{nombre_prospecto}},
-//                {{contacto_prospecto}}, {{tipo_negocio}}, {{como_conociste}}, {{notas}}
-//
-//    TEMPLATE_COMERCIAL — auto-reply al comercial:
-//      To email: {{to_email}}  ← activa "Dynamic Recipients" en la config del template
-//      Subject:  Formulario recibido — completa el seguimiento
-//      Body:     cita {{nombre_prospecto}} y añade el link: {{form2_link}}
-//
-// 4. Copia tu Public Key: Account > General > Public Key
-// ─────────────────────────────────────────────────────────────────────────────
-const EMAILJS_PUBLIC_KEY = 'TU_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID = 'TU_SERVICE_ID';
-const TEMPLATE_MARCO     = 'TU_TEMPLATE_MARCO';
-const TEMPLATE_COMERCIAL = 'TU_TEMPLATE_COMERCIAL';
-const FORM2_LINK         = 'URL_FORMULARIO_GHL_FORM2';
-
-emailjs.init(EMAILJS_PUBLIC_KEY);
-
-document.getElementById('formNotas').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const err = document.getElementById('formError');
-  btn.disabled = true;
-  btn.textContent = 'Enviando...';
-  err.style.display = 'none';
-
-  const params = {
-    email_comercial:    this.email_comercial.value.trim(),
-    nombre_prospecto:   this.nombre_prospecto.value.trim(),
-    contacto_prospecto: this.contacto_prospecto.value.trim(),
-    tipo_negocio:       this.tipo_negocio.value.trim() || '—',
-    como_conociste:     this.como_conociste.value.trim() || '—',
-    notas:              this.notas.value.trim() || '—',
-    form2_link:         FORM2_LINK,
-  };
-
-  try {
-    await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_MARCO, params);
-    await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_COMERCIAL, { ...params, to_email: params.email_comercial });
-    document.getElementById('notasFormWrapper').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-  } catch(e2) {
-    err.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Enviar formulario →';
-  }
-});
 </script>
 </body>
 </html>
