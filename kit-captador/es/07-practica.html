@@ -339,12 +339,33 @@
             <strong style="color: var(--text);">Simula con el Notebook de entrenamiento:</strong> Abre el chat, pega el prompt de abajo y practica los tres escenarios hasta que el script salga solo. El Notebook responde de forma realista — pide precio, muestra resistencia, se comporta como un prospecto real.
             <a href="https://notebooklm.google.com/notebook/85a559fd-1beb-4006-84cc-455e24c50ecd/preview" target="_blank" rel="noopener" class="nb-btn">Abrir Notebook →</a>
             <div class="prompt-box">
-              <div class="prompt-label">Prompt sugerido — pégalo en el chat al abrir el Notebook</div>
-              <div class="prompt-text" id="promptText">Eres un dueño de negocio local [especifica el sector].
-Voy a practicar mi script de captación contigo.
-Responde de forma natural y realista como lo haría un prospecto real: puedes pedir el precio, decir que estás ocupado o mostrar resistencia.
+              <div class="prompt-label">Escenario 1 · Prospecto receptivo</div>
+              <div class="prompt-text" id="prompt1">Eres Carlos, dueño de un restaurante en Alicante.
+Tu negocio va bien en verano pero baja mucho en invierno.
+Tienes Instagram pero lo llevas tú solo y no da muchos resultados.
+Llevas 6 años con el restaurante.
+Voy a practicar mi script de captación. Eres receptivo pero no lo pones demasiado fácil.
 Espera a que yo inicie la conversación.</div>
-              <button class="copy-btn" onclick="copyPrompt(this)">Copiar</button>
+              <button class="copy-btn" onclick="copyPrompt('prompt1', this)">Copiar</button>
+            </div>
+            <div class="prompt-box" style="margin-top: 10px;">
+              <div class="prompt-label">Escenario 2 · Prospecto con resistencia</div>
+              <div class="prompt-text" id="prompt2">Eres María, dueña de una clínica dental en Valencia.
+Llevas 3 años con la clínica y quieres más pacientes de implantes.
+Ya te han contactado otras empresas de marketing y estás escéptica.
+Tu primera reacción es preguntar el precio antes de agendar nada.
+Voy a practicar mi script de captación. Muestra resistencia natural y pide el precio cuando venga a cuento.
+Espera a que yo inicie la conversación.</div>
+              <button class="copy-btn" onclick="copyPrompt('prompt2', this)">Copiar</button>
+            </div>
+            <div class="prompt-box" style="margin-top: 10px;">
+              <div class="prompt-label">Escenario 3 · Prospecto a descartar</div>
+              <div class="prompt-text" id="prompt3">Eres Roberto, freelance de diseño gráfico.
+Empezaste hace unos meses, trabajas solo desde casa, sin local ni empleados.
+Consigues clientes por LinkedIn pero querrías ganar más.
+Voy a practicar mi script de captación. Sé amable y natural — cuando te pregunten quedará claro que no encajas con el perfil.
+Espera a que yo inicie la conversación.</div>
+              <button class="copy-btn" onclick="copyPrompt('prompt3', this)">Copiar</button>
             </div>
           </div>
         </div>
@@ -367,8 +388,8 @@ Espera a que yo inicie la conversación.</div>
   <footer class="footer">Formación Interna · Uso Exclusivo del Colaborador</footer>
 </div>
 <script>
-function copyPrompt(btn) {
-  const text = document.getElementById('promptText').textContent.trim();
+function copyPrompt(id, btn) {
+  const text = document.getElementById(id).textContent.trim();
   navigator.clipboard.writeText(text).then(() => {
     btn.textContent = '✓ Copiado'; btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
